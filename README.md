@@ -59,9 +59,3 @@ We welcome contributions! Please feel free to open issues, submit bug reports, a
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Meson](https://mesonbuild.com) - Build system
-- [C++](https://isocpp.org) - Programming language used
-- [GitHub](https://github.com) - Repository hosting
