@@ -41,7 +41,7 @@ The headers will be installed in the `/usr/local/include/libfm` directory, and t
 To use the FM library in your own project, add the following to your `meson.build`:
 
 ```meson
-dependency('fm', type: 'static')
+dependency('libfm', required: true)
 ```
 
 Then link the library in your C++ project. Be sure to include the appropriate headers from `include/libfm`.
