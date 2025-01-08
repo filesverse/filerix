@@ -18,3 +18,5 @@ libfm = library(
 )
 
 install_subdir('include', install_dir: join_paths(get_option('prefix'), 'include', 'libfm'), strip_directory: true)
+
+install_data('libfm.pc', install_dir: join_paths(get_option('prefix'), 'lib/pkgconfig'))
