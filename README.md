@@ -34,6 +34,26 @@ meson install -C builddir
 
 The headers will be installed in the `/usr/local/include/libfm` directory, and the library will be installed to your system's default library directory.
 
+### Using Nix
+
+To build and install the library using Nix, you can use the provided `flake.nix` file:
+
+1. Ensure you have Nix installed on your system. If not, follow the [official installation guide](https://nixos.org/download.html).
+
+2. Run the following command to build the library:
+
+   ```bash
+   nix build .#libfm
+   ```
+
+3. The resulting library can be found in the `result` symlink. To use it in your environment, you can run:
+
+   ```bash
+   nix develop
+   ```
+
+This will create a development shell with the library and its dependencies set up.
+
 ## Usage
 
 ### Linking the Library
