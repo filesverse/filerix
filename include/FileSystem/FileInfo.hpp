@@ -8,6 +8,7 @@ struct FileInfo
 {
   std::string name;
   std::string type;
+  std::string path;
   uintmax_t size;
 };
 

@@ -16,7 +16,7 @@ namespace DirectoryPermissions
 
   bool RequestElevatedPermissions(const std::string &path)
   {
-    std::string command = "pkexec " + path;
+    std::string command = "pkexec chmod +r \"" + path + "\"";
     int result = std::system(command.c_str());
     return result == 0;
   }

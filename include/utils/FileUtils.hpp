@@ -3,7 +3,7 @@
 
 #include <napi.h>
 #include <vector>
-#include "libfm/FileSystem/FileInfo.h"
+#include "libfm/FileSystem/FileInfo.hpp"
 
 namespace FileUtils
 {
@@ -12,6 +12,7 @@ namespace FileUtils
     Napi::Object fileObj = Napi::Object::New(env);
     fileObj.Set("name", file.name);
     fileObj.Set("type", file.type);
+    fileObj.Set("path", file.path);
     fileObj.Set("size", file.size);
     return fileObj;
   }
