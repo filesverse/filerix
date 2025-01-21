@@ -1,0 +1,12 @@
+{
+  "include": [
+    "./**/*"
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@libfm": [
+        "./libfm.ts"
+      ],
+    },
+  }
+}

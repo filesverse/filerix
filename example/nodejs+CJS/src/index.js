@@ -1,4 +1,4 @@
-import { getDriveUsage } from "./lib/libfm";
+const { getDriveUsage } = require('./lib/libfm');
 
 async function getDriveUsageFunc(drivePath) {
   try {

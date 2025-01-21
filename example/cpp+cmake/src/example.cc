@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
-#include "FileSystem/MountUtils.hpp"
+#include "FileSystem/DriveUtils.hpp"
 #include "utils/Logger.hpp"
 
 int main()
 {
   std::string drivePath = "/";
 
-  auto [usedBytes, totalBytes] = MountUtils::GetDriveUsage(drivePath);
+  auto [usedBytes, totalBytes] = DriveUtils::GetDriveUsage(drivePath);
 
   Logger::Info("Used space: " + std::to_string(usedBytes) + " bytes");
   Logger::Info("Total space: " + std::to_string(totalBytes) + " bytes");
