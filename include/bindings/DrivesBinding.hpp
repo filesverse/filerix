@@ -51,15 +51,14 @@ namespace libfm
   {
     Napi::Env env = info.Env();
 
-    if (info.Length() < 2 || !info[0].IsString() || !info[1].IsString())
+    if (info.Length() < 1)
     {
-      Napi::TypeError::New(env, "Source and target must be strings").ThrowAsJavaScriptException();
+      Napi::TypeError::New(env, "Source must be a string").ThrowAsJavaScriptException();
       return Napi::Boolean::New(env, false);
     }
 
     std::string source = info[0].As<Napi::String>().Utf8Value();
-    std::string target = info[1].As<Napi::String>().Utf8Value();
-    return Napi::Boolean::New(env, DriveUtils::MountDrive(source, target));
+    return Napi::Boolean::New(env, DriveUtils::MountDrive(source));
   }
 
   inline Napi::Boolean UnmountDrive(const Napi::CallbackInfo &info)

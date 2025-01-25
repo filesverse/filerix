@@ -19,7 +19,7 @@ namespace DriveUtils
   std::vector<DriveInfo> GetDrives();
   std::pair<unsigned long long, unsigned long long> GetDriveUsage(const std::string &drive);
   std::string GetDeviceLabelOrUUID(const std::string &device);
-  bool MountDrive(const std::string &device, const std::string &nameOrUuid);
+  bool MountDrive(const std::string &device);
   bool UnmountDrive(const std::string &device);
 }
 

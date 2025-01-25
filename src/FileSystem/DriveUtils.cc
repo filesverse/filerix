@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <regex>
+#include <cstdlib>
 #include "include/FileSystem/UserUtils.hpp"
 #include "include/FileSystem/DriveUtils.hpp"
 
@@ -187,41 +188,33 @@ namespace DriveUtils
 
   bool MountDrive(const std::string &device)
   {
-    std::string nameOrUuid = GetDeviceLabelOrUUID(device);
-    if (nameOrUuid.empty())
+    std::string command = "pkexec mount " + device;
+
+    int ret = system(command.c_str());
+
+    if (ret != 0)
     {
-      std::cerr << "Failed to retrieve name or UUID for device: " << device << std::endl;
+      std::cerr << "Failed to mount " << device << std::endl;
       return false;
     }
 
-    std::string user = UserUtils::GetUserName();
-    std::string mountPath = "/run/media/" + user + "/" + nameOrUuid;
-
-    try
-    {
-      fs::create_directories(mountPath);
-    }
-    catch (const std::exception &e)
-    {
-      perror("Failed to create mount directory");
-      return false;
-    }
-
-    if (mount(device.c_str(), mountPath.c_str(), "auto", MS_MGC_VAL, nullptr) != 0)
-    {
-      perror("Mount failed");
-      return false;
-    }
+    std::cout << "Drive " << device << " mounted successfully." << std::endl;
     return true;
   }
 
   bool UnmountDrive(const std::string &device)
   {
-    if (umount(device.c_str()) != 0)
+    std::string command = "pkexec umount " + device;
+
+    int ret = system(command.c_str());
+
+    if (ret != 0)
     {
-      perror("Unmount failed");
+      std::cerr << "Failed to unmount " << device << std::endl;
       return false;
     }
+
+    std::cout << "Drive " << device << " unmounted successfully." << std::endl;
     return true;
   }
 }
