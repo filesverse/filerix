@@ -16,7 +16,8 @@ export default defineConfig({
         text: 'Introduction',
         items: [
           { text: 'installation', link: '/guide/installation' },
-          { text: 'Getting Started', link: '/guide/getting-started' }
+          { text: 'Getting Started', link: '/guide/getting-started' },
+          { text: 'Logging', link: '/guide/logging' }
         ]
       },
       {
@@ -35,8 +36,8 @@ export default defineConfig({
             link: '/guide/usage/nodejs',
           },
           {
-            text: 'electron - Coming soon',
-            link: '#',
+            text: 'electron',
+            link: '/guide/usage/electron',
           },
         ]
       },

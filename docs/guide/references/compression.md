@@ -1,7 +1,6 @@
 # **Compression**
 
----
-
+## compressFile()
 - **`compressFile(source: string, destination: string): boolean`**  
   - **Description:** Compresses a file using gzip.  
   - **Parameters:**  
@@ -31,9 +30,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { compressFile } from "@kingmaj0r/libfm/lib";
 
-if (libfm.compressFile('/path/to/file.txt', '/path/to/file.gz')) {
+if (compressFile('/path/to/file.txt', '/path/to/file.gz')) {
     console.log('File compressed successfully.');
 } else {
     console.log('Compression failed.');
@@ -42,8 +41,7 @@ if (libfm.compressFile('/path/to/file.txt', '/path/to/file.gz')) {
 
 :::
 
----
-
+## decompressFile()
 - **`decompressFile(source: string, destination: string): boolean`**  
   - **Description:** Decompresses a gzip file.  
   - **Parameters:**  
@@ -73,9 +71,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { decompressFile } from "@kingmaj0r/libfm/lib";
 
-if (libfm.decompressFile('/path/to/file.gz', '/path/to/file.txt')) {
+if (decompressFile('/path/to/file.gz', '/path/to/file.txt')) {
     console.log('File decompressed successfully.');
 } else {
     console.log('Decompression failed.');

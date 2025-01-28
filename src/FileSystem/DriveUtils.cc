@@ -11,8 +11,11 @@
 #include <iostream>
 #include <regex>
 #include <cstdlib>
+#include <future>
+#include <fstream>
 #include "include/FileSystem/UserUtils.hpp"
 #include "include/FileSystem/DriveUtils.hpp"
+#include "include/utils/Logger.hpp"
 
 namespace DriveUtils
 {
@@ -20,201 +23,287 @@ namespace DriveUtils
 
   std::string GetMountPoint(const std::string &device)
   {
-    FILE *file = setmntent("/proc/mounts", "r");
-    if (!file)
-    {
-      throw std::runtime_error("Unable to read /proc/mounts");
-    }
+    Logger::Info("Attempting to get mount point for device: " + device);
 
-    struct mntent *mnt;
-    while ((mnt = getmntent(file)))
+    try
     {
-      if (mnt->mnt_fsname == device)
+      FILE *file = setmntent("/proc/mounts", "r");
+      if (!file)
       {
-        endmntent(file);
-        return mnt->mnt_dir;
+        Logger::Error("Unable to read /proc/mounts");
+        throw std::runtime_error("Unable to read /proc/mounts");
       }
+
+      struct mntent *mnt;
+      while ((mnt = getmntent(file)))
+      {
+        if (mnt->mnt_fsname == device)
+        {
+          endmntent(file);
+          Logger::Info("Mount point for " + device + " is " + mnt->mnt_dir);
+          return mnt->mnt_dir;
+        }
+      }
+      endmntent(file);
+      Logger::Error("Device " + device + " is not mounted or does not exist.");
+      throw std::runtime_error("Device " + device + " is not mounted or does not exist.");
     }
-    endmntent(file);
-    throw std::runtime_error("Device " + device + " is not mounted or does not exist.");
+    catch (const std::exception &e)
+    {
+      Logger::Error("Error getting mount point for device " + device + ": " + e.what());
+      throw;
+    }
   }
 
   std::vector<DriveInfo> GetDrives()
   {
+    Logger::Info("Getting list of valid drives with mountable partitions...");
+
     std::vector<DriveInfo> drives;
-    std::map<std::string, std::string> mountPoints;
-
-    FILE *file = setmntent("/proc/mounts", "r");
-    if (!file)
-    {
-      throw std::runtime_error("Unable to read /proc/mounts");
-    }
-
-    struct mntent *mnt;
-    while ((mnt = getmntent(file)))
-    {
-      std::string device = mnt->mnt_fsname;
-      std::string mountPoint = mnt->mnt_dir;
-
-      if (device.find("/dev/sd") == 0 || device.find("/dev/nvme") == 0)
-      {
-        mountPoints[device] = mountPoint;
-      }
-    }
-    endmntent(file);
-
-    std::regex partitionRegex(R"((/dev/[a-zA-Z]+[0-9]+))");
-
+    std::map<std::string, std::pair<std::string, std::string>> mountPoints;
     std::string hostDrive;
 
-    for (const auto &entry : std::filesystem::directory_iterator("/dev"))
+    try
     {
-      std::string devicePath = entry.path().string();
-
-      if (devicePath.find("/dev/sd") == 0 || devicePath.find("/dev/nvme") == 0)
+      FILE *file = setmntent("/proc/mounts", "r");
+      if (!file)
       {
-        DriveInfo drive;
-
-        std::smatch match;
-        if (std::regex_search(devicePath, match, partitionRegex))
-        {
-          drive.device = devicePath.substr(0, devicePath.find_last_not_of("0123456789") + 1);
-          drive.partition = devicePath;
-        }
-        else
-        {
-          drive.device = devicePath;
-          drive.partition = "";
-        }
-
-        auto it = mountPoints.find(devicePath);
-        if (it != mountPoints.end())
-        {
-          drive.status = "mounted";
-          drive.mountPoint = it->second;
-        }
-        else
-        {
-          drive.status = "unmounted";
-          drive.mountPoint = "";
-        }
-
-        drive.unmountable = (drive.mountPoint == "/" || drive.mountPoint == "/home" || drive.mountPoint == "/boot" || drive.mountPoint == "/boot/efi");
-
-        if (drive.mountPoint == "/boot" || drive.mountPoint == "/boot/efi")
-        {
-          continue;
-        }
-
-        if (drive.mountPoint == "/home" || drive.mountPoint == "/")
-        {
-          hostDrive = drive.device;
-          drive.mountPoint = "/";
-        }
-
-        drives.push_back(drive);
+        Logger::Error("Unable to read /proc/mounts");
+        throw std::runtime_error("Unable to read /proc/mounts");
       }
-    }
 
-    std::sort(drives.begin(), drives.end(), [&hostDrive](const DriveInfo &a, const DriveInfo &b)
-              {
-        if (a.device == hostDrive) return true;
-        if (b.device == hostDrive) return false;
-        return a.device < b.device; });
+      struct mntent *mnt;
+      while ((mnt = getmntent(file)))
+      {
+        std::string device = mnt->mnt_fsname;
+        std::string mountPoint = mnt->mnt_dir;
+        std::string fsType = mnt->mnt_type;
+
+        if (device.find("/dev/") == 0)
+        {
+          mountPoints[device] = {mountPoint, fsType};
+
+          if (mountPoint == "/")
+          {
+            hostDrive = device;
+          }
+        }
+      }
+      endmntent(file);
+
+      std::regex driveRegex(R"(^/dev/(sd[a-z]+|nvme[0-9]+n[0-9]+)$)");
+
+      std::regex partitionRegex(R"(^/dev/(sd[a-z]+[0-9]+|nvme[0-9]+n[0-9]+p[0-9]+)$)");
+
+      for (const auto &entry : std::filesystem::directory_iterator("/sys/class/block"))
+      {
+        std::string deviceName = entry.path().filename().string();
+        std::string devicePath = "/dev/" + deviceName;
+
+        std::string ueventFile = entry.path().string() + "/device/uevent";
+        if (std::filesystem::exists(ueventFile))
+        {
+          std::ifstream ueventStream(ueventFile);
+          std::string line;
+          while (std::getline(ueventStream, line))
+          {
+            if (line.find("DEVTYPE=disk") != std::string::npos && line.find("ID_BUS=usb") != std::string::npos)
+            {
+              Logger::Info("Skipping USB device: " + devicePath);
+              goto continue_loop;
+            }
+          }
+        }
+
+        if (std::regex_match(devicePath, partitionRegex))
+        {
+          auto it = mountPoints.find(devicePath);
+          DriveInfo drive;
+          drive.device = devicePath;
+          drive.partition = devicePath;
+
+          if (it != mountPoints.end())
+          {
+            drive.status = "mounted";
+            drive.mountPoint = it->second.first;
+            drive.fsType = it->second.second;
+
+            if ((drive.fsType == "vfat" && drive.mountPoint == "/boot/efi") ||
+                drive.mountPoint == "/boot" ||
+                drive.mountPoint == "/home")
+            {
+              Logger::Info("Skipping partition: " + drive.device + " (EFI, /boot, or /home)");
+              continue;
+            }
+
+            Logger::Info("Drive " + drive.device + " is mounted at " + drive.mountPoint);
+          }
+          else
+          {
+            drive.status = "unmounted";
+            drive.mountPoint = "";
+            Logger::Info("Drive " + drive.device + " is unmounted.");
+          }
+
+          if (drive.device == hostDrive)
+          {
+            drive.unmountable = false;
+          }
+          else
+          {
+            drive.unmountable = true;
+          }
+          drives.push_back(drive);
+        }
+
+      continue_loop:
+        continue;
+      }
+
+      if (!hostDrive.empty())
+      {
+        Logger::Info("Adding host drive: " + hostDrive);
+        DriveInfo hostDriveInfo;
+        hostDriveInfo.device = hostDrive;
+        hostDriveInfo.partition = hostDrive;
+        hostDriveInfo.mountPoint = "/";
+        hostDriveInfo.status = "mounted";
+        hostDriveInfo.fsType = mountPoints[hostDrive].second;
+        hostDriveInfo.unmountable = false;
+        drives.push_back(hostDriveInfo);
+      }
+
+      std::sort(drives.begin(), drives.end(), [&hostDrive](const DriveInfo &a, const DriveInfo &b)
+                {
+            if (a.device == hostDrive)
+                return true;
+            if (b.device == hostDrive)
+                return false;
+            return a.device < b.device; });
+
+      Logger::Info("Drives sorted.");
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Error retrieving drives: " + std::string(e.what()));
+      throw;
+    }
 
     return drives;
   }
 
   std::pair<unsigned long long, unsigned long long> GetDriveUsage(const std::string &drive)
   {
-    // Get the mount point for the device (e.g., /dev/sda1)
-    std::string mountPoint = GetMountPoint(drive);
+    Logger::Info("Getting drive usage for: " + drive);
 
-    struct statvfs stat;
-    if (statvfs(mountPoint.c_str(), &stat) != 0)
+    try
     {
-      throw std::runtime_error("Unable to get drive information for " + drive);
+      std::string mountPoint = GetMountPoint(drive);
+
+      struct statvfs stat;
+      if (statvfs(mountPoint.c_str(), &stat) != 0)
+      {
+        Logger::Error("Unable to get drive information for " + drive);
+        throw std::runtime_error("Unable to get drive information for " + drive);
+      }
+
+      unsigned long long totalSpace = stat.f_blocks * stat.f_frsize;
+      unsigned long long usedSpace = (stat.f_blocks - stat.f_bfree) * stat.f_frsize;
+
+      Logger::Info("Drive usage for " + drive + ": " + std::to_string(usedSpace) + " / " + std::to_string(totalSpace));
+
+      return {usedSpace, totalSpace};
     }
-
-    // Calculate total space and used space
-    unsigned long long totalSpace = stat.f_blocks * stat.f_frsize;
-    unsigned long long usedSpace = (stat.f_blocks - stat.f_bfree) * stat.f_frsize;
-
-    return {usedSpace, totalSpace};
+    catch (const std::exception &e)
+    {
+      Logger::Error("Error getting drive usage for " + drive + ": " + e.what());
+      throw;
+    }
   }
 
   std::string GetDeviceLabelOrUUID(const std::string &device)
   {
-    std::ostringstream command;
-    command << "blkid -o value -s LABEL " << device << " 2>/dev/null";
+    Logger::Info("Getting label or UUID for device: " + device);
 
-    FILE *pipe = popen(command.str().c_str(), "r");
-    if (!pipe)
+    try
     {
-      perror("Failed to retrieve device label");
+      for (const auto &entry : fs::directory_iterator("/dev/disk/by-label"))
+      {
+        if (fs::canonical(entry.path()) == fs::canonical(device))
+        {
+          Logger::Info("Found label for " + device + ": " + entry.path().filename().string());
+          return entry.path().filename().string();
+        }
+      }
+
+      for (const auto &entry : fs::directory_iterator("/dev/disk/by-uuid"))
+      {
+        if (fs::canonical(entry.path()) == fs::canonical(device))
+        {
+          Logger::Info("Found UUID for " + device + ": " + entry.path().filename().string());
+          return entry.path().filename().string();
+        }
+      }
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Error getting label or UUID for device " + device + ": " + e.what());
       return {};
     }
 
-    char buffer[128];
-    std::string label;
-    while (fgets(buffer, sizeof(buffer), pipe))
-    {
-      label += buffer;
-    }
-    pclose(pipe);
-
-    if (label.empty())
-    {
-      command.str("");
-      command << "blkid -o value -s UUID " << device << " 2>/dev/null";
-
-      pipe = popen(command.str().c_str(), "r");
-      if (!pipe)
-      {
-        perror("Failed to retrieve device UUID");
-        return {};
-      }
-
-      while (fgets(buffer, sizeof(buffer), pipe))
-      {
-        label += buffer;
-      }
-      pclose(pipe);
-    }
-
-    label.erase(std::remove(label.begin(), label.end(), '\n'), label.end());
-    return label;
+    Logger::Warn("No label or UUID found for device: " + device);
+    return {};
   }
 
   bool MountDrive(const std::string &device)
   {
-    std::string command = "pkexec mount " + device;
+    Logger::Info("Attempting to mount drive: " + device);
 
-    int ret = system(command.c_str());
-
-    if (ret != 0)
+    try
     {
-      std::cerr << "Failed to mount " << device << std::endl;
+      std::string command = "pkexec mount " + device;
+
+      int ret = system(command.c_str());
+
+      if (ret != 0)
+      {
+        Logger::Error("Failed to mount " + device);
+        return false;
+      }
+
+      Logger::Info("Drive " + device + " mounted successfully.");
+      return true;
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Error mounting drive " + device + ": " + e.what());
       return false;
     }
-
-    std::cout << "Drive " << device << " mounted successfully." << std::endl;
-    return true;
   }
 
   bool UnmountDrive(const std::string &device)
   {
-    std::string command = "pkexec umount " + device;
+    Logger::Info("Attempting to unmount drive: " + device);
 
-    int ret = system(command.c_str());
-
-    if (ret != 0)
+    try
     {
-      std::cerr << "Failed to unmount " << device << std::endl;
+      std::string command = "pkexec umount " + device;
+
+      int ret = system(command.c_str());
+
+      if (ret != 0)
+      {
+        Logger::Error("Failed to unmount " + device);
+        return false;
+      }
+
+      Logger::Info("Drive " + device + " unmounted successfully.");
+      return true;
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Error unmounting drive " + device + ": " + e.what());
       return false;
     }
-
-    std::cout << "Drive " << device << " unmounted successfully." << std::endl;
-    return true;
   }
 }

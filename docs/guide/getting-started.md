@@ -26,8 +26,8 @@ int main()
 }
 ```
 
-```javascript [NodeJS]
-import libfm from "/path/to/fm.node";
+```javascript [Node.js]
+import { getDriveUsage } from "@kingmaj0r/libfm/lib";
 
 async function getDriveUsageFunc(drivePath) {
   try {
@@ -43,7 +43,7 @@ async function getDriveUsageFunc(drivePath) {
   }
 }
 
-const drivePath = '/'; // or /dev/sdX
+const drivePath = '/dev/sdX'; // or /dev/sdX
 getDriveUsageFunc(drivePath);
 ```
 

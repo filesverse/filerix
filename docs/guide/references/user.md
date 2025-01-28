@@ -1,7 +1,6 @@
 # **User**
 
----
-
+## getUserName()
 - **`getUserName(): string`**  
   - **Description:** Retrieves the username of the currently logged-in user.  
   - **Returns:**  
@@ -26,20 +25,19 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { getUserName } from "@kingmaj0r/libfm/lib";
 
 console.log(`Current user: ${libfm.getUserName()}`);
 ```
 
 :::
 
----
-
+## changePermissions()
 - **`changePermissions(path: string, mode: number): boolean`**  
   - **Description:** Changes file or directory permissions.  
   - **Parameters:**  
     - `path` (string): The file or directory path.  
-    - `mode` (number): The permission mode (e.g., `0o755`).  
+    - `mode` (number): The permission mode (e.g., `0755`).  
   - **Returns:**  
     - `true` if successful, otherwise `false`.  
   - **Examples:**
@@ -52,7 +50,7 @@ console.log(`Current user: ${libfm.getUserName()}`);
 
 int main() {
     const std::string filePath = "/path/to/file";
-    int mode = 0644; // Equivalent to `0o644`
+    int mode = 0644;
 
     if (UserUtils::ChangePermissions(filePath, mode)) {
         std::cout << "Permissions updated successfully." << std::endl;
@@ -64,9 +62,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { changePermissions } from "@kingmaj0r/libfm/lib";
 
-if (libfm.changePermissions('/path/to/file', 0o644)) {
+if (changePermissions('/path/to/file', 0o644)) {
     console.log('Permissions updated successfully.');
 } else {
     console.log('Failed to update permissions.');

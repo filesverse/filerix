@@ -1,4 +1,6 @@
-const { getDriveUsage } = require('./lib/libfm');
+const { init, getDriveUsage } = require('@kingmaj0r/libfm/lib');
+
+init(__dirname + "/../build/Release/fm.node");
 
 async function getDriveUsageFunc(drivePath) {
   try {
@@ -14,5 +16,5 @@ async function getDriveUsageFunc(drivePath) {
   }
 }
 
-const drivePath = '/';
+const drivePath = '/dev/sdX';
 getDriveUsageFunc(drivePath);

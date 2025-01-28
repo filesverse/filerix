@@ -1,7 +1,6 @@
 # **Drives**
 
----
-
+## getDriveUsage()
 - **`getDriveUsage(drivePath: string): { used_space: number; total_space: number; }`**  
   - **Description:** Retrieves the total and used space of a specified drive.  
   - **Parameters:**  
@@ -31,26 +30,26 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { getDriveUsage } from "@kingmaj0r/libfm/lib";
 
-const usage = libfm.getDriveUsage('/');
+const usage = libfm.getDriveUsage('/dev/sdX');
 console.log(`Used space: ${usage.used_space} bytes`);
 console.log(`Total space: ${usage.total_space} bytes`);
 ```
 
 :::
 
----
-
+## getDrives()
 - **`getDrives(): DriveInfo[]`**  
   - **Description:** Returns a list of all available drives on the system.  
   - **Returns:**  
     - An array of `DriveInfo` objects, each containing:
-      - `device` (string): The device path.  
+      - `device` (string): The device path.
       - `status` (string): `mounted` or `unmounted`.
       - `unmountable` (boolean): Whether the drive can be unmounted.
-      - `mountPoint` (string): The mount point.  
-      - `partition` (string): The partition path.  
+      - `mountPoint` (string): The mount point.
+      - `partition` (string): The partition path.
+      - `fsType` (string): The partition type.
   - **Examples:**
 
 :::code-group
@@ -76,9 +75,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { getDrives } from "@kingmaj0r/libfm/lib";
 
-const drives = libfm.getDrives();
+const drives = getDrives();
 drives.forEach(drive => {
     console.log(`Device: ${drive.device}, Status: ${drive.status}, Mount Point: ${drive.mountPoint}`);
 });
@@ -86,8 +85,7 @@ drives.forEach(drive => {
 
 :::
 
----
-
+## getDriveInfo()
 - **`getDriveInfo(drivePath: string): DriveInfo`**  
   - **Description:** Returns detailed information about a specific drive.  
   - **Parameters:**  
@@ -99,6 +97,7 @@ drives.forEach(drive => {
       - `unmountable` (boolean): Whether the drive can be unmounted.
       - `mountPoint` (string): The mount point.  
       - `partition` (string): The partition path.  
+      - `fsType` (string): The partition type.
   - **Examples:**
 
 :::code-group
@@ -109,7 +108,7 @@ drives.forEach(drive => {
 
 int main() {
     try {
-        auto driveInfo = DriveUtils::GetDriveInfo("/dev/sda1");
+        auto driveInfo = DriveUtils::GetDriveInfo("/dev/sdX");
         std::cout << "Device: " << driveInfo.device 
                   << ", Status: " << driveInfo.status 
                   << ", Mount Point: " << driveInfo.mountPoint 
@@ -122,60 +121,15 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { getDriveInfo } from "@kingmaj0r/libfm/lib";
 
-const driveInfo = libfm.getDriveInfo('/dev/sda1');
+const driveInfo = getDriveInfo('/dev/sdX');
 console.log(`Device: ${driveInfo.device}, Status: ${driveInfo.status}, Mount Point: ${driveInfo.mountPoint}`);
 ```
 
 :::
 
----
-
-- **`formatDrive(drivePath: string): boolean`**  
-  - **Description:** Formats the specified drive.  
-  - **Parameters:**  
-    - `drivePath` (string): The path to the drive to be formatted (e.g., `/dev/sda1`).  
-  - **Returns:**  
-    - A boolean indicating whether the formatting was successful.  
-  - **Examples:**
-
-:::code-group
-
-```cpp [C++]
-#include <iostream>
-#include "libfm/FileSystem/DriveUtils.hpp"
-
-int main() {
-    try {
-        bool success = DriveUtils::FormatDrive("/dev/sda1");
-        if (success) {
-            std::cout << "Drive formatted successfully." << std::endl;
-        } else {
-            std::cout << "Drive formatting failed." << std::endl;
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-    }
-    return 0;
-}
-```
-
-```javascript [Node.js]
-import libfm from "/path/to/fm.node";
-
-const success = libfm.formatDrive('/dev/sda1');
-if (success) {
-    console.log("Drive formatted successfully.");
-} else {
-    console.log("Drive formatting failed.");
-}
-```
-
-:::
-
----
-
+## mountDrive()
 - **`mountDrive(drivePath: string, mountPoint: string): boolean`**  
   - **Description:** Mounts the specified drive to the given mount point.  
   - **Parameters:**  
@@ -193,7 +147,7 @@ if (success) {
 
 int main() {
     try {
-        bool success = DriveUtils::MountDrive("/dev/sda1", "/mnt/mydrive");
+        bool success = DriveUtils::MountDrive("/dev/sdX", "/mnt/mydrive");
         if (success) {
             std::cout << "Drive mounted successfully." << std::endl;
         } else {
@@ -207,9 +161,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { mountDrive } from "@kingmaj0r/libfm/lib";
 
-const success = libfm.mountDrive('/dev/sda1', '/mnt/mydrive');
+const success = mountDrive('/dev/sdX', '/mnt/mydrive');
 if (success) {
     console.log("Drive mounted successfully.");
 } else {
@@ -219,8 +173,7 @@ if (success) {
 
 :::
 
----
-
+## unmountDrive()
 - **`unmountDrive(drivePath: string): boolean`**  
   - **Description:** Unmounts the specified drive.  
   - **Parameters:**  
@@ -237,7 +190,7 @@ if (success) {
 
 int main() {
     try {
-        bool success = DriveUtils::UnmountDrive("/dev/sda1");
+        bool success = DriveUtils::UnmountDrive("/dev/sdX");
         if (success) {
             std::cout << "Drive unmounted successfully." << std::endl;
         } else {
@@ -251,9 +204,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { unmountDrive } from "@kingmaj0r/libfm/lib";
 
-const success = libfm.unmountDrive('/dev/sda1');
+const success = unmountDrive('/dev/sdX');
 if (success) {
     console.log("Drive unmounted successfully.");
 } else {

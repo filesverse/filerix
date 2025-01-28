@@ -1,7 +1,6 @@
 # **Filesystem**
 
----
-
+## getFiles()
 - **`getFiles(path: string): FileInfo[]`**  
   - **Description:** Lists all files and directories in the specified path.  
   - **Parameters:**  
@@ -12,7 +11,6 @@
       - `path` (string): Full file path.
       - `isDirectory` (boolean): Whether it is a directory.
       - `size` (number): File size (in bytes).
-      - `modifiedDate` (Date): Last modified date.  
   - **Examples:**
 
 :::code-group
@@ -32,9 +30,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { getFiles } from "@kingmaj0r/libfm/lib";
 
-const files = libfm.getFiles('/home/user/Documents');
+const files = getFiles('/home/user/Documents');
 files.forEach(file => {
     console.log(`${file.name} - ${file.isDirectory ? 'Directory' : 'File'}`);
 });
@@ -42,8 +40,7 @@ files.forEach(file => {
 
 :::
 
----
-
+## searchFiles()
 - **`searchFiles(path: string, query: string): FileInfo[]`**  
   - **Description:** Searches for files matching the query within a directory (recursively).  
   - **Parameters:**  
@@ -55,7 +52,6 @@ files.forEach(file => {
       - `path` (string): Full file path.
       - `isDirectory` (boolean): Whether it is a directory.
       - `size` (number): File size (in bytes).
-      - `modifiedDate` (Date): Last modified date.  
   - **Examples:**
 
 :::code-group
@@ -74,9 +70,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { searchFiles } from "@kingmaj0r/libfm/lib";
 
-const results = libfm.searchFiles('/home/user/Documents', 'project');
+const results = searchFiles('/home/user/Documents', 'project');
 results.forEach(file => {
     console.log(`${file.name} - ${file.path}`);
 });
@@ -84,8 +80,7 @@ results.forEach(file => {
 
 :::
 
----
-
+## copyFile()
 - **`copyFile(source: string, destination: string): boolean`**  
   - **Description:** Copies a file or directory to a specified location.  
   - **Parameters:**  
@@ -112,9 +107,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { copyFile } from "@kingmaj0r/libfm/lib";
 
-if (libfm.copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
+if (copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
     console.log('File copied successfully.');
 } else {
     console.log('Failed to copy file.');
@@ -123,8 +118,7 @@ if (libfm.copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt'))
 
 :::
 
----
-
+## cutFile()
 - **`cutFile(source: string, destination: string): boolean`**  
   - **Description:** Moves a file or directory to a new location (cut and paste).  
   - **Parameters:**  
@@ -151,9 +145,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { cutFile } from "@kingmaj0r/libfm/lib";
 
-if (libfm.cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
+if (cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
     console.log('File moved successfully.');
 } else {
     console.log('Failed to move file.');
@@ -162,8 +156,7 @@ if (libfm.cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt'))
 
 :::
 
----
-
+## renameFile()
 - **`renameFile(oldPath: string, newPath: string): boolean`**  
   - **Description:** Renames or moves a file or directory.  
   - **Parameters:**  
@@ -190,9 +183,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import libfm from "/path/to/fm.node";
+import { renameFile } from "@kingmaj0r/libfm/lib";
 
-if (libfm.renameFile('/home/user/file.txt', '/home/user/file_renamed.txt')) {
+if (renameFile('/home/user/file.txt', '/home/user/file_renamed.txt')) {
     console.log('File renamed successfully.');
 } else {
     console.log('Failed to rename file.');

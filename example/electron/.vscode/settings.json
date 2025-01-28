@@ -1,0 +1,20 @@
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "C_Cpp.errorSquiggles": "disabled",
+  "files.associations": {
+    "utility": "cpp",
+    "stdexcept": "cpp",
+    "ostream": "cpp",
+    "string": "cpp",
+    "iomanip": "cpp",
+    "initializer_list": "cpp"
+  }
+}

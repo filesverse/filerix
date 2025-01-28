@@ -13,48 +13,59 @@ namespace FileUtils
 {
   std::string GetMimeType(const fs::path &filePath)
   {
-    if (fs::is_directory(filePath))
+    try
     {
-      return "directory";
+      if (fs::is_directory(filePath))
+      {
+        return "directory";
+      }
+
+      static const std::unordered_map<std::string, std::string> imageTypes = {
+          {".jpg", "image/jpeg"},
+          {".jpeg", "image/jpeg"},
+          {".png", "image/png"},
+          {".gif", "image/gif"},
+          {".bmp", "image/bmp"},
+          {".tiff", "image/tiff"},
+          {".webp", "image/webp"},
+          {".svg", "image/svg+xml"}};
+
+      std::string ext = filePath.extension().string();
+      auto it = imageTypes.find(ext);
+      if (it != imageTypes.end())
+      {
+        return it->second;
+      }
+      return "file";
     }
-
-    static const std::unordered_map<std::string, std::string> imageTypes = {
-        {".jpg", "image/jpeg"},
-        {".jpeg", "image/jpeg"},
-        {".png", "image/png"},
-        {".gif", "image/gif"},
-        {".bmp", "image/bmp"},
-        {".tiff", "image/tiff"},
-        {".webp", "image/webp"},
-        {".svg", "image/svg+xml"}};
-
-    std::string ext = filePath.extension().string();
-    if (imageTypes.find(ext) != imageTypes.end())
+    catch (const std::exception &e)
     {
-      return imageTypes.at(ext);
+      Logger::Error("Error getting MIME type for file: " + std::string(e.what()));
+      return "unknown";
     }
-    return "file";
   }
 
   std::vector<FileInfo> GetFiles(const std::string &path)
   {
     std::vector<FileInfo> files;
+
     try
     {
       fs::path fsPath(path);
+
       if (!fs::exists(fsPath))
       {
-        std::cerr << "Error: Directory does not exist: " << path << "\n";
-        return {};
+        Logger::Error("Error: Directory does not exist: " + path);
+        return files;
       }
 
       if (!DirectoryPermissions::HasAccess(path))
       {
-        std::cerr << "Warning: Insufficient permissions to access the directory: " << path << "\n";
+        Logger::Warn("Warning: Insufficient permissions to access the directory: " + path);
         if (!DirectoryPermissions::RequestElevatedPermissions(path))
         {
-          std::cerr << "Error: Failed to obtain elevated permissions for directory: " << path << "\n";
-          return {};
+          Logger::Error("Error: Failed to obtain elevated permissions for directory: " + path);
+          return files;
         }
       }
 
@@ -70,8 +81,13 @@ namespace FileUtils
     }
     catch (const fs::filesystem_error &e)
     {
-      std::cerr << "Filesystem error accessing entry: " << e.what() << "\n";
+      Logger::Error("Filesystem error accessing entry in directory " + path + ": " + std::string(e.what()));
     }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Unexpected error in GetFiles: " + std::string(e.what()));
+    }
+
     return files;
   }
 
@@ -96,8 +112,13 @@ namespace FileUtils
     }
     catch (const fs::filesystem_error &e)
     {
-      throw std::runtime_error(e.what());
+      Logger::Error("Filesystem error during search in directory " + path + ": " + std::string(e.what()));
     }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Unexpected error during file search: " + std::string(e.what()));
+    }
+
     return searchResults;
   }
 
@@ -110,18 +131,26 @@ namespace FileUtils
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Copy failed: " + std::string(e.what()));
+      Logger::Error("Copy failed from " + source + " to " + destination + ": " + std::string(e.what()));
       return false;
     }
   }
 
   bool Cut(const std::string &source, const std::string &destination)
   {
-    if (Copy(source, destination))
+    try
     {
-      return fs::remove_all(source) > 0;
+      if (Copy(source, destination))
+      {
+        return fs::remove_all(source) > 0;
+      }
+      return false;
     }
-    return false;
+    catch (const std::exception &e)
+    {
+      Logger::Error("Cut operation failed for " + source + " to " + destination + ": " + std::string(e.what()));
+      return false;
+    }
   }
 
   bool Rename(const std::string &oldPath, const std::string &newPath)
@@ -133,25 +162,59 @@ namespace FileUtils
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Rename failed: " + std::string(e.what()));
+      Logger::Error("Rename failed from " + oldPath + " to " + newPath + ": " + std::string(e.what()));
       return false;
     }
   }
 
   bool MoveTo(const std::string &source, const std::string &destination)
   {
-    return Rename(source, destination);
+    try
+    {
+      return Rename(source, destination);
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Move failed from " + source + " to " + destination + ": " + std::string(e.what()));
+      return false;
+    }
   }
 
   bool Compress(const std::string &source, const std::string &destination)
   {
-    std::string command = "gzip -c \"" + source + "\" > \"" + destination + "\"";
-    return std::system(command.c_str()) == 0;
+    try
+    {
+      std::string command = "gzip -c \"" + source + "\" > \"" + destination + "\"";
+      int result = std::system(command.c_str());
+      if (result != 0)
+      {
+        Logger::Error("Compression failed for " + source + " to " + destination);
+      }
+      return result == 0;
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Compression error for " + source + " to " + destination + ": " + std::string(e.what()));
+      return false;
+    }
   }
 
   bool Decompress(const std::string &source, const std::string &destination)
   {
-    std::string command = "gzip -d -c \"" + source + "\" > \"" + destination + "\"";
-    return std::system(command.c_str()) == 0;
+    try
+    {
+      std::string command = "gzip -d -c \"" + source + "\" > \"" + destination + "\"";
+      int result = std::system(command.c_str());
+      if (result != 0)
+      {
+        Logger::Error("Decompression failed for " + source + " to " + destination);
+      }
+      return result == 0;
+    }
+    catch (const std::exception &e)
+    {
+      Logger::Error("Decompression error for " + source + " to " + destination + ": " + std::string(e.what()));
+      return false;
+    }
   }
 }

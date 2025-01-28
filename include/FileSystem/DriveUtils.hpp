@@ -12,6 +12,7 @@ struct DriveInfo
   bool unmountable;
   std::string mountPoint;
   std::string partition;
+  std::string fsType;
 };
 
 namespace DriveUtils

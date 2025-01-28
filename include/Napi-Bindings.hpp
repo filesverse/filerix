@@ -6,6 +6,7 @@
 #include "bindings/DrivesBinding.hpp"
 #include "bindings/UserBinding.hpp"
 #include "bindings/CompressionBinding.hpp"
+#include "bindings/LoggerBinding.hpp"
 
 Napi::Object Init(Napi::Env env, Napi::Object exports)
 {
@@ -26,6 +27,9 @@ Napi::Object Init(Napi::Env env, Napi::Object exports)
 
   exports.Set("compressFile", Napi::Function::New(env, libfm::CompressFile));
   exports.Set("decompressFile", Napi::Function::New(env, libfm::DecompressFile));
+
+  exports.Set("initLogger", Napi::Function::New(env, libfm::InitLogger));
+
   return exports;
 }
 

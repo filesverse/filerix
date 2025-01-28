@@ -20,6 +20,7 @@ namespace libfm
       driveObj.Set("unmountable", Napi::Boolean::New(env, drives[i].unmountable));
       driveObj.Set("mountPoint", Napi::String::New(env, drives[i].mountPoint));
       driveObj.Set("partition", Napi::String::New(env, drives[i].partition));
+      driveObj.Set("fsType", Napi::String::New(env, drives[i].fsType));
 
       driveArray[i] = driveObj;
     }

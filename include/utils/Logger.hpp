@@ -5,7 +5,9 @@
 
 namespace Logger
 {
+  void Init(const std::string &logLevel);
   void Error(const std::string &message);
+  void Warn(const std::string &message);
   void Info(const std::string &message);
 }
 

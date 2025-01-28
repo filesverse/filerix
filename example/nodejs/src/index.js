@@ -1,4 +1,11 @@
-import { getDriveUsage } from "./lib/libfm";
+import { init, getDriveUsage } from "@kingmaj0r/libfm/lib";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+init(__dirname + "/../build/Release/fm.node");
 
 async function getDriveUsageFunc(drivePath) {
   try {
@@ -14,5 +21,5 @@ async function getDriveUsageFunc(drivePath) {
   }
 }
 
-const drivePath = '/';
+const drivePath = '/dev/sdX';
 getDriveUsageFunc(drivePath);
