@@ -4,8 +4,11 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "libfm",
   description: "File manager library that provides all the essentials.",
+  base: "/libfm/",
+  cleanUrls: true,
   themeConfig: {
     logo: '/logo.png',
+
     nav: [
       { text: 'Home', link: '/' },
       { text: "Guide", link: '/guide/installation' },
