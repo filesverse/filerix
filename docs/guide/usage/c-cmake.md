@@ -1,10 +1,10 @@
-# **C++ Usage with CMake**
+# **C Usage with CMake**
 
-## **Prerequisites**
+### **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 
-1. **C++ Compiler**: Ensure you have a C++ compiler installed. For example, `g++` on Linux.
+1. **C Compiler**: Ensure you have a C compiler installed. For example, `gcc` on Linux.
 
 2. **CMake**: Install CMake. If you don't have it already:
    
@@ -32,9 +32,9 @@ sudo pacman -Syu cmake make
 
 ## **Building the Example with CMake**
 
-1. Navigate to the `example/cpp+cmake` directory:
+1. Navigate to the `example/c+cmake` directory:
    ```bash
-   cd example/cpp+cmake
+   cd example/c+cmake
    ```
 
 2. Create a build directory to keep the build files organized:
@@ -55,6 +55,8 @@ sudo pacman -Syu cmake make
 
    After building, the executable `example` will be available in the `build` directory.
 
+---
+
 ## **Running the Example**
 
 1. Once the build process completes, run the compiled executable:
@@ -70,11 +72,10 @@ sudo pacman -Syu cmake make
 
 ## **Understanding the Code**
 
-The C++ code interacts with the `libfm` library to fetch the disk usage of a given directory (`/` by default). Here’s a quick breakdown of the key components:
+The C code interacts with the `libfm` library to fetch the disk usage of a given directory (/ by default). Here’s a quick breakdown of the key components:
 
-- **DriveUtils::GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
-- **Logger::Info**: This utility logs information (like the disk usage) to a log file or the console.
-- **std::cout**: The result is printed to the console for the user to see.
+- **GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
+- **printf**: The result is printed to the console for the user to see.
 
 This simple program is designed to showcase how to use `libfm` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.
 

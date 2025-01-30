@@ -1,6 +1,6 @@
 # **C++ Usage with Meson**
 
-### **Prerequisites**
+## **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 
@@ -10,9 +10,7 @@ Before proceeding, ensure the following are installed and set up:
    
 3. **libfm**: Ensure the `libfm` library and its development files are installed.
 
----
-
-### **1. Installing Dependencies**
+## **Installing Dependencies**
 
 Depending on your distribution, run one of the following commands to install the required build tools:
 
@@ -32,9 +30,7 @@ sudo pacman -Syu meson ninja
 
 :::
 
----
-
-### **2. Building the Example with Meson**
+## **Building the Example with Meson**
 
 1. Navigate to the `example/cpp+meson` directory:
    ```bash
@@ -47,21 +43,19 @@ sudo pacman -Syu meson ninja
    cd build
    ```
 
-3. Run Meson to configure the project:
+3. Run `meson` to configure the project:
    ```bash
    meson ..
    ```
 
-4. Build the project with `make`:
+4. Build the project with `ninja`:
    ```bash
    ninja
    ```
 
    After building, the executable `example` will be available in the `build` directory.
 
----
-
-### **3. Running the Example**
+## **Running the Example**
 
 1. Once the build process completes, run the compiled executable:
    ```bash
@@ -74,9 +68,17 @@ sudo pacman -Syu meson ninja
    Total space: <total_bytes> bytes
    ```
 
----
+## **Understanding the Code**
 
-### **4. Common Issues**
+The C++ code interacts with the `libfm` library to fetch the disk usage of a given directory (`/` by default). Here’s a quick breakdown of the key components:
+
+- **DriveUtils::GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
+- **Logger::Info**: This utility logs information (like the disk usage) to a log file or the console.
+- **std::cout**: The result is printed to the console for the user to see.
+
+This simple program is designed to showcase how to use `libfm` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.
+
+## **Common Issues**
 
 - **Missing `libfm.so` (Shared Library)**:
   If you encounter errors about missing libraries (e.g., `libfm.so`), ensure the library path is correctly set:
@@ -94,15 +96,3 @@ sudo pacman -Syu meson ninja
   meson .. --reconfigure
   ```
   This will force Meson to reconfigure the project and show more detailed output to help troubleshoot.
-
----
-
-### **5. Understanding the Code**
-
-The C++ code interacts with the `libfm` library to fetch the disk usage of a given directory (`/` by default). Here’s a quick breakdown of the key components:
-
-- **DriveUtils::GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
-- **Logger::Info**: This utility logs information (like the disk usage) to a log file or the console.
-- **std::cout**: The result is printed to the console for the user to see.
-
-This simple program is designed to showcase how to use `libfm` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.

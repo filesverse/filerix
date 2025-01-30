@@ -10,9 +10,7 @@ Before proceeding, ensure the following are installed and set up:
    - **Linux**: Install `build-essential` (e.g., `sudo apt install build-essential` on Ubuntu).
 4. **libfm**: Ensure the `libfm` library and its development files are installed. If you built `libfm` manually, ensure the `.so` files are in your library path.
 
----
-
-### **1. Building the Node.js Wrapper with `node-gyp`**
+## **Building the Node.js Wrapper with `node-gyp`**
 
 1. Navigate to the `example/electron` directory:
    ```bash
@@ -27,9 +25,7 @@ Before proceeding, ensure the following are installed and set up:
 
 3. After building, the compiled Node.js addon (`fm.node`) will be available in the `build/Release` directory.
 
----
-
-### **2. Installation**
+## **Installation**
 
 1. Ensure you are in the `example/electron` directory:
    ```bash
@@ -41,9 +37,7 @@ Before proceeding, ensure the following are installed and set up:
    npm install
    ```
 
----
-
-### **3. Running the Example**
+## **Running the Example**
 
 1. The example is set up in `example/electron`.
   - The `getDrives` function gets all available mountable/mounted drives and returns an object.

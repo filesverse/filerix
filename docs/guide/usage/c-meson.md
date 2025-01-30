@@ -1,12 +1,12 @@
-# **C++ Usage with CMake**
+# **C Usage with Meson**
 
-## **Prerequisites**
+### **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 
-1. **C++ Compiler**: Ensure you have a C++ compiler installed. For example, `g++` on Linux.
+1. **C Compiler**: Ensure you have a C compiler installed. For example, `gcc` on Linux.
 
-2. **CMake**: Install CMake. If you don't have it already:
+2. **Meson**: Install Meson. If you don't have it already:
    
 3. **libfm**: Ensure the `libfm` library and its development files are installed.
 
@@ -17,24 +17,24 @@ Depending on your distribution, run one of the following commands to install the
 :::code-group
 
 ```sh [<i class="devicon-fedora-plain"></i> Fedora]
-sudo dnf install cmake make
+sudo dnf install meson ninja
 ```
 
 ```sh [<i class="devicon-ubuntu-plain"></i> Ubuntu]
-sudo apt install cmake make
+sudo apt install meson ninja
 ```
 
 ```sh [<i class="devicon-archlinux-plain"></i> Arch]
-sudo pacman -Syu cmake make
+sudo pacman -Syu meson ninja
 ```
 
 :::
 
-## **Building the Example with CMake**
+## **Building the Example with Meson**
 
-1. Navigate to the `example/cpp+cmake` directory:
+1. Navigate to the `example/c+meson` directory:
    ```bash
-   cd example/cpp+cmake
+   cd example/c+meson
    ```
 
 2. Create a build directory to keep the build files organized:
@@ -43,17 +43,19 @@ sudo pacman -Syu cmake make
    cd build
    ```
 
-3. Run `cmake` to configure the project:
+3. Run `meson` to configure the project:
    ```bash
-   cmake ..
+   meson ..
    ```
 
-4. Build the project with `make`:
+4. Build the project with `ninja`:
    ```bash
-   make
+   ninja
    ```
 
    After building, the executable `example` will be available in the `build` directory.
+
+---
 
 ## **Running the Example**
 
@@ -70,11 +72,10 @@ sudo pacman -Syu cmake make
 
 ## **Understanding the Code**
 
-The C++ code interacts with the `libfm` library to fetch the disk usage of a given directory (`/` by default). Here’s a quick breakdown of the key components:
+The C code interacts with the `libfm` library to fetch the disk usage of a given directory (/ by default). Here’s a quick breakdown of the key components:
 
-- **DriveUtils::GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
-- **Logger::Info**: This utility logs information (like the disk usage) to a log file or the console.
-- **std::cout**: The result is printed to the console for the user to see.
+- **GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
+- **printf**: The result is printed to the console for the user to see.
 
 This simple program is designed to showcase how to use `libfm` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.
 

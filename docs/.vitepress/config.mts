@@ -27,11 +27,17 @@ export default defineConfig({
         text: 'Usage',
         items: [
           {
-            text: 'c++',
-            link: "#",
+            text: 'C++',
             items: [
               { text: 'cmake', link: '/guide/usage/cpp-cmake' },
               { text: 'meson', link: '/guide/usage/cpp-meson' },
+            ]
+          },
+          {
+            text: 'C',
+            items: [
+              { text: 'cmake', link: '/guide/usage/c-cmake' },
+              { text: 'meson', link: '/guide/usage/c-meson' },
             ]
           },
           {
