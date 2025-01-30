@@ -5,6 +5,7 @@ library_sources = files(
   'src/FileSystem/DriveUtils.c',
   'src/FileSystem/DriveUtils.cc',
   'src/FileSystem/FileUtils.cc',
+  'src/FileSystem/UserUtils.c',
   'src/FileSystem/UserUtils.cc',
   'src/Utils/Logger.c',
   'src/Utils/Logger.cc',

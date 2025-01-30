@@ -24,6 +24,23 @@ int main() {
 }
 ```
 
+```c [C]
+#include <stdio.h>
+#include "libfm/FileSystem/UserUtils.h"
+
+int main() {
+  const char *username = GetUserName();
+
+  if (username) {
+    printf("Username: %s\n", username);
+  } else {
+    fprintf(stderr, "Failed to get username.\n");
+  }
+
+  return 0;
+}
+```
+
 ```javascript [Node.js]
 import { getUserName } from "@kingmaj0r/libfm/lib";
 
@@ -58,6 +75,29 @@ int main() {
         std::cerr << "Failed to update permissions." << std::endl;
     }
     return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include <stdbool.h>
+#include "libfm/FileSystem/UserUtils.h"
+
+int main() {
+  const char *username = GetUserName();
+
+  char path[256];
+  snprintf(path, sizeof(path), "/home/%s/%s", username, "test");
+
+  bool success = ChangePermissions(path, 711);
+
+  if (success) {
+    printf("Successfully changed permissions.\n");
+  } else {
+    fprintf(stderr, "Failed to set permissions.\n");
+  }
+
+  return 0;
 }
 ```
 
