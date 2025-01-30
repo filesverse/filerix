@@ -2,7 +2,7 @@
 #define DRIVES_BINDING_HPP
 
 #include <napi.h>
-#include "libfm/FileSystem/DriveUtils.h"
+#include "libfm/FileSystem/DriveUtils.hpp"
 
 namespace libfm
 {
