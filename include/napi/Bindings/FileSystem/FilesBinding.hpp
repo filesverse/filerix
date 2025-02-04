@@ -1,11 +1,12 @@
 #ifndef FILES_BINDING_HPP
 #define FILES_BINDING_HPP
 
-#include <napi.h>
-#include "libfm/FileSystem/FileUtils.hpp"
-#include "libfm/utils/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
+#include "filerix/napi/Utils/FileUtils.hpp"
 
-namespace libfm
+#include <napi.h>
+
+namespace filerix
 {
   inline Napi::Array GetFiles(const Napi::CallbackInfo &info)
   {

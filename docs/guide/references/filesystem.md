@@ -17,24 +17,42 @@
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    auto files = FileUtils::GetFiles("/home/user/Documents");
-    for (const auto& file : files) {
-        std::cout << file.name << " - " 
-                  << (file.isDirectory ? "Directory" : "File") << std::endl;
-    }
-    return 0;
+  auto files = FileUtils::GetFiles("/home/user/Documents");
+
+  for (const auto& file : files) {
+    std::cout << file.name << " - " 
+              << (file.isDirectory ? "Directory" : "File") << std::endl;
+  }
+
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  FileList* files = GetFiles("/home/user/Documents");
+
+  for (int i = 0; i < files->count; i++) {
+    File *file = &files->files[i];
+    printf("%s - %s\n", file->name, file->isDirectory ? "Directory" : "File");
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { getFiles } from "@kingmaj0r/libfm/lib";
+import { getFiles } from "@kingmaj0r/filerix/lib";
 
 const files = getFiles('/home/user/Documents');
 files.forEach(file => {
-    console.log(`${file.name} - ${file.isDirectory ? 'Directory' : 'File'}`);
+  console.log(`${file.name} - ${file.isDirectory ? 'Directory' : 'File'}`);
 });
 ```
 
@@ -58,23 +76,46 @@ files.forEach(file => {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    auto results = FileUtils::SearchFiles("/home/user/Documents", "project");
-    for (const auto& file : results) {
-        std::cout << file.name << " - " << file.path << std::endl;
-    }
-    return 0;
+  auto results = FileUtils::SearchFiles("/home/user/Documents", "project");
+
+  for (const auto& file : results) {
+    std::cout << file.name << " - " << file.path << std::endl;
+  }
+
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  const char* search_dir = "/home/user/Documents";
+  const char* search_term = "project";
+
+  size_t result_count = 0;
+  struct FileInfo* results = SearchFiles(search_dir, search_term, &result_count);
+
+  for (size_t i = 0; i < result_count; i++) {
+    printf("%s - %s\n", results[i].name, results[i].path);
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { searchFiles } from "@kingmaj0r/libfm/lib";
+import { searchFiles } from "@kingmaj0r/filerix/lib";
 
 const results = searchFiles('/home/user/Documents', 'project');
 results.forEach(file => {
-    console.log(`${file.name} - ${file.path}`);
+  console.log(`${file.name} - ${file.path}`);
 });
 ```
 
@@ -94,25 +135,41 @@ results.forEach(file => {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    if (FileUtils::Copy("/home/user/file.txt", "/home/user/Documents/file_copy.txt")) {
-        std::cout << "File copied successfully." << std::endl;
-    } else {
-        std::cerr << "Failed to copy file." << std::endl;
-    }
-    return 0;
+  if (FileUtils::Copy("/home/user/file.txt", "/home/user/Documents/file_copy.txt")) {
+    std::cout << "File copied successfully." << std::endl;
+  } else {
+    std::cerr << "Failed to copy file." << std::endl;
+  }
+
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  if (Copy("/home/user/file.txt", "/home/user/Documents/file_copy.txt")) {
+    printf("File copied successfully.\n");
+  } else {
+    fprintf(stderr, "Failed to copy file.\n");
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { copyFile } from "@kingmaj0r/libfm/lib";
+import { copyFile } from "@kingmaj0r/filerix/lib";
 
 if (copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
-    console.log('File copied successfully.');
+  console.log('File copied successfully.');
 } else {
-    console.log('Failed to copy file.');
+  console.log('Failed to copy file.');
 }
 ```
 
@@ -132,25 +189,41 @@ if (copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    if (FileUtils::Cut("/home/user/file.txt", "/home/user/Documents/file_moved.txt")) {
-        std::cout << "File moved successfully." << std::endl;
-    } else {
-        std::cerr << "Failed to move file." << std::endl;
-    }
-    return 0;
+  if (FileUtils::Cut("/home/user/file.txt", "/home/user/Documents/file_moved.txt")) {
+    std::cout << "File moved successfully." << std::endl;
+  } else {
+    std::cerr << "Failed to move file." << std::endl;
+  }
+  
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  if (Cut("/home/user/file.txt", "/home/user/Documents/file_moved.txt")) {
+    printf("File moved successfully.\n");
+  } else {
+    fprintf(stderr, "Failed to move file.\n");
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { cutFile } from "@kingmaj0r/libfm/lib";
+import { cutFile } from "@kingmaj0r/filerix/lib";
 
 if (cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
-    console.log('File moved successfully.');
+  console.log('File moved successfully.');
 } else {
-    console.log('Failed to move file.');
+  console.log('Failed to move file.');
 }
 ```
 
@@ -170,25 +243,41 @@ if (cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    if (FileUtils::Rename("/home/user/file.txt", "/home/user/file_renamed.txt")) {
-        std::cout << "File renamed successfully." << std::endl;
-    } else {
-        std::cerr << "Failed to rename file." << std::endl;
-    }
-    return 0;
+  if (FileUtils::Rename("/home/user/file.txt", "/home/user/file_renamed.txt")) {
+    std::cout << "File renamed successfully." << std::endl;
+  } else {
+    std::cerr << "Failed to rename file." << std::endl;
+  }
+
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  if (Rename("/home/user/file.txt", "/home/user/file_renamed.txt")) {
+    printf("File renamed successfully.\n");
+  } else {
+    fprintf(stderr, "Failed to rename file.\n");
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { renameFile } from "@kingmaj0r/libfm/lib";
+import { renameFile } from "@kingmaj0r/filerix/lib";
 
 if (renameFile('/home/user/file.txt', '/home/user/file_renamed.txt')) {
-    console.log('File renamed successfully.');
+  console.log('File renamed successfully.');
 } else {
-    console.log('Failed to rename file.');
+  console.log('Failed to rename file.');
 }
 ```
 

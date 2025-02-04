@@ -1,5 +1,6 @@
-#include "include/FileSystem/DirectoryPermissions.hpp"
-#include "include/utils/Logger.hpp"
+#include "include/FileSystem/DirectoryPermissions.h"
+#include "include/Utils/Logger.h"
+
 #include <filesystem>
 #include <iostream>
 #include <cstdlib>

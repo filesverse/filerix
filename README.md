@@ -1,3 +1,3 @@
-# libfm
+# filerix
 
-To get started read the [wiki](https://kingmaj0r.github.io/libfm/)
+To get started read the [wiki](https://kingmaj0r.github.io/filerix/)

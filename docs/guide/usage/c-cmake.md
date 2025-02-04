@@ -8,7 +8,7 @@ Before proceeding, ensure the following are installed and set up:
 
 2. **CMake**: Install CMake. If you don't have it already:
    
-3. **libfm**: Ensure the `libfm` library and its development files are installed.
+3. **filerix**: Ensure the `filerix` library and its development files are installed.
 
 ## **Installing Dependencies**
 
@@ -72,19 +72,19 @@ sudo pacman -Syu cmake make
 
 ## **Understanding the Code**
 
-The C code interacts with the `libfm` library to fetch the disk usage of a given directory (/ by default). Here’s a quick breakdown of the key components:
+The C code interacts with the `filerix` library to fetch the disk usage of a given directory (/ by default). Here’s a quick breakdown of the key components:
 
 - **GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
 - **printf**: The result is printed to the console for the user to see.
 
-This simple program is designed to showcase how to use `libfm` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.
+This simple program is designed to showcase how to use `filerix` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.
 
 ## **Common Issues**
 
-- **Missing `libfm.so` (Shared Library)**:
-  If you encounter errors about missing libraries (e.g., `libfm.so`), ensure the library path is correctly set:
+- **Missing `filerix.so` (Shared Library)**:
+  If you encounter errors about missing libraries (e.g., `filerix.so`), ensure the library path is correctly set:
   ```bash
   export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   ```
 
-  If `libfm` was installed manually, ensure the path where it's located is included in `LD_LIBRARY_PATH`.
+  If `filerix` was installed manually, ensure the path where it's located is included in `LD_LIBRARY_PATH`.

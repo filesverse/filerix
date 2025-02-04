@@ -1,11 +1,11 @@
-import { init, getDriveUsage } from "@kingmaj0r/libfm/lib";
+import { init, getDriveUsage } from "@kingmaj0r/filerix/lib";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-init(__dirname + "/../build/Release/fm.node");
+init(__dirname + "/../build/Release/filerix.node");
 
 async function getDriveUsageFunc(drivePath) {
   try {

@@ -2,42 +2,30 @@
 
 ---
 
-The logging system is initialized during the application's startup. The following examples show how to initialize the logging system in both C++ and JavaScript (Node.js).
+The logging system is automatically initialized by checking the `filerix_log_level` environment variable during the application's startup. This allows you to configure the logging level without needing to explicitly call any initialization functions.
 
-## **Logging Initialization**
+## **Log Level Configuration**
 
-To initialize the logging system, use the `Logger::init()` or `libfm.initLogger()` function. This function sets up the logging mechanism for the application, enabling it to log messages at different levels.
+You can control the log level by setting the `filerix_log_level` environment variable. The available log levels are:
+
+- **debug**: Logs all messages (including debug, warning, and error).
+- **warning**: Logs warning and error messages.
+- **error**: Logs only error messages.
+
+To set the log level, use the following command in your terminal before running your application:
+
+```bash
+export filerix_log_level=debug  # Or warning | error
+```
+
+Alternatively, you can set the environment variable in your application's code (for example, in your main function or before starting the application).
 
 ## **Log Files Location**
 
 Logs are stored in the following directory:
 ```
-~/.local/libfm/{error_log | warning_log | info_log}.txt
+~/.local/filerix/{error_log | warning_log | info_log}.txt
 ```
-- **error_log.txt:** Stores error-level messages.  
-- **warning_log.txt:** Stores warning-level messages.  
-- **info_log.txt:** Stores debug and info-level messages.  
-
-## **Example**
-
-:::code-group
-
-```cpp [C++]
-#include "include/utils/Logger.hpp"
-
-int main() {
-  Logger::init("debug"); // AVAILABLE OPTIONS: debug/info | warning | error
-}
-```
-
-```javascript [Node.js]
-import libfm from "/path/to/fm.node";
-
-libfm.initLogger("debug");  // AVAILABLE OPTIONS: debug/info | warning | error
-```
-
-:::
-
----
-
-The `Logger::init()` or `libfm.initLogger()` function should only be called once, during the startup of your application. It ensures the logger is ready to capture and display logs.
+- **error_log.txt:** Stores error-level messages.
+- **warning_log.txt:** Stores warning-level messages.
+- **info_log.txt:** Stores debug and info-level messages.

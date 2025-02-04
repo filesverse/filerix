@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "libfm"
+  name: "filerix"
   image: /logo.png
   text: "File manager library that provides all the essentials."
   tagline: "A lightweight and efficient library for Linux file management."
@@ -17,7 +17,7 @@ hero:
 
 features:
   - title: Easy File Operations
-    details: libfm simplifies file operations like reading, writing, and moving files, making your file management tasks easier.
+    details: filerix simplifies file operations like reading, writing, and moving files, making your file management tasks easier.
   - title: Drive Information
     details: Get detailed information about available drives, their usage, and mount points with ease.
   - title: File System Navigation

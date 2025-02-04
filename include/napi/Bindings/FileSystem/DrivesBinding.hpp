@@ -1,10 +1,11 @@
 #ifndef DRIVES_BINDING_HPP
 #define DRIVES_BINDING_HPP
 
-#include <napi.h>
-#include "libfm/FileSystem/DriveUtils.hpp"
+#include "filerix/FileSystem/DriveUtils.h"
 
-namespace libfm
+#include <napi.h>
+
+namespace filerix
 {
   inline Napi::Array GetDrives(const Napi::CallbackInfo &info)
   {
@@ -42,8 +43,8 @@ namespace libfm
     auto usage = DriveUtils::GetDriveUsage(drive);
 
     Napi::Object result = Napi::Object::New(env);
-    result.Set("used_space", Napi::Number::New(env, usage.first));
-    result.Set("total_space", Napi::Number::New(env, usage.second));
+    result.Set("used_space", Napi::Number::New(env, usage.used));
+    result.Set("total_space", Napi::Number::New(env, usage.total));
 
     return result;
   }

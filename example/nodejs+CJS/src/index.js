@@ -1,6 +1,6 @@
-const { init, getDriveUsage } = require('@kingmaj0r/libfm/lib');
+const { init, getDriveUsage } = require('@kingmaj0r/filerix/lib');
 
-init(__dirname + "/../build/Release/fm.node");
+init(__dirname + "/../build/Release/filerix.node");
 
 async function getDriveUsageFunc(drivePath) {
   try {

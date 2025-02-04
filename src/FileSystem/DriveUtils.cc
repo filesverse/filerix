@@ -1,3 +1,7 @@
+#include "include/FileSystem/UserUtils.h"
+#include "include/FileSystem/DriveUtils.h"
+#include "include/Utils/Logger.h"
+
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -13,9 +17,6 @@
 #include <cstdlib>
 #include <future>
 #include <fstream>
-#include "include/FileSystem/UserUtils.hpp"
-#include "include/FileSystem/DriveUtils.hpp"
-#include "include/utils/Logger.hpp"
 
 namespace DriveUtils
 {
@@ -31,7 +32,6 @@ namespace DriveUtils
       if (!file)
       {
         Logger::Error("Unable to read /proc/mounts");
-        throw std::runtime_error("Unable to read /proc/mounts");
       }
 
       struct mntent *mnt;
@@ -46,12 +46,10 @@ namespace DriveUtils
       }
       endmntent(file);
       Logger::Error("Device " + device + " is not mounted or does not exist.");
-      throw std::runtime_error("Device " + device + " is not mounted or does not exist.");
     }
     catch (const std::exception &e)
     {
       Logger::Error("Error getting mount point for device " + device + ": " + e.what());
-      throw;
     }
   }
 
@@ -69,7 +67,6 @@ namespace DriveUtils
       if (!file)
       {
         Logger::Error("Unable to read /proc/mounts");
-        throw std::runtime_error("Unable to read /proc/mounts");
       }
 
       struct mntent *mnt;
@@ -186,13 +183,12 @@ namespace DriveUtils
     catch (const std::exception &e)
     {
       Logger::Error("Error retrieving drives: " + std::string(e.what()));
-      throw;
     }
 
     return drives;
   }
 
-  std::pair<unsigned long long, unsigned long long> GetDriveUsage(const std::string &drive)
+  DriveUsage GetDriveUsage(const std::string &drive)
   {
     Logger::Info("Getting drive usage for: " + drive);
 
@@ -204,7 +200,6 @@ namespace DriveUtils
       if (statvfs(mountPoint.c_str(), &stat) != 0)
       {
         Logger::Error("Unable to get drive information for " + drive);
-        throw std::runtime_error("Unable to get drive information for " + drive);
       }
 
       unsigned long long totalSpace = stat.f_blocks * stat.f_frsize;
@@ -217,7 +212,6 @@ namespace DriveUtils
     catch (const std::exception &e)
     {
       Logger::Error("Error getting drive usage for " + drive + ": " + e.what());
-      throw;
     }
   }
 

@@ -1,10 +1,11 @@
 #ifndef COMPRESSION_BINDING_HPP
 #define COMPRESSION_BINDING_HPP
 
-#include <napi.h>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
-namespace libfm
+#include <napi.h>
+
+namespace filerix
 {
   inline Napi::Boolean CompressFile(const Napi::CallbackInfo &info)
   {

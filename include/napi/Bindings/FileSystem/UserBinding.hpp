@@ -1,10 +1,11 @@
 #ifndef USER_BINDING_HPP
 #define USER_BINDING_HPP
 
-#include <napi.h>
-#include "libfm/FileSystem/UserUtils.hpp"
+#include "filerix/FileSystem/UserUtils.h"
 
-namespace libfm
+#include <napi.h>
+
+namespace filerix
 {
   inline Napi::String GetUserName(const Napi::CallbackInfo &info)
   {

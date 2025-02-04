@@ -1,7 +1,7 @@
 import { BrowserWindow, shell } from "electron";
 import { is } from "@electron-toolkit/utils";
 import { join } from "path";
-import initFM from "@kingmaj0r/libfm/electron";
+import initFM from "@kingmaj0r/filerix/electron";
 
 async function createWindow(): Promise<void> {
   const mainWindow = new BrowserWindow({

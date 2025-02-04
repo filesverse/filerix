@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDrives, getDriveUsage } from "@kingmaj0r/libfm";
+import { getDrives, getDriveUsage } from "@kingmaj0r/filerix";
 
 function App(): JSX.Element {
   const [drives, setDrives] = useState<string[]>([]);

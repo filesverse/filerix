@@ -31,8 +31,8 @@ sudo pacman -Syu meson g++ clang
 2. Clone the repository
 
 ```bash
-git clone https://github.com/KingMaj0r/libfm.git
-cd libfm
+git clone https://github.com/KingMaj0r/filerix.git
+cd filerix
 ```
 
 3. Build the project
@@ -48,7 +48,7 @@ meson compile -C builddir
 meson install -C builddir
 ```
 
-The headers will be installed in the `/usr/local/include/libfm` directory, and the library will be installed to your system's default library directory.
+The headers will be installed in the `/usr/local/include/filerix` directory, and the library will be installed to your system's default library directory.
 
 ## Installation via Nix
 
@@ -58,7 +58,7 @@ To build and install the library using Nix, you can use the provided `flake.nix`
 2. Run the following command to build the library:
 
 ```bash
-nix build .#libfm
+nix build .#filerix
 ```
 
 3. The resulting library can be found in the `result` symlink. To use it in your environment, you can run:

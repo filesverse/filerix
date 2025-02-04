@@ -7,17 +7,13 @@ Below are two examples to help you get started with **Node.js** or **C++**.
 ```cpp [C++]
 #include <iostream>
 #include <string>
-#include "libfm/FileSystem/DriveUtils.hpp"
-#include "libfm/utils/Logger.hpp"
+#include "filerix/FileSystem/DriveUtils.hpp"
 
 int main()
 {
   std::string drivePath = "/";
 
   auto [usedBytes, totalBytes] = DriveUtils::GetDriveUsage(drivePath);
-
-  Logger::Info("Used space: " + std::to_string(usedBytes) + " bytes");
-  Logger::Info("Total space: " + std::to_string(totalBytes) + " bytes");
 
   std::cout << "Used space: " << usedBytes << " bytes" << std::endl;
   std::cout << "Total space: " << totalBytes << " bytes" << std::endl;
@@ -26,12 +22,30 @@ int main()
 }
 ```
 
+```c [C]
+#include <stdio.h>
+#include <string.h>
+#include "filerix/FileSystem/DriveUtils.h"
+
+int main()
+{
+  const char *drivePath = "/";
+
+  DriveUsage usage = GetDriveUsage(drivePath);
+
+  printf("Used space: %llu bytes\n", usage.used);
+  printf("Total space: %llu bytes\n", usage.total);
+
+  return 0;
+}
+```
+
 ```javascript [Node.js]
-import { getDriveUsage } from "@kingmaj0r/libfm/lib";
+import { getDriveUsage } from "@kingmaj0r/filerix/lib";
 
 async function getDriveUsageFunc(drivePath) {
   try {
-    const usage = await libfm.getDriveUsage(drivePath);
+    const usage = await getDriveUsage(drivePath);
 
     const usedBytes = usage.used_space;
     const totalBytes = usage.total_space;
@@ -43,7 +57,7 @@ async function getDriveUsageFunc(drivePath) {
   }
 }
 
-const drivePath = '/dev/sdX'; // or /dev/sdX
+const drivePath = '/dev/sdX';
 getDriveUsageFunc(drivePath);
 ```
 

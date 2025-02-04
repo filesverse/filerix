@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import { electronApp, optimizer } from "@electron-toolkit/utils";
-import { init as initLibfm } from "@kingmaj0r/libfm/lib";
+import { init as initFilerix } from "@kingmaj0r/filerix/lib";
 import { createWindow } from "./window/index";
 
 app.whenReady().then(() => {
@@ -10,7 +10,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  initLibfm(__dirname + "/../../build/Release/fm.node");
+  initFilerix(__dirname + "/../../build/Release/filerix.node");
 
   createWindow();
 

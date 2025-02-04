@@ -8,7 +8,7 @@ Before proceeding, ensure the following are installed and set up:
 2. **Python**: Required by `node-gyp`. Install Python 3.x.
 3. **Build Tools**:
    - **Linux**: Install `build-essential` (e.g., `sudo apt install build-essential` on Ubuntu).
-4. **libfm**: Ensure the `libfm` library and its development files are installed. If you built `libfm` manually, ensure the `.so` files are in your library path.
+4. **filerix**: Ensure the `filerix` library and its development files are installed. If you built `filerix` manually, ensure the `.so` files are in your library path.
 
 ## **Building the Node.js Wrapper with `node-gyp`**
 
@@ -23,7 +23,7 @@ Before proceeding, ensure the following are installed and set up:
    node-gyp build
    ```
 
-3. After building, the compiled Node.js addon (`fm.node`) will be available in the `build/Release` directory.
+3. After building, the compiled Node.js addon (`filerix.node`) will be available in the `build/Release` directory.
 
 ## **Installation**
 
@@ -49,7 +49,7 @@ Before proceeding, ensure the following are installed and set up:
 
 ## **Common issues**
 
-- If you encounter issues with library loading (e.g., `libfm.so` not found), ensure the library path is correctly set:
+- If you encounter issues with library loading (e.g., `filerix.so` not found), ensure the library path is correctly set:
   ```bash
   export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   ```

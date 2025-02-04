@@ -1,9 +1,10 @@
 #ifndef FILE_UTILS_HPP
 #define FILE_UTILS_HPP
 
+#include "filerix/FileSystem/FileInfo.h"
+
 #include <napi.h>
 #include <vector>
-#include "libfm/FileSystem/FileInfo.hpp"
 
 namespace FileUtils
 {

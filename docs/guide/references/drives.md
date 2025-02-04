@@ -17,7 +17,7 @@
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/DriveUtils.hpp"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   auto drives = DriveUtils::GetDrives();
@@ -40,7 +40,7 @@ int main() {
 
 ```c [C]
 #include <stdio.h>
-#include "libfm/FileSystem/DriveUtils.h"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   DriveInfo *drives = GetDrives();
@@ -62,7 +62,7 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { getDrives } from "@kingmaj0r/libfm/lib";
+import { getDrives } from "@kingmaj0r/filerix/lib";
 
 const drives = getDrives();
 
@@ -92,7 +92,7 @@ drives.forEach(drive => {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/DriveUtils.hpp"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -112,7 +112,7 @@ int main() {
 
 ```c [C]
 #include <stdio.h>
-#include "libfm/FileSystem/DriveUtils.h"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -131,9 +131,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { getDriveUsage } from "@kingmaj0r/libfm/lib";
+import { getDriveUsage } from "@kingmaj0r/filerix/lib";
 
-const usage = libfm.getDriveUsage('/dev/sdX');
+const usage = filerix.getDriveUsage('/dev/sdX');
 console.log(`Used space: ${usage.used_space} bytes`);
 console.log(`Total space: ${usage.total_space} bytes`);
 ```
@@ -153,7 +153,7 @@ console.log(`Total space: ${usage.total_space} bytes`);
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/DriveUtils.hpp"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -172,7 +172,7 @@ int main() {
 
 ```c [C]
 #include <stdio.h>
-#include "libfm/FileSystem/DriveUtils.h"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -190,7 +190,7 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { mountDrive } from "@kingmaj0r/libfm/lib";
+import { mountDrive } from "@kingmaj0r/filerix/lib";
 
 const device = "/dev/sdX";
 
@@ -217,7 +217,7 @@ if (success) {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/DriveUtils.hpp"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -236,7 +236,7 @@ int main() {
 
 ```c [C]
 #include <stdio.h>
-#include "libfm/FileSystem/DriveUtils.h"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -255,7 +255,7 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { unmountDrive } from "@kingmaj0r/libfm/lib";
+import { unmountDrive } from "@kingmaj0r/filerix/lib";
 
 const device = "/dev/sdX";
 
@@ -282,7 +282,7 @@ if (success) {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/DriveUtils.hpp"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -301,7 +301,7 @@ int main() {
 
 ```c [C]
 #include <stdio.h>
-#include "libfm/FileSystem/DriveUtils.h"
+#include "filerix/FileSystem/DriveUtils.h"
 
 int main() {
   const char *device = "/dev/sdX";
@@ -319,7 +319,7 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { getDeviceLabelOrUUID } from "@kingmaj0r/libfm/lib";
+import { getDeviceLabelOrUUID } from "@kingmaj0r/filerix/lib";
 
 const device = "/dev/sdX"
 

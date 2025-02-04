@@ -1,10 +1,12 @@
-#include "include/utils/Logger.hpp"
+#include "include/Utils/Logger.h"
+
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <ctime>
 #include <filesystem>
 #include <unistd.h>
+#include <cstring>
 
 namespace Logger
 {
@@ -13,10 +15,35 @@ namespace Logger
     NONE,
     ERROR,
     WARNING,
-    INFO
+    DEBUG
   };
 
   static LogLevel currentLogLevel = LogLevel::NONE;
+
+  static LogLevel getLogLevelFromString(const char *logLevel)
+  {
+    if (strcmp(logLevel, "error") == 0)
+      return LogLevel::ERROR;
+    else if (strcmp(logLevel, "warning") == 0)
+      return LogLevel::WARNING;
+    else if (strcmp(logLevel, "debug") == 0)
+      return LogLevel::DEBUG;
+    return LogLevel::NONE;
+  }
+
+  static void initLoggerFromEnv()
+  {
+    const char *logLevelEnv = std::getenv("filerix_log_level");
+
+    if (logLevelEnv)
+    {
+      currentLogLevel = getLogLevelFromString(logLevelEnv);
+    }
+    else
+    {
+      currentLogLevel = LogLevel::NONE;
+    }
+  }
 
   static void logToFile(const std::string &logType, const std::string &message)
   {
@@ -27,7 +54,7 @@ namespace Logger
       return;
     }
 
-    std::filesystem::path logFilePath = std::filesystem::path(homeDir) / ".local" / "libfm" / (logType + "_log.txt");
+    std::filesystem::path logFilePath = std::filesystem::path(homeDir) / ".local" / "filerix" / (logType + "_log.txt");
 
     std::filesystem::create_directories(logFilePath.parent_path());
 
@@ -47,42 +74,40 @@ namespace Logger
     }
   }
 
-  void Init(const std::string &logLevel)
-  {
-    if (logLevel == "error")
-    {
-      currentLogLevel = LogLevel::ERROR;
-    }
-    else if (logLevel == "info" || logLevel == "debug")
-    {
-      currentLogLevel = LogLevel::INFO;
-    }
-    else
-    {
-      currentLogLevel = LogLevel::NONE;
-    }
-  }
-
   void Error(const std::string &message)
   {
-    if (currentLogLevel == LogLevel::ERROR || currentLogLevel == LogLevel::WARNING || currentLogLevel == LogLevel::INFO)
+    initLoggerFromEnv();
+
+    std::cerr << "\033[1;32m[filerix]\033[0m \033[1;31m[ERROR]\033[0m " << message << std::endl;
+
+    if (currentLogLevel == LogLevel::ERROR || currentLogLevel == LogLevel::WARNING || currentLogLevel == LogLevel::DEBUG)
     {
       logToFile("ERROR", message);
     }
+
+    exit(EXIT_FAILURE);
   }
 
   void Warn(const std::string &message)
   {
-    if (currentLogLevel == LogLevel::WARNING || currentLogLevel == LogLevel::INFO)
+    initLoggerFromEnv();
+
+    if (currentLogLevel == LogLevel::WARNING || currentLogLevel == LogLevel::DEBUG)
     {
+      std::cerr << "\033[1;32m[filerix]\033[0m \033[1;33m[WARNING]\033[0m " << message << std::endl;
+
       logToFile("WARNING", message);
     }
   }
 
   void Info(const std::string &message)
   {
-    if (currentLogLevel == LogLevel::INFO)
+    initLoggerFromEnv();
+
+    if (currentLogLevel == LogLevel::DEBUG)
     {
+      std::cout << "\033[1;32m[filerix]\033[0m \033[1;34m[INFO]\033[0m " << message << std::endl;
+
       logToFile("INFO", message);
     }
   }

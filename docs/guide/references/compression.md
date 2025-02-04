@@ -14,28 +14,47 @@
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    const std::string source = "/path/to/file.txt";
-    const std::string destination = "/path/to/file.gz";
+  const std::string source = "/path/to/file.txt";
+  const std::string destination = "/path/to/file.gz";
 
-    if (FileUtils::Compress(source, destination)) {
-        std::cout << "File compressed successfully." << std::endl;
-    } else {
-        std::cerr << "Compression failed." << std::endl;
-    }
-    return 0;
+  if (FileUtils::Compress(source, destination)) {
+    std::cout << "File compressed successfully." << std::endl;
+  } else {
+    std::cerr << "Compression failed." << std::endl;
+  }
+
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  const char *source = "/path/to/file.txt";
+  const char *destination = "/path/to/file.gz";
+
+  if (Compress(source, destination)) {
+    printf("File compressed successfully.\n");
+  } else {
+    fprintf(stderr, "Compression failed.\n");
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { compressFile } from "@kingmaj0r/libfm/lib";
+import { compressFile } from "@kingmaj0r/filerix/lib";
 
 if (compressFile('/path/to/file.txt', '/path/to/file.gz')) {
-    console.log('File compressed successfully.');
+  console.log('File compressed successfully.');
 } else {
-    console.log('Compression failed.');
+  console.log('Compression failed.');
 }
 ```
 
@@ -55,23 +74,42 @@ if (compressFile('/path/to/file.txt', '/path/to/file.gz')) {
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/FileUtils.hpp"
+#include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-    const std::string source = "/path/to/file.gz";
-    const std::string destination = "/path/to/file.txt";
+  const std::string source = "/path/to/file.gz";
+  const std::string destination = "/path/to/file.txt";
 
-    if (FileUtils::Decompress(source, destination)) {
-        std::cout << "File decompressed successfully." << std::endl;
-    } else {
-        std::cerr << "Decompression failed." << std::endl;
-    }
-    return 0;
+  if (FileUtils::Decompress(source, destination)) {
+    std::cout << "File decompressed successfully." << std::endl;
+  } else {
+    std::cerr << "Decompression failed." << std::endl;
+  }
+
+  return 0;
+}
+```
+
+```c [C]
+#include <stdio.h>
+#include "filerix/FileSystem/FileUtils.h"
+
+int main() {
+  const char *source = "/path/to/file.gz";
+  const char *destination = "/path/to/file.txt";
+
+  if (Decompress(source, destination)) {
+    printf("File decompressed successfully.\n");
+  } else {
+    fprintf(stderr, "Decompression failed.\n");
+  }
+
+  return 0;
 }
 ```
 
 ```javascript [Node.js]
-import { decompressFile } from "@kingmaj0r/libfm/lib";
+import { decompressFile } from "@kingmaj0r/filerix/lib";
 
 if (decompressFile('/path/to/file.gz', '/path/to/file.txt')) {
     console.log('File decompressed successfully.');

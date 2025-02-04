@@ -10,8 +10,8 @@
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (system: let
       pkgs = nixpkgs.legacyPackages.${system};
     in {
-      packages.libfm = pkgs.stdenv.mkDerivation rec {
-        pname = "libfm";
+      packages.filerix = pkgs.stdenv.mkDerivation rec {
+        pname = "filerix";
         version = "1.0.0";
 
         src = ./.;

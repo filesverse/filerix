@@ -1,6 +1,7 @@
-#include "include/FileSystem/FileUtils.hpp"
-#include "include/FileSystem/DirectoryPermissions.hpp"
-#include "include/utils/Logger.hpp"
+#include "include/FileSystem/FileUtils.h"
+#include "include/FileSystem/DirectoryPermissions.h"
+#include "include/Utils/Logger.h"
+
 #include <filesystem>
 #include <iostream>
 #include <unordered_map>

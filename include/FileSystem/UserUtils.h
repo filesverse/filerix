@@ -2,8 +2,27 @@
 #define USERUTILS_H
 
 #include <sys/types.h>
+#include <stdbool.h>
 
-char *GetUserName();
-int ChangePermissions(const char *path, mode_t mode);
+#ifdef __cplusplus
+#include <string>
+
+extern "C"
+{
+#endif
+
+  const char *GetUserName();
+  bool ChangePermissions(const char *path, int mode);
+
+#ifdef __cplusplus
+}
+
+namespace UserUtils
+{
+  std::string GetUserName();
+  bool ChangePermissions(const std::string &path, int mode);
+}
+
+#endif
 
 #endif

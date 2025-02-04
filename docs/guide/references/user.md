@@ -11,22 +11,24 @@
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/UserUtils.hpp"
+#include "filerix/FileSystem/UserUtils.h"
 
 int main() {
-    try {
-        std::string username = UserUtils::GetUserName();
-        std::cout << "Current user: " << username << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-    }
-    return 0;
+  const char *username = GetUserName();
+
+  if (username) {
+    std::cout << "Username: ", << username << std::endl;
+  } else {
+    std::cerr << "Failed to get username." << std::endl;
+  }
+
+  return 0;
 }
 ```
 
 ```c [C]
 #include <stdio.h>
-#include "libfm/FileSystem/UserUtils.h"
+#include "filerix/FileSystem/UserUtils.h"
 
 int main() {
   const char *username = GetUserName();
@@ -42,9 +44,9 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { getUserName } from "@kingmaj0r/libfm/lib";
+import { getUserName } from "@kingmaj0r/filerix/lib";
 
-console.log(`Current user: ${libfm.getUserName()}`);
+console.log(`Current user: ${filerix.getUserName()}`);
 ```
 
 :::
@@ -63,35 +65,31 @@ console.log(`Current user: ${libfm.getUserName()}`);
 
 ```cpp [C++]
 #include <iostream>
-#include "libfm/FileSystem/UserUtils.hpp"
+#include "filerix/FileSystem/UserUtils.h"
 
 int main() {
-    const std::string filePath = "/path/to/file";
-    int mode = 0644;
+  const std::string filePath = "/path/to/file";
+  int mode = 0644;
 
-    if (UserUtils::ChangePermissions(filePath, mode)) {
-        std::cout << "Permissions updated successfully." << std::endl;
-    } else {
-        std::cerr << "Failed to update permissions." << std::endl;
-    }
-    return 0;
+  if (UserUtils::ChangePermissions(filePath, mode)) {
+    std::cout << "Permissions updated successfully." << std::endl;
+  } else {
+    std::cerr << "Failed to update permissions." << std::endl;
+  }
+
+  return 0;
 }
 ```
 
 ```c [C]
 #include <stdio.h>
-#include <stdbool.h>
-#include "libfm/FileSystem/UserUtils.h"
+#include "filerix/FileSystem/UserUtils.h"
 
 int main() {
-  const char *username = GetUserName();
+  const char* filePath = "/path/to/file";
+  int mode = 0644;
 
-  char path[256];
-  snprintf(path, sizeof(path), "/home/%s/%s", username, "test");
-
-  bool success = ChangePermissions(path, 711);
-
-  if (success) {
+  if (ChangePermissions(filePath, mode)) {
     printf("Successfully changed permissions.\n");
   } else {
     fprintf(stderr, "Failed to set permissions.\n");
@@ -102,7 +100,7 @@ int main() {
 ```
 
 ```javascript [Node.js]
-import { changePermissions } from "@kingmaj0r/libfm/lib";
+import { changePermissions } from "@kingmaj0r/filerix/lib";
 
 if (changePermissions('/path/to/file', 0o644)) {
     console.log('Permissions updated successfully.');

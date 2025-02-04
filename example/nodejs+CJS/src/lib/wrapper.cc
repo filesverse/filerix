@@ -1,4 +1,4 @@
 #include <napi.h>
-#include <libfm/Napi-Bindings.hpp>
+#include <filerix/Napi-Bindings.hpp>
 
 NODE_API_MODULE(addon, Init)

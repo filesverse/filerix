@@ -1,10 +1,12 @@
+#include "include/FileSystem/UserUtils.h"
+#include "include/Utils/Logger.h"
+
 #include <string>
 #include <stdexcept>
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/stat.h>
-#include "include/utils/Logger.hpp"
 
 namespace UserUtils
 {

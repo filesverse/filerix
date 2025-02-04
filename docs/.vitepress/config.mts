@@ -2,9 +2,9 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "libfm",
+  title: "filerix",
   description: "File manager library that provides all the essentials.",
-  base: "/libfm/",
+  base: "/filerix/",
   cleanUrls: true,
   themeConfig: {
     logo: '/logo.png',
@@ -61,7 +61,7 @@ export default defineConfig({
       },
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/KingMaj0r/libfm' }
+      { icon: 'github', link: 'https://github.com/KingMaj0r/filerix' }
     ]
   }
 })
