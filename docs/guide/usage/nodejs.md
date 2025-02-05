@@ -51,5 +51,5 @@ Before proceeding, ensure the following are installed and set up:
 
 - If you encounter issues with library loading (e.g., `filerix.so` not found), ensure the library path is correctly set:
   ```bash
-  export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
   ```

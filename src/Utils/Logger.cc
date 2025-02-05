@@ -78,7 +78,7 @@ namespace Logger
   {
     initLoggerFromEnv();
 
-    std::cerr << "\033[1;32m[filerix]\033[0m \033[1;31m[ERROR]\033[0m " << message << std::endl;
+    std::cerr << "\033[1;32m[ filerix ]\033[0m \033[1;31m[ ERROR ]\033[0m " << message << std::endl;
 
     if (currentLogLevel == LogLevel::ERROR || currentLogLevel == LogLevel::WARNING || currentLogLevel == LogLevel::DEBUG)
     {
@@ -94,7 +94,7 @@ namespace Logger
 
     if (currentLogLevel == LogLevel::WARNING || currentLogLevel == LogLevel::DEBUG)
     {
-      std::cerr << "\033[1;32m[filerix]\033[0m \033[1;33m[WARNING]\033[0m " << message << std::endl;
+      std::cerr << "\033[1;32m[ filerix ]\033[0m \033[1;33m[ WARN ]\033[0m " << message << std::endl;
 
       logToFile("WARNING", message);
     }
@@ -106,7 +106,7 @@ namespace Logger
 
     if (currentLogLevel == LogLevel::DEBUG)
     {
-      std::cout << "\033[1;32m[filerix]\033[0m \033[1;34m[INFO]\033[0m " << message << std::endl;
+      std::cout << "\033[1;32m[ filerix ]\033[0m \033[1;34m[ INFO ]\033[0m " << message << std::endl;
 
       logToFile("INFO", message);
     }

@@ -3,10 +3,14 @@
 #include "include/Utils/Logger.h"
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <unordered_map>
 #include <stdexcept>
 #include <cstdlib>
+#include <vector>
+#include <cstring>
+#include <zlib.h>
 
 namespace fs = std::filesystem;
 
@@ -183,39 +187,139 @@ namespace FileUtils
 
   bool Compress(const std::string &source, const std::string &destination)
   {
-    try
+    std::ifstream inFile(source, std::ios::binary);
+    if (!inFile)
     {
-      std::string command = "gzip -c \"" + source + "\" > \"" + destination + "\"";
-      int result = std::system(command.c_str());
-      if (result != 0)
-      {
-        Logger::Error("Compression failed for " + source + " to " + destination);
-      }
-      return result == 0;
-    }
-    catch (const std::exception &e)
-    {
-      Logger::Error("Compression error for " + source + " to " + destination + ": " + std::string(e.what()));
+      Logger::Error("Failed to open source file: " + source);
       return false;
     }
+
+    std::ofstream outFile(destination, std::ios::binary);
+    if (!outFile)
+    {
+      Logger::Error("Failed to create destination file: " + destination);
+      return false;
+    }
+
+    unsigned char header[10] = {0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00}; // GZIP header
+    outFile.write(reinterpret_cast<char *>(header), sizeof(header));
+
+    std::vector<char> buffer(1024);
+    z_stream strm;
+    memset(&strm, 0, sizeof(strm));
+    if (deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, MAX_WBITS + 16, 8, Z_DEFAULT_STRATEGY) != Z_OK)
+    {
+      Logger::Error("Failed to initialize zlib for compression");
+      return false;
+    }
+
+    while (inFile.read(buffer.data(), buffer.size()) || inFile.gcount() > 0)
+    {
+      strm.avail_in = inFile.gcount();
+      strm.next_in = reinterpret_cast<unsigned char *>(buffer.data());
+
+      do
+      {
+        std::vector<char> outBuffer(1024);
+        strm.avail_out = outBuffer.size();
+        strm.next_out = reinterpret_cast<unsigned char *>(outBuffer.data());
+
+        if (deflate(&strm, Z_NO_FLUSH) == Z_STREAM_ERROR)
+        {
+          Logger::Error("Compression error");
+          return false;
+        }
+
+        outFile.write(outBuffer.data(), outBuffer.size() - strm.avail_out);
+      } while (strm.avail_out == 0);
+    }
+
+    do
+    {
+      std::vector<char> outBuffer(1024);
+      strm.avail_out = outBuffer.size();
+      strm.next_out = reinterpret_cast<unsigned char *>(outBuffer.data());
+
+      if (deflate(&strm, Z_FINISH) == Z_STREAM_ERROR)
+      {
+        Logger::Error("Compression error");
+        return false;
+      }
+
+      outFile.write(outBuffer.data(), outBuffer.size() - strm.avail_out);
+    } while (strm.avail_out == 0);
+
+    deflateEnd(&strm);
+
+    return true;
   }
 
   bool Decompress(const std::string &source, const std::string &destination)
   {
-    try
+    std::ifstream inFile(source, std::ios::binary);
+    if (!inFile)
     {
-      std::string command = "gzip -d -c \"" + source + "\" > \"" + destination + "\"";
-      int result = std::system(command.c_str());
-      if (result != 0)
-      {
-        Logger::Error("Decompression failed for " + source + " to " + destination);
-      }
-      return result == 0;
-    }
-    catch (const std::exception &e)
-    {
-      Logger::Error("Decompression error for " + source + " to " + destination + ": " + std::string(e.what()));
+      Logger::Error("Failed to open compressed file: " + source);
       return false;
     }
+
+    std::ofstream outFile(destination, std::ios::binary);
+    if (!outFile)
+    {
+      Logger::Error("Failed to create destination file: " + destination);
+      return false;
+    }
+
+    // Skip the gzip header (10 bytes)
+    inFile.seekg(10, std::ios::beg);
+
+    std::vector<char> buffer(1024);
+    z_stream strm;
+    memset(&strm, 0, sizeof(strm));
+    if (inflateInit2(&strm, MAX_WBITS + 16) != Z_OK)
+    {
+      Logger::Error("Failed to initialize zlib for decompression");
+      return false;
+    }
+
+    while (inFile.read(buffer.data(), buffer.size()) || inFile.gcount() > 0)
+    {
+      strm.avail_in = inFile.gcount();
+      strm.next_in = reinterpret_cast<unsigned char *>(buffer.data());
+
+      do
+      {
+        std::vector<char> outBuffer(1024);
+        strm.avail_out = outBuffer.size();
+        strm.next_out = reinterpret_cast<unsigned char *>(outBuffer.data());
+
+        if (inflate(&strm, Z_NO_FLUSH) == Z_STREAM_ERROR)
+        {
+          Logger::Error("Decompression error");
+          return false;
+        }
+
+        outFile.write(outBuffer.data(), outBuffer.size() - strm.avail_out);
+      } while (strm.avail_out == 0);
+    }
+
+    do
+    {
+      std::vector<char> outBuffer(1024);
+      strm.avail_out = outBuffer.size();
+      strm.next_out = reinterpret_cast<unsigned char *>(outBuffer.data());
+
+      if (inflate(&strm, Z_FINISH) == Z_STREAM_ERROR)
+      {
+        Logger::Error("Decompression error");
+        return false;
+      }
+
+      outFile.write(outBuffer.data(), outBuffer.size() - strm.avail_out);
+    } while (strm.avail_out == 0);
+
+    inflateEnd(&strm);
+
+    return true;
   }
 }

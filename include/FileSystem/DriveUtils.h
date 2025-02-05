@@ -45,7 +45,6 @@ extern "C"
 #endif
 
 #ifdef __cplusplus
-
 #include <string>
 #include <vector>
 #include <utility>

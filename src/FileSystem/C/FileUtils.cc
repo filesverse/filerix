@@ -1,4 +1,5 @@
-#include "FileUtils.h"
+#include "include/FileSystem/FileUtils.h"
+#include "include/Utils/Logger.h"
 
 #include <cstring>
 #include <cstdlib>
@@ -42,13 +43,19 @@ extern "C"
     *count = files.size();
 
     struct FileInfo *result = (struct FileInfo *)malloc(*count * sizeof(struct FileInfo));
+    if (result == NULL)
+    {
+      Logger::Error("Memory allocation failed for FileInfo array");
+      return NULL;
+    }
 
     for (size_t i = 0; i < *count; ++i)
     {
-      strncpy(result[i].name, files[i].name.c_str(), sizeof(result[i].name));
-      strncpy(result[i].type, files[i].type.c_str(), sizeof(result[i].type));
-      strncpy(result[i].path, files[i].path.c_str(), sizeof(result[i].path));
+      result[i].name = strdup(files[i].name.c_str());
+      result[i].type = strdup(files[i].type.c_str());
+      result[i].path = strdup(files[i].path.c_str());
       result[i].size = files[i].size;
+      result[i].isDirectory = files[i].isDirectory;
     }
 
     return result;
@@ -63,10 +70,11 @@ extern "C"
 
     for (size_t i = 0; i < *count; ++i)
     {
-      strncpy(result[i].name, files[i].name.c_str(), sizeof(result[i].name));
-      strncpy(result[i].type, files[i].type.c_str(), sizeof(result[i].type));
-      strncpy(result[i].path, files[i].path.c_str(), sizeof(result[i].path));
+      result[i].name = strdup(files[i].name.c_str());
+      result[i].type = strdup(files[i].type.c_str());
+      result[i].path = strdup(files[i].path.c_str());
       result[i].size = files[i].size;
+      result[i].isDirectory = files[i].isDirectory;
     }
 
     return result;
