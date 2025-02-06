@@ -18,8 +18,8 @@ Test(FileUtilsTest, SearchFiles_Success)
   auto results = FileUtils::SearchFiles(testDir, "project");
 
   cr_assert_eq(results.size(), 2);
-  cr_assert_str_eq(results[0].name.c_str(), "project1.txt");
-  cr_assert_str_eq(results[1].name.c_str(), "project2.txt");
+  cr_assert_str_eq(results[0].name, "project1.txt");
+  cr_assert_str_eq(results[1].name, "project2.txt");
 
   Cleanup(file1.c_str());
   Cleanup(file2.c_str());

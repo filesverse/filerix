@@ -1,5 +1,4 @@
 #include <criterion/criterion.h>
-#include <sys/stat.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,7 +7,7 @@
 #include "filerix/FileSystem/FileUtils.h"
 #include "TestUtils.h"
 
-Test(FileUtilsTest, Compress_Success, .init = setup_redirect)
+Test(FileUtilsTest, Compress_Success)
 {
   cr_assert(CreateFile("./test_file_gz.txt"), "File creation failed");
 
@@ -21,7 +20,7 @@ Test(FileUtilsTest, Compress_Success, .init = setup_redirect)
   Cleanup("./test_file.gz");
 }
 
-Test(FileUtilsTest, Compress_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, Compress_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   Compress("./non_existent.txt", "./test_file.gz");
 }

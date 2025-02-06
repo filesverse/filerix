@@ -36,10 +36,10 @@ int main() {
 #include "filerix/FileSystem/FileUtils.h"
 
 int main() {
-  FileList* files = GetFiles("/home/user/Documents");
+  struct FileList files = GetFiles("/home/user/Documents");
 
-  for (int i = 0; i < files->count; i++) {
-    File *file = &files->files[i];
+  for (int i = 0; i < files.count; i++) {
+    FileInfo *file = &files.files[i];
     printf("%s - %s\n", file->name, file->isDirectory ? "Directory" : "File");
   }
 
@@ -99,11 +99,10 @@ int main() {
   const char* search_dir = "/home/user/Documents";
   const char* search_term = "project";
 
-  size_t result_count = 0;
-  struct FileInfo* results = SearchFiles(search_dir, search_term, &result_count);
+  struct FileList result = SearchFiles(search_dir, search_term);
 
-  for (size_t i = 0; i < result_count; i++) {
-    printf("%s - %s\n", results[i].name, results[i].path);
+  for (size_t i = 0; i < result.count; i++) {
+    printf("%s - %s\n", result.files[i].name, result.files[i].path);
   }
 
   return 0;

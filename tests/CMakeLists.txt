@@ -32,8 +32,8 @@ set(CXX_SOURCES
 set(C_SOURCES
   src/TestUtils.c
   src/FileSystem/FileUtils_Rename.c
-  #src/FileSystem/FileUtils_GetFiles.c
-  #src/FileSystem/FileUtils_SearchFiles.c
+  src/FileSystem/FileUtils_GetFiles.c
+  src/FileSystem/FileUtils_SearchFiles.c
   src/FileSystem/FileUtils_Copy.c
   src/FileSystem/FileUtils_Cut.c
   src/FileSystem/FileUtils_Compress.c

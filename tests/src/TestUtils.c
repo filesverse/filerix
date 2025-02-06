@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 bool CreateFile(const char *path)
 {
@@ -30,8 +31,30 @@ int FileExists(const char *path)
   return access(path, F_OK) != -1;
 }
 
-void setup_redirect()
+void SetupRedirect()
 {
   cr_redirect_stdout();
   cr_redirect_stderr();
+}
+
+int RemoveDir(const char *path)
+{
+  char command[1024];
+
+  snprintf(command, sizeof(command), "rm -rf %s", path);
+
+  int result = system(command);
+
+  if (result == -1)
+  {
+    perror("system");
+    return -1;
+  }
+
+  return 0;
+}
+
+int CreateDir(const char *path)
+{
+  return mkdir(path, 0777) == 0;
 }

@@ -19,7 +19,7 @@ Test(FileUtilsTest, Decompress_Success)
   Cleanup(destination.c_str());
 }
 
-Test(FileUtilsTest, Decompress_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, Decompress_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   std::string invalidSource = "./non_existent.gz";
   std::string destination = "./test_file_gz.txt";

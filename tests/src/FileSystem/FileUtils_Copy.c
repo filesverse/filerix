@@ -16,7 +16,7 @@ Test(FileUtilsTest, Copy_Success)
   Cleanup("./file_copy.txt");
 }
 
-Test(FileUtilsTest, Copy_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, Copy_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   Copy("./non_existent.txt", "./file_copy.txt");
 }

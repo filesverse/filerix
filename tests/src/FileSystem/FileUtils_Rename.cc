@@ -14,7 +14,7 @@ Test(FileUtilsTest, RenameTest_Success)
   Cleanup(renamedPath.c_str());
 }
 
-Test(FileUtilsTest, RenameTest_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, RenameTest_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   FileUtils::Rename(invalidPath, renamedPath);
 }

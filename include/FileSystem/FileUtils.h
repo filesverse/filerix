@@ -20,8 +20,14 @@ extern "C"
   bool Compress(const char *source, const char *destination);
   bool Decompress(const char *source, const char *destination);
 
-  struct FileInfo *GetFiles(const char *path, size_t *count);
-  struct FileInfo *SearchFiles(const char *path, const char *query, size_t *count);
+  struct FileList
+  {
+    struct FileInfo *files;
+    size_t count;
+  };
+
+  struct FileList GetFiles(const char *path);
+  struct FileList SearchFiles(const char *path, const char *query);
 
 #ifdef __cplusplus
 }

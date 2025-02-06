@@ -10,7 +10,7 @@
 #define INVALID_FILE "./non_existent_file.txt"
 #define MODE 0644
 
-Test(UserUtils, ChangePermissions_Success, .init = setup_redirect)
+Test(UserUtils, ChangePermissions_Success)
 {
   cr_assert(CreateFile(TEST_FILE), "Failed to create test file");
   cr_assert(ChangePermissions(TEST_FILE, MODE), "Failed to change file permissions");
@@ -22,7 +22,7 @@ Test(UserUtils, ChangePermissions_Success, .init = setup_redirect)
   Cleanup(TEST_FILE);
 }
 
-Test(UserUtils, ChangePermissions_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(UserUtils, ChangePermissions_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   ChangePermissions(INVALID_FILE, MODE);
 }

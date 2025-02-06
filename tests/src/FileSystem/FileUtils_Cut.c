@@ -16,7 +16,7 @@ Test(FileUtilsTest, Cut_Success)
   Cleanup("./file_moved.txt");
 }
 
-Test(FileUtilsTest, Cut_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, Cut_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   Cut("./non_existent.txt", "./file_moved.txt");
 }

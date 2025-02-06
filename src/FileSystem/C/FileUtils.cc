@@ -37,44 +37,63 @@ extern "C"
     return FileUtils::Decompress(std::string(source), std::string(destination));
   }
 
-  struct FileInfo *GetFiles(const char *path, size_t *count)
+  void CopyStringToCharArray(const std::string &src, char *dest, size_t maxLen)
+  {
+    strncpy(dest, src.c_str(), maxLen - 1);
+    dest[maxLen - 1] = '\0';
+  }
+
+  FileList GetFiles(const char *path)
   {
     auto files = FileUtils::GetFiles(std::string(path));
-    *count = files.size();
+    struct FileList result;
+    result.count = files.size();
+    result.files = (struct FileInfo *)malloc(result.count * sizeof(struct FileInfo));
 
-    struct FileInfo *result = (struct FileInfo *)malloc(*count * sizeof(struct FileInfo));
-    if (result == NULL)
+    if (result.files == NULL)
     {
       Logger::Error("Memory allocation failed for FileInfo array");
-      return NULL;
     }
 
-    for (size_t i = 0; i < *count; ++i)
+    for (size_t i = 0; i < result.count; ++i)
     {
-      result[i].name = strdup(files[i].name.c_str());
-      result[i].type = strdup(files[i].type.c_str());
-      result[i].path = strdup(files[i].path.c_str());
-      result[i].size = files[i].size;
-      result[i].isDirectory = files[i].isDirectory;
+      result.files[i].name = (char *)malloc(256 * sizeof(char));
+      result.files[i].type = (char *)malloc(256 * sizeof(char));
+      result.files[i].path = (char *)malloc(256 * sizeof(char));
+
+      CopyStringToCharArray(files[i].name, result.files[i].name, 256);
+      CopyStringToCharArray(files[i].type, result.files[i].type, 256);
+      CopyStringToCharArray(files[i].path, result.files[i].path, 256);
+      result.files[i].size = files[i].size;
+      result.files[i].isDirectory = files[i].isDirectory;
     }
 
     return result;
   }
 
-  struct FileInfo *SearchFiles(const char *path, const char *query, size_t *count)
+  FileList SearchFiles(const char *path, const char *query)
   {
     auto files = FileUtils::SearchFiles(std::string(path), std::string(query));
-    *count = files.size();
+    struct FileList result;
+    result.count = files.size();
+    result.files = (struct FileInfo *)malloc(result.count * sizeof(struct FileInfo));
 
-    struct FileInfo *result = (struct FileInfo *)malloc(*count * sizeof(struct FileInfo));
-
-    for (size_t i = 0; i < *count; ++i)
+    if (result.files == NULL)
     {
-      result[i].name = strdup(files[i].name.c_str());
-      result[i].type = strdup(files[i].type.c_str());
-      result[i].path = strdup(files[i].path.c_str());
-      result[i].size = files[i].size;
-      result[i].isDirectory = files[i].isDirectory;
+      Logger::Error("Memory allocation failed for FileInfo array");
+    }
+
+    for (size_t i = 0; i < result.count; ++i)
+    {
+      result.files[i].name = (char *)malloc(256 * sizeof(char));
+      result.files[i].type = (char *)malloc(256 * sizeof(char));
+      result.files[i].path = (char *)malloc(256 * sizeof(char));
+
+      CopyStringToCharArray(files[i].name, result.files[i].name, 256);
+      CopyStringToCharArray(files[i].type, result.files[i].type, 256);
+      CopyStringToCharArray(files[i].path, result.files[i].path, 256);
+      result.files[i].size = files[i].size;
+      result.files[i].isDirectory = files[i].isDirectory;
     }
 
     return result;

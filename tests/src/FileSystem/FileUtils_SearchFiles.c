@@ -12,24 +12,6 @@ const char *file1 = "./test_search_files/project1.txt";
 const char *file2 = "./test_search_files/project2.txt";
 const char *file3 = "./test_search_files/random.txt";
 
-int CreateDir(const char *dir)
-{
-  return mkdir(dir, 0777) == 0;
-}
-
-int RemoveDir(const char *dir)
-{
-  if (rmdir(dir) == 0)
-  {
-    return 1;
-  }
-  else
-  {
-    perror("rmdir failed");
-    return 0;
-  }
-}
-
 Test(FileUtilsTest, SearchFiles_Success)
 {
   cr_assert(CreateDir(testDir), "Failed to create directory");
@@ -37,13 +19,12 @@ Test(FileUtilsTest, SearchFiles_Success)
   cr_assert(CreateFile(file2), "Failed to create file2");
   cr_assert(CreateFile(file3), "Failed to create file3");
 
-  size_t count;
-  FileInfo *results = SearchFiles(testDir, "project", &count);
-  cr_assert(results != NULL, "SearchFiles returned NULL");
+  struct FileList results = SearchFiles(testDir, "project");
+  cr_assert(results.files != NULL, "SearchFiles returned NULL");
 
-  cr_assert_eq(count, 2, "Expected 2 results");
-  cr_assert_str_eq(results[0].name, "project1.txt");
-  cr_assert_str_eq(results[1].name, "project2.txt");
+  cr_assert_eq(results.count, 2, "Expected 2 results");
+  cr_assert_str_eq(results.files[0].name, "project1.txt");
+  cr_assert_str_eq(results.files[1].name, "project2.txt");
 
   Cleanup(file1);
   Cleanup(file2);
@@ -58,10 +39,9 @@ Test(FileUtilsTest, SearchFiles_Failure)
   cr_assert(CreateFile(file2), "Failed to create file2");
   cr_assert(CreateFile(file3), "Failed to create file3");
 
-  size_t count;
-  FileInfo *results = SearchFiles(testDir, "non_existent", &count);
-  cr_assert(results != NULL, "SearchFiles returned NULL");
-  cr_assert_eq(count, 0, "Expected empty results");
+  struct FileList results = SearchFiles(testDir, "non_existent");
+  cr_assert(results.files != NULL, "SearchFiles returned NULL");
+  cr_assert_eq(results.count, 0, "Expected empty results");
 
   Cleanup(file1);
   Cleanup(file2);

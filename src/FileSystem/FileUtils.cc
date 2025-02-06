@@ -16,6 +16,13 @@ namespace fs = std::filesystem;
 
 namespace FileUtils
 {
+  char *CopyString(const std::string &str)
+  {
+    char *copy = new char[str.size() + 1];
+    std::strcpy(copy, str.c_str());
+    return copy;
+  }
+
   std::string GetMimeType(const fs::path &filePath)
   {
     try
@@ -77,10 +84,12 @@ namespace FileUtils
       for (const auto &entry : fs::directory_iterator(fsPath))
       {
         FileInfo fileInfo;
-        fileInfo.name = entry.path().filename().string();
-        fileInfo.type = GetMimeType(entry.path());
-        fileInfo.path = entry.path().string();
+        fileInfo.name = CopyString(entry.path().filename().string());
+        fileInfo.type = CopyString(GetMimeType(entry.path()));
+        fileInfo.path = CopyString(entry.path().string());
         fileInfo.size = fs::is_regular_file(entry.path()) ? fs::file_size(entry.path()) : 0;
+        fileInfo.isDirectory = fs::is_directory(entry.path());
+
         files.push_back(fileInfo);
       }
     }
@@ -107,10 +116,12 @@ namespace FileUtils
         if (fileName.find(query) != std::string::npos)
         {
           FileInfo fileInfo;
-          fileInfo.name = fileName;
-          fileInfo.type = fs::is_directory(entry.path()) ? "directory" : "file";
-          fileInfo.path = entry.path().string();
+          fileInfo.name = CopyString(entry.path().filename().string());
+          fileInfo.type = CopyString(GetMimeType(entry.path()));
+          fileInfo.path = CopyString(entry.path().string());
           fileInfo.size = fs::is_regular_file(entry.path()) ? fs::file_size(entry.path()) : 0;
+          fileInfo.isDirectory = fs::is_directory(entry.path());
+
           searchResults.push_back(fileInfo);
         }
       }

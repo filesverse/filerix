@@ -19,7 +19,7 @@ Test(FileUtilsTest, Copy_Success)
   Cleanup(destination.c_str());
 }
 
-Test(FileUtilsTest, Copy_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, Copy_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   std::string invalidSource = "./non_existent.txt";
   std::string destination = "./file_copy.txt";

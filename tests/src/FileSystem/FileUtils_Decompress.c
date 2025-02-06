@@ -16,7 +16,7 @@ Test(FileUtilsTest, Decompress_Success)
   Cleanup("./test_file_gz.txt");
 }
 
-Test(FileUtilsTest, Decompress_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, Decompress_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   Decompress("./non_existent.gz", "./test_file_gz.txt");
 }

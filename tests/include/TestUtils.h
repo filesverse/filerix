@@ -11,7 +11,9 @@ extern "C"
   bool CreateFile(const char *path);
   bool Cleanup(const char *path);
   int FileExists(const char *path);
-  void setup_redirect();
+  int RemoveDir(const char *path);
+  int CreateDir(const char *path);
+  void SetupRedirect();
 
 #ifdef __cplusplus
 }

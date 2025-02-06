@@ -11,7 +11,7 @@ const std::string filePath = "./test_file_permissions.txt";
 const std::string invalidFilePath = "./non_existent_file.txt";
 const int mode = 0644;
 
-Test(UserUtilsTest, ChangePermissions_Success, .init = setup_redirect)
+Test(UserUtilsTest, ChangePermissions_Success)
 {
   cr_assert(CreateFile(filePath.c_str()), "Failed to create test file");
 
@@ -24,7 +24,7 @@ Test(UserUtilsTest, ChangePermissions_Success, .init = setup_redirect)
   Cleanup(filePath.c_str());
 }
 
-Test(UserUtilsTest, ChangePermissions_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(UserUtilsTest, ChangePermissions_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   UserUtils::ChangePermissions(invalidFilePath, mode);
 }

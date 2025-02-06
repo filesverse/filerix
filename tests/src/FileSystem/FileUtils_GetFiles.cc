@@ -22,15 +22,15 @@ Test(FileUtilsTest, GetFiles_Success)
 
   cr_assert_eq(files.size(), 2, "Expected 2 files in directory");
 
-  cr_assert_str_eq(files[0].name.c_str(), "file1.txt", "First file name mismatch");
-  cr_assert_str_eq(files[1].name.c_str(), "file2.txt", "Second file name mismatch");
+  cr_assert_str_eq(files[0].name, "file1.txt", "First file name mismatch");
+  cr_assert_str_eq(files[1].name, "file2.txt", "Second file name mismatch");
 
   Cleanup(testFile1.c_str());
   Cleanup(testFile2.c_str());
   std::filesystem::remove(testDir);
 }
 
-Test(FileUtilsTest, GetFiles_Failure, .init = setup_redirect, .exit_code = EXIT_FAILURE)
+Test(FileUtilsTest, GetFiles_Failure, .init = SetupRedirect, .exit_code = EXIT_FAILURE)
 {
   std::string invalidDir = "./InvalidDir";
 
