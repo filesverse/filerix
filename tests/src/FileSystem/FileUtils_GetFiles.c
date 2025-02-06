@@ -10,7 +10,7 @@
 
 Test(FileUtilsTest, GetFiles_Success)
 {
-  const char *testDir = "./TestDir";
+  const char *testDir = "./TestDir_GetFiles";
   const char *testFile1 = "./TestDir/file1.txt";
   const char *testFile2 = "./TestDir/file2.txt";
 

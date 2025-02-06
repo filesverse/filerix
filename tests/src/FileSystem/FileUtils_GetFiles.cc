@@ -10,7 +10,7 @@ bool CreateDirectory(const std::string &path)
 
 Test(FileUtilsTest, GetFiles_Success)
 {
-  std::string testDir = "./TestDir";
+  std::string testDir = "./TestDir_GetFiles";
   std::string testFile1 = testDir + "/file1.txt";
   std::string testFile2 = testDir + "/file2.txt";
 
