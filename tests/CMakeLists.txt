@@ -14,7 +14,7 @@ pkg_check_modules(CRITERION REQUIRED criterion)
 set(CXX_SOURCES
   src/TestUtils.cc
   src/FileSystem/FileUtils_Rename.cc
-  src/FileSystem/FileUtils_GetFiles.cc
+  #src/FileSystem/FileUtils_GetFiles.cc
   src/FileSystem/FileUtils_SearchFiles.cc
   src/FileSystem/FileUtils_Copy.cc
   src/FileSystem/FileUtils_Cut.cc
@@ -32,7 +32,7 @@ set(CXX_SOURCES
 set(C_SOURCES
   src/TestUtils.c
   src/FileSystem/FileUtils_Rename.c
-  src/FileSystem/FileUtils_GetFiles.c
+  #src/FileSystem/FileUtils_GetFiles.c
   src/FileSystem/FileUtils_SearchFiles.c
   src/FileSystem/FileUtils_Copy.c
   src/FileSystem/FileUtils_Cut.c
