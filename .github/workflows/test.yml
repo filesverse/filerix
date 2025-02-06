@@ -1,0 +1,47 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y libudev-dev zlib1g-dev libcriterion-dev meson ninja-build
+
+    - name: Install filerix
+      run: |
+        meson setup build
+        meson compile -C build
+        sudo meson install -C build
+
+    - name: Configure CMake
+      working-directory: ${{github.workspace}}/tests
+      run: cmake -B ${{github.workspace}}/tests/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Set permssions
+      working-directory: ${{github.workspace}}/tests
+      run: |
+        chmod 777 -R ./build
+        chmod 777 -R ./build/*
+
+    - name: Build
+      working-directory: ${{github.workspace}}/tests
+      run: cmake --build ${{github.workspace}}/tests/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/tests/build
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
