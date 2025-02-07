@@ -12,16 +12,8 @@ export default defineConfig({
       { rel: 'icon', href: 'favicon.ico' }
     ],
     [
-      'script',
-      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=googlecbcab056e50286fb' }
-    ],
-    [
-      'script',
-      {},
-      `window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'googlecbcab056e50286fb');`
+      'meta',
+      { name: 'google-site-verification', content: 'Y102h-h5HYlYeh1duBU7Tiw4hWdBh3kJcE42t1goHKI' }
     ]
   ],
   themeConfig: {
