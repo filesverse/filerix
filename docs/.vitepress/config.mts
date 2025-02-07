@@ -6,6 +6,24 @@ export default defineConfig({
   description: "File manager library that provides all the essentials.",
   base: "/filerix/",
   cleanUrls: true,
+  head: [
+    [
+      'link', 
+      { rel: 'icon', href: 'favicon.ico' }
+    ],
+    [
+      'script',
+      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=googlecbcab056e50286fb' }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'googlecbcab056e50286fb');`
+    ]
+  ],
   themeConfig: {
     logo: '/logo.png',
 
