@@ -10,7 +10,6 @@ export default defineConfig({
   description: "File manager library that provides all the essentials.",
   base: "/filerix/",
   cleanUrls: true,
-  mpa: true,
   lastUpdated: true,
   head: [
     ['link', { rel: 'icon', href: '/filerix/favicon.ico' }],
