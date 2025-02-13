@@ -6,6 +6,7 @@ export default defineConfig({
   description: "File manager library that provides all the essentials.",
   base: "/filerix/",
   cleanUrls: true,
+  mpa: true,
   head: [
     [
       'link', 
@@ -16,6 +17,9 @@ export default defineConfig({
       { name: 'google-site-verification', content: 'Y102h-h5HYlYeh1duBU7Tiw4hWdBh3kJcE42t1goHKI' }
     ]
   ],
+  sitemap: {
+    hostname: 'https://filesverse.github.io/filerix'
+  },
   themeConfig: {
     logo: '/logo.png',
 
