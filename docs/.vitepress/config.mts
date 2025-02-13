@@ -13,7 +13,7 @@ export default defineConfig({
   mpa: true,
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', href: 'favicon.ico' }],
+    ['link', { rel: 'icon', href: '/filerix/favicon.ico' }],
     ['meta', { name: 'google-site-verification', content: 'Y102h-h5HYlYeh1duBU7Tiw4hWdBh3kJcE42t1goHKI' }],
     ['meta', { name: "title", content: 'filerix' }],
     ['meta', { name: 'description', content: 'Filerix is a lightweight and efficient library for Linux file management.' }],
