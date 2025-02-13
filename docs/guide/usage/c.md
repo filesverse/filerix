@@ -1,6 +1,6 @@
 # <i class="devicon-c-plain colored"></i> **C Usage with CMake and Meson**
 
-### **Prerequisites**
+## **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 

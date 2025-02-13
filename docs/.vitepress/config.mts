@@ -11,6 +11,7 @@ export default defineConfig({
   base: "/filerix/",
   cleanUrls: true,
   mpa: true,
+  lastUpdated: true,
   head: [
     [
       'link', 
@@ -19,7 +20,7 @@ export default defineConfig({
     ['meta', { name: 'google-site-verification', content: 'Y102h-h5HYlYeh1duBU7Tiw4hWdBh3kJcE42t1goHKI' }]
   ],
   sitemap: {
-    hostname: 'https://filesverse.github.io/filerix'
+    hostname: 'https://filesverse.github.io/filerix/',
   },
   themeConfig: {
     logo: '/logo.png',
@@ -27,7 +28,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: "Guide", link: '/guide/installation' },
-      { text: "References", link: '/references/compression' },
+      { text: "Reference", link: '/references/compression' },
     ],
 
     sidebar: {
