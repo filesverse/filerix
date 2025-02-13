@@ -14,15 +14,15 @@ This library is currently under development and may be subject to changes.
 1. install dependencies
 :::code-group
 
-```sh [<i class="devicon-fedora-plain"></i> Fedora]
+```sh [<i class="devicon-fedora-plain colored"></i> Fedora]
 sudo dnf install meson gcc-c++ clang
 ```
 
-```sh [<i class="devicon-ubuntu-plain"></i> Ubuntu]
+```sh [<i class="devicon-ubuntu-plain colored"></i> Ubuntu]
 sudo apt install meson g++ clang
 ```
 
-```sh [<i class="devicon-archlinux-plain"></i> Arch]
+```sh [<i class="devicon-archlinux-plain colored"></i> Arch]
 sudo pacman -Syu meson g++ clang
 ```
 

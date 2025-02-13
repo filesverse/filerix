@@ -1,4 +1,4 @@
-# **Node.js Usage**
+# <i class="devicon-nodejs-plain colored"></i> **Node.js Usage**
 
 ## **Prerequisites**
 

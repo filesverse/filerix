@@ -1,14 +1,19 @@
-# **C++ Usage with Meson**
+# <i class="devicon-cplusplus-plain colored"></i> **C++ Usage with CMake and Meson**
 
-## **Prerequisites**
+### **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 
 1. **C++ Compiler**: Ensure you have a C++ compiler installed. For example, `g++` on Linux.
+2. **filerix**: Ensure the `filerix` library and its development files are installed.
+
+#### **CMake Prerequisites**
+
+1. **CMake**: Install CMake. If you don't have it already:
+   
+#### **Meson Prerequisites**
 
 2. **Meson**: Install Meson. If you don't have it already:
-   
-3. **filerix**: Ensure the `filerix` library and its development files are installed.
 
 ## **Installing Dependencies**
 
@@ -16,19 +21,46 @@ Depending on your distribution, run one of the following commands to install the
 
 :::code-group
 
-```sh [<i class="devicon-fedora-plain"></i> Fedora]
-sudo dnf install meson ninja
+```sh [<i class="devicon-fedora-plain colored"></i> Fedora]
+sudo dnf install cmake make meson ninja
 ```
 
-```sh [<i class="devicon-ubuntu-plain"></i> Ubuntu]
-sudo apt install meson ninja
+```sh [<i class="devicon-ubuntu-plain colored"></i> Ubuntu]
+sudo apt install cmake make meson ninja
 ```
 
-```sh [<i class="devicon-archlinux-plain"></i> Arch]
-sudo pacman -Syu meson ninja
+```sh [<i class="devicon-archlinux-plain colored"></i> Arch]
+sudo pacman -Syu cmake make meson ninja
 ```
 
 :::
+
+## **Building the Example with CMake**
+
+1. Navigate to the `example/cpp+cmake` directory:
+   ```bash
+   cd example/cpp+cmake
+   ```
+
+2. Create a build directory to keep the build files organized:
+   ```bash
+   mkdir build
+   cd build
+   ```
+
+3. Run `cmake` to configure the project:
+   ```bash
+   cmake ..
+   ```
+
+4. Build the project with `make`:
+   ```bash
+   make
+   ```
+
+   After building, the executable `example` will be available in the `build` directory.
+
+---
 
 ## **Building the Example with Meson**
 
@@ -73,7 +105,6 @@ sudo pacman -Syu meson ninja
 The C++ code interacts with the `filerix` library to fetch the disk usage of a given directory (`/` by default). Here’s a quick breakdown of the key components:
 
 - **DriveUtils::GetDriveUsage**: This function retrieves the disk usage details (used space and total space) for the given path.
-- **Logger::Info**: This utility logs information (like the disk usage) to a log file or the console.
 - **std::cout**: The result is printed to the console for the user to see.
 
 This simple program is designed to showcase how to use `filerix` for filesystem operations and how to integrate it into a C++ project with CMake and Meson.

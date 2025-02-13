@@ -1,6 +1,6 @@
-# **Electron Usage**
+# <i class="devicon-electron-original colored"></i> **Electron Usage**
 
-### **Prerequisites**
+## **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 

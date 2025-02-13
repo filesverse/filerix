@@ -1,6 +1,10 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
+const createSidebarSection = (text: string, items: { text: string, link: string }[]) => ({
+  text,
+  items
+})
+
 export default defineConfig({
   title: "filerix",
   description: "File manager library that provides all the essentials.",
@@ -12,10 +16,7 @@ export default defineConfig({
       'link', 
       { rel: 'icon', href: 'favicon.ico' }
     ],
-    [
-      'meta',
-      { name: 'google-site-verification', content: 'Y102h-h5HYlYeh1duBU7Tiw4hWdBh3kJcE42t1goHKI' }
-    ]
+    ['meta', { name: 'google-site-verification', content: 'Y102h-h5HYlYeh1duBU7Tiw4hWdBh3kJcE42t1goHKI' }]
   ],
   sitemap: {
     hostname: 'https://filesverse.github.io/filerix'
@@ -26,54 +27,32 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: "Guide", link: '/guide/installation' },
+      { text: "References", link: '/references/compression' },
     ],
 
-    sidebar: [
-      {
-        text: 'Introduction',
-        items: [
-          { text: 'installation', link: '/guide/installation' },
+    sidebar: {
+      '/guide/': [
+        createSidebarSection('Introduction', [
+          { text: 'Installation', link: '/guide/installation' },
           { text: 'Getting Started', link: '/guide/getting-started' },
           { text: 'Logging', link: '/guide/logging' }
-        ]
-      },
-      {
-        text: 'Usage',
-        items: [
-          {
-            text: 'C++',
-            items: [
-              { text: 'cmake', link: '/guide/usage/cpp-cmake' },
-              { text: 'meson', link: '/guide/usage/cpp-meson' },
-            ]
-          },
-          {
-            text: 'C',
-            items: [
-              { text: 'cmake', link: '/guide/usage/c-cmake' },
-              { text: 'meson', link: '/guide/usage/c-meson' },
-            ]
-          },
-          {
-            text: 'nodejs',
-            link: '/guide/usage/nodejs',
-          },
-          {
-            text: 'electron',
-            link: '/guide/usage/electron',
-          },
-        ]
-      },
-      {
-        text: 'References',
-        items: [
-          { text: 'Compression', link: '/guide/references/compression' },
-          { text: 'Drives', link: '/guide/references/drives' },
-          { text: 'Filesystem', link: '/guide/references/filesystem' },
-          { text: 'User', link: '/guide/references/user' },
-        ]
-      },
-    ],
+        ]),
+        createSidebarSection('Usage', [
+          { text: '<i class="devicon-cplusplus-plain colored"></i> C++', link: '/guide/usage/cpp' },
+          { text: '<i class="devicon-c-plain colored"></i> C', link: '/guide/usage/c' },
+          { text: '<i class="devicon-nodejs-plain colored"></i> Node.js', link: '/guide/usage/nodejs' },
+          { text: '<i class="devicon-electron-original colored"></i> Electron', link: '/guide/usage/electron' }
+        ])
+      ],
+      '/references/': [
+        createSidebarSection('References', [
+          { text: 'Compression', link: '/references/compression' },
+          { text: 'Drives', link: '/references/drives' },
+          { text: 'Filesystem', link: '/references/filesystem' },
+          { text: 'User', link: '/references/user' }
+        ])
+      ]
+    },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/KingMaj0r/filerix' }
     ]

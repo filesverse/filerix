@@ -9,7 +9,7 @@
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/UserUtils.h"
 
@@ -26,7 +26,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/UserUtils.h"
 
@@ -43,7 +43,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { getUserName } from "@kingmaj0r/filerix/lib";
 
 console.log(`Current user: ${filerix.getUserName()}`);
@@ -63,7 +63,7 @@ console.log(`Current user: ${filerix.getUserName()}`);
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/UserUtils.h"
 
@@ -81,7 +81,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/UserUtils.h"
 
@@ -99,7 +99,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { changePermissions } from "@kingmaj0r/filerix/lib";
 
 if (changePermissions('/path/to/file', 0o644)) {

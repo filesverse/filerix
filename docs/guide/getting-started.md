@@ -4,7 +4,7 @@ Below are two examples to help you get started with **Node.js** or **C++**.
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include <string>
 #include "filerix/FileSystem/DriveUtils.hpp"
@@ -22,7 +22,7 @@ int main()
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include <string.h>
 #include "filerix/FileSystem/DriveUtils.h"
@@ -40,7 +40,7 @@ int main()
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { getDriveUsage } from "@kingmaj0r/filerix/lib";
 
 async function getDriveUsageFunc(drivePath) {

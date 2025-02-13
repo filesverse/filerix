@@ -16,10 +16,16 @@ hero:
       link: /guide/getting-started
 
 features:
-  - title: Easy File Operations
-    details: filerix simplifies file operations like reading, writing, and moving files, making your file management tasks easier.
-  - title: Drive Information
-    details: Get detailed information about available drives, their usage, and mount points with ease.
-  - title: File System Navigation
-    details: Navigate the file system efficiently with support for directories, partitions, and file metadata.
+  - title: Simplified File Operations
+    details: Filerix streamlines core file operations such as reading, writing, and moving files, providing a seamless experience for managing your file system.
+  - title: Efficient File System Navigation
+    details: Navigate the file system with ease, offering comprehensive support for directories, partitions, and detailed file metadata for optimal management.
+  - title: Detailed Drive Information
+    details: Retrieve comprehensive drive information, including usage statistics and mount points, enabling efficient monitoring and management of available storage resources.
+  - title: <i class="devicon-electron-original colored"></i> Electron Support
+    details: Build and integrate a powerful file manager directly into your Electron applications. Our library offers seamless compatibility, allowing you to enhance your desktop apps with advanced file management capabilities.
+  - title: <i class="devicon-typescript-plain colored"></i> <i class="devicon-javascript-plain colored"></i> TypeScript/JavaScript Support
+    details: Easily incorporate the file manager into your TypeScript or JavaScript projects. With comprehensive APIs and simple integration, you can quickly add robust file management features to your web or Node.js applications.
+  - title: <i class="devicon-cplusplus-plain colored"></i> <i class="devicon-c-plain colored"></i> C++/C Support
+    details: Leverage the file manager in your C++ or C projects, providing efficient and powerful file system operations. The library ensures smooth integration with both CMake and Meson build systems for streamlined development.
 ---

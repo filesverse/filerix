@@ -15,7 +15,7 @@
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -38,7 +38,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -61,7 +61,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { getDrives } from "@kingmaj0r/filerix/lib";
 
 const drives = getDrives();
@@ -90,7 +90,7 @@ drives.forEach(drive => {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -110,7 +110,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -130,7 +130,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { getDriveUsage } from "@kingmaj0r/filerix/lib";
 
 const usage = filerix.getDriveUsage('/dev/sdX');
@@ -151,7 +151,7 @@ console.log(`Total space: ${usage.total_space} bytes`);
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -170,7 +170,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -189,7 +189,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { mountDrive } from "@kingmaj0r/filerix/lib";
 
 const device = "/dev/sdX";
@@ -215,7 +215,7 @@ if (success) {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -234,7 +234,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -254,7 +254,7 @@ int main() {
 
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { unmountDrive } from "@kingmaj0r/filerix/lib";
 
 const device = "/dev/sdX";
@@ -280,7 +280,7 @@ if (success) {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -299,7 +299,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/DriveUtils.h"
 
@@ -318,7 +318,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { getDeviceLabelOrUUID } from "@kingmaj0r/filerix/lib";
 
 const device = "/dev/sdX"

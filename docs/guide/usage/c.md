@@ -1,14 +1,19 @@
-# **C Usage with Meson**
+# <i class="devicon-c-plain colored"></i> **C Usage with CMake and Meson**
 
 ### **Prerequisites**
 
 Before proceeding, ensure the following are installed and set up:
 
 1. **C Compiler**: Ensure you have a C compiler installed. For example, `gcc` on Linux.
+2. **filerix**: Ensure the `filerix` library and its development files are installed.
+
+#### **CMake Prerequisites**
+
+1. **CMake**: Install CMake. If you don't have it already:
+   
+#### **Meson Prerequisites**
 
 2. **Meson**: Install Meson. If you don't have it already:
-   
-3. **filerix**: Ensure the `filerix` library and its development files are installed.
 
 ## **Installing Dependencies**
 
@@ -16,19 +21,44 @@ Depending on your distribution, run one of the following commands to install the
 
 :::code-group
 
-```sh [<i class="devicon-fedora-plain"></i> Fedora]
-sudo dnf install meson ninja
+```sh [<i class="devicon-fedora-plain colored"></i> Fedora]
+sudo dnf install cmake make meson ninja
 ```
 
-```sh [<i class="devicon-ubuntu-plain"></i> Ubuntu]
-sudo apt install meson ninja
+```sh [<i class="devicon-ubuntu-plain colored"></i> Ubuntu]
+sudo apt install cmake make meson ninja
 ```
 
-```sh [<i class="devicon-archlinux-plain"></i> Arch]
-sudo pacman -Syu meson ninja
+```sh [<i class="devicon-archlinux-plain colored"></i> Arch]
+sudo pacman -Syu cmake make meson ninja
 ```
 
 :::
+
+## **Building the Example with CMake**
+
+1. Navigate to the `example/c+cmake` directory:
+   ```bash
+   cd example/c+cmake
+   ```
+
+2. Create a build directory to keep the build files organized:
+   ```bash
+   mkdir build
+   cd build
+   ```
+
+3. Run `cmake` to configure the project:
+   ```bash
+   cmake ..
+   ```
+
+4. Build the project with `make`:
+   ```bash
+   make
+   ```
+
+   After building, the executable `example` will be available in the `build` directory.
 
 ## **Building the Example with Meson**
 
@@ -54,8 +84,6 @@ sudo pacman -Syu meson ninja
    ```
 
    After building, the executable `example` will be available in the `build` directory.
-
----
 
 ## **Running the Example**
 

@@ -15,7 +15,7 @@
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -31,7 +31,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -47,7 +47,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { getFiles } from "@kingmaj0r/filerix/lib";
 
 const files = getFiles('/home/user/Documents');
@@ -74,7 +74,7 @@ files.forEach(file => {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -89,7 +89,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -109,7 +109,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { searchFiles } from "@kingmaj0r/filerix/lib";
 
 const results = searchFiles('/home/user/Documents', 'project');
@@ -132,7 +132,7 @@ results.forEach(file => {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -147,7 +147,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -162,7 +162,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { copyFile } from "@kingmaj0r/filerix/lib";
 
 if (copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
@@ -186,7 +186,7 @@ if (copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -201,7 +201,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -216,7 +216,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { cutFile } from "@kingmaj0r/filerix/lib";
 
 if (cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
@@ -240,7 +240,7 @@ if (cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -255,7 +255,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -270,7 +270,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { renameFile } from "@kingmaj0r/filerix/lib";
 
 if (renameFile('/home/user/file.txt', '/home/user/file_renamed.txt')) {

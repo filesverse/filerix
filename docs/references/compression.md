@@ -12,7 +12,7 @@
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -30,7 +30,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -48,7 +48,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { compressFile } from "@kingmaj0r/filerix/lib";
 
 if (compressFile('/path/to/file.txt', '/path/to/file.gz')) {
@@ -72,7 +72,7 @@ if (compressFile('/path/to/file.txt', '/path/to/file.gz')) {
 
 :::code-group
 
-```cpp [C++]
+```cpp [<i class="devicon-cplusplus-plain colored"></i> C++]
 #include <iostream>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -90,7 +90,7 @@ int main() {
 }
 ```
 
-```c [C]
+```c [<i class="devicon-c-plain colored"></i> C]
 #include <stdio.h>
 #include "filerix/FileSystem/FileUtils.h"
 
@@ -108,7 +108,7 @@ int main() {
 }
 ```
 
-```javascript [Node.js]
+```javascript [<i class="devicon-nodejs-plain colored"></i> Node.js]
 import { decompressFile } from "@kingmaj0r/filerix/lib";
 
 if (decompressFile('/path/to/file.gz', '/path/to/file.txt')) {
