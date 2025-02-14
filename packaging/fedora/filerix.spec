@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://github.com/filesverse/filerix
 Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 
-BuildRequires:  gcc, meson, ninja-build, pkgconfig, systemd-devel, zlib-devel
+BuildRequires:  gcc, gcc-c++, meson, ninja-build, pkgconfig, systemd-devel, zlib-devel
 Requires:       glibc, udev, zlib
 
 %description
