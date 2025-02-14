@@ -28,6 +28,8 @@ meson install -C build --destdir=%{buildroot}
 %license LICENSE
 %doc README.md
 %{_libdir}/libfilerix.so
+
+%files devel
 %{_includedir}/filerix/*
 %{_libdir}/pkgconfig/filerix.pc
 
