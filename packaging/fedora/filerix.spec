@@ -1,5 +1,5 @@
 Name:           filerix
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        A high-performance file management library
 

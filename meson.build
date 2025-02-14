@@ -1,4 +1,4 @@
-project('filerix', ['cpp', 'c'], version: '1.0', default_options: ['cpp_std=c++17'])
+project('filerix', ['cpp', 'c'], version: '1.0.1', default_options: ['cpp_std=c++17'])
 
 dependencies = [
   dependency('libudev', required: true),
