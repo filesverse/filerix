@@ -5,7 +5,7 @@ Summary:        A high-performance file management library
 
 License:        MIT
 URL:            https://github.com/filesverse/filerix
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  gcc, meson, ninja-build, pkgconfig, systemd-devel, zlib-devel
 Requires:       glibc, udev, zlib
