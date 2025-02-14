@@ -1,11 +1,11 @@
 {
   "name": "example",
   "version": "1.0.0",
-  "description": "A simple example using libfm with electron.",
+  "description": "A simple example using filerix with electron.",
   "main": "./out/main/index.js",
   "author": "KingMaj0r",
   "type": "module",
-  "homepage": "https://github.com/KingMaj0r/libfm",
+  "homepage": "https://github.com/filesverse/filerix",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
