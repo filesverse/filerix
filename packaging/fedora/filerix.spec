@@ -14,6 +14,14 @@ Requires:       glibc, udev, zlib
 Filerix is a lightweight and high-performance file management library 
 designed to provide essential file system operations.
 
+%package devel
+Summary:        Development files for Filerix
+Requires:       %{name} = %{version}-%{release}
+
+%description devel
+The Filerix development package contains headers and pkg-config files needed 
+to develop applications using the Filerix library.
+
 %prep
 %autosetup -n %{name}-%{version}
 
