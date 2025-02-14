@@ -15,7 +15,7 @@ Filerix is a lightweight and high-performance file management library
 designed to provide essential file system operations.
 
 %prep
-%autosetup
+%autosetup -n %{name}-%{version}
 
 %build
 meson setup build --prefix=%{_prefix}
