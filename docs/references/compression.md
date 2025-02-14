@@ -58,6 +58,21 @@ if (compressFile('/path/to/file.txt', '/path/to/file.gz')) {
 }
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  let source = "/path/to/file.txt";
+  let destination = "/path/to/file.gz";
+
+  if FileUtils::compress(source, destination) {
+    println!("File compressed successfully.");
+  } else {
+    eprintln!("Compression failed.");
+  }
+}
+```
+
 :::
 
 ## decompressFile()
@@ -115,6 +130,21 @@ if (decompressFile('/path/to/file.gz', '/path/to/file.txt')) {
     console.log('File decompressed successfully.');
 } else {
     console.log('Decompression failed.');
+}
+```
+
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  let source = "/path/to/file.gz";
+  let destination = "/path/to/file.txt";
+
+  if FileUtils::decompress(source, destination) {
+    println!("File decompressed successfully.");
+  } else {
+    eprintln!("Decompression failed.");
+  }
 }
 ```
 

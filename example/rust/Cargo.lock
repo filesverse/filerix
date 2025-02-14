@@ -5,8 +5,6 @@ version = 4
 [[package]]
 name = "filerix"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d4b70988b179feb8a4a383daa55d51faaa564f70a6114be691a4e222ff1b4922"
 dependencies = [
  "lazy_static",
  "libc",

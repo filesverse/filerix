@@ -49,6 +49,17 @@ import { getUserName } from "@kingmaj0r/filerix/lib";
 console.log(`Current user: ${filerix.getUserName()}`);
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::UserUtils;
+
+fn main() {
+  match UserUtils::get_user_name() {
+    Some(username) => println!("Username: {}", username),
+    None => eprintln!("Failed to get username."),
+  }
+}
+```
+
 :::
 
 ## changePermissions()
@@ -106,6 +117,21 @@ if (changePermissions('/path/to/file', 0o644)) {
     console.log('Permissions updated successfully.');
 } else {
     console.log('Failed to update permissions.');
+}
+```
+
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::UserUtils;
+
+fn main() {
+  let file_path = "/path/to/file";
+  let mode = 0o644;
+
+  if UserUtils::change_permissions(file_path, mode) {
+    println!("Permissions updated successfully.");
+  } else {
+    eprintln!("Failed to update permissions.");
+  }
 }
 ```
 

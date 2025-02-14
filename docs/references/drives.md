@@ -75,6 +75,26 @@ drives.forEach(drive => {
 });
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::DriveUtils;
+
+fn main() {
+  let drives = DriveUtils::get_drives();
+
+  if drives.is_empty() {
+    println!("No drives found or an error occurred.");
+    std::process::exit(1);
+  }
+
+  for drive in drives {
+    println!(
+      "Device: {}, Status: {}, Mount Point: {}",
+      drive.device, drive.status, drive.mount_point
+    );
+  }
+}
+```
+
 :::
 
 ## getDriveUsage()
@@ -138,6 +158,23 @@ console.log(`Used space: ${usage.used_space} bytes`);
 console.log(`Total space: ${usage.total_space} bytes`);
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::DriveUtils;
+
+fn main() {
+  let device = "/dev/sdX";
+
+  let usage = DriveUtils::get_drive_usage(device);
+
+  if let Some(usage) = usage {
+    println!("Used space: {} bytes", usage.used);
+    println!("Total space: {} bytes", usage.total);
+  } else {
+    eprintln!("Failed to get drive usage.");
+  }
+}
+```
+
 :::
 
 ## mountDrive()
@@ -199,6 +236,20 @@ if (success) {
   console.log("Drive mounted successfully.");
 } else {
   console.log("Drive mounting failed for ", device);
+}
+```
+
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::DriveUtils;
+
+fn main() {
+  let device = "/dev/sdX";
+
+  if DriveUtils::mount_drive(device) {
+    println!("Drive mounted successfully.");
+  } else {
+    println!("Drive mounting failed for {}", device);
+  }
 }
 ```
 
@@ -267,6 +318,20 @@ if (success) {
 }
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::DriveUtils;
+
+fn main() {
+  let device = "/dev/sdX";
+
+  if DriveUtils::unmount_drive(device) {
+    println!("Drive unmounted successfully.");
+  } else {
+    println!("Drive unmounting failed for {}", device);
+  }
+}
+```
+
 :::
 
 ## getDeviceLabelOrUUID()
@@ -329,6 +394,20 @@ if (name) {
   console.log("Label or UUID for device {device}: {name}");
 } else {
   console.log("No label or UUID found for device ", device);
+}
+```
+
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::DriveUtils;
+
+fn main() {
+  let device = "/dev/sdX";
+
+  if let Some(label_or_uuid) = DriveUtils::get_device_label_or_uuid(device) {
+    println!("Label or UUID for device {}: {}", device, label_or_uuid);
+  } else {
+    println!("No label or UUID found for device {}.", device);
+  }
 }
 ```
 

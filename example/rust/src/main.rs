@@ -1,7 +1,6 @@
 use filerix::FileSystem::{DriveUtils, UserUtils, FileUtils};
 use std::fs;
 use std::io::Write;
-use std::path::Path;
 
 fn create_file(file_path: &str, content: &str) {
   let mut file = fs::File::create(file_path).expect("Failed to create file");
@@ -33,7 +32,7 @@ fn main() {
   } else {
     println!("Available Drives:");
     for drive in &drives {
-      println!("Device: {}", unsafe { std::ffi::CStr::from_ptr(drive.device.as_ptr()) }.to_string_lossy());
+      println!("Device: {}", drive.device);
     }
   }
 
@@ -54,7 +53,7 @@ fn main() {
   } else {
     println!("Files in {}:", home_dir);
     for file in files {
-      println!("- {}", unsafe { std::ffi::CStr::from_ptr(file.name) }.to_string_lossy());
+      println!("- {}", file.name);
     }
   }
 
@@ -65,7 +64,7 @@ fn main() {
   } else {
     println!("Search results for '{}':", search_query);
     for file in found_files {
-      println!("- {}", unsafe { std::ffi::CStr::from_ptr(file.name) }.to_string_lossy());
+      println!("- {}", file.name);
     }
   }
 

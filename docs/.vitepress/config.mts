@@ -41,7 +41,8 @@ export default defineConfig({
           { text: '<i class="devicon-cplusplus-plain colored"></i> C++', link: '/guide/usage/cpp' },
           { text: '<i class="devicon-c-plain colored"></i> C', link: '/guide/usage/c' },
           { text: '<i class="devicon-nodejs-plain colored"></i> Node.js', link: '/guide/usage/nodejs' },
-          { text: '<i class="devicon-electron-original colored"></i> Electron', link: '/guide/usage/electron' }
+          { text: '<i class="devicon-electron-original colored"></i> Electron', link: '/guide/usage/electron' },
+          { text: '<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust', link: '/guide/usage/rust' },
         ])
       ],
       '/references/': [

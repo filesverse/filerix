@@ -56,6 +56,18 @@ files.forEach(file => {
 });
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  let files = FileUtils::get_files("/home/user/Documents");
+
+  for file in files {
+    println!("{} - {}", file.name, if file.is_directory { "Directory" } else { "File" });
+  }
+}
+```
+
 :::
 
 ## searchFiles()
@@ -118,6 +130,18 @@ results.forEach(file => {
 });
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  let results = FileUtils::search_files("/home/user/Documents", "project");
+
+  for file in results {
+    println!("{} - {}", file.name, file.path);
+  }
+}
+```
+
 :::
 
 ## copyFile()
@@ -169,6 +193,18 @@ if (copyFile('/home/user/file.txt', '/home/user/Documents/file_copy.txt')) {
   console.log('File copied successfully.');
 } else {
   console.log('Failed to copy file.');
+}
+```
+
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  if FileUtils::copy("/home/user/file.txt", "/home/user/Documents/file_copy.txt") {
+    println!("File copied successfully.");
+  } else {
+    eprintln!("Failed to copy file.");
+  }
 }
 ```
 
@@ -226,6 +262,18 @@ if (cutFile('/home/user/file.txt', '/home/user/Documents/file_moved.txt')) {
 }
 ```
 
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  if FileUtils::cut("/home/user/file.txt", "/home/user/Documents/file_moved.txt") {
+    println!("File moved successfully.");
+  } else {
+    eprintln!("Failed to moved file.");
+  }
+}
+```
+
 :::
 
 ## renameFile()
@@ -277,6 +325,18 @@ if (renameFile('/home/user/file.txt', '/home/user/file_renamed.txt')) {
   console.log('File renamed successfully.');
 } else {
   console.log('Failed to rename file.');
+}
+```
+
+```rust [<i class="devicon-rust-plain colored" style="color:#CE422B;"></i> Rust]
+use filerix::FileSystem::FileUtils;
+
+fn main() {
+  if FileUtils::rename("/home/user/file.txt", "/home/user/Documents/file_rename.txt") {
+    println!("File renamed successfully.");
+  } else {
+    eprintln!("Failed to rename file.");
+  }
 }
 ```
 
