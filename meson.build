@@ -44,9 +44,10 @@ pkgconfig = import('pkgconfig')
 
 pkgconfig.generate(
   name: 'filerix',
-  description: 'A file manager library',
+  description: 'File manager library that provides all the essentials.',
   version: meson.project_version(),
+  requires: dependencies,
   libraries: filerix,
-  subdirs: ['include/filerix'],
-  filebase: 'filerix',
+  subdirs: ['filerix'],
+  filebase: 'filerix'
 )
