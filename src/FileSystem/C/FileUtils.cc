@@ -1,5 +1,5 @@
-#include "include/FileSystem/FileUtils.h"
-#include "include/Utils/Logger.h"
+#include "FileSystem/FileUtils.h"
+#include "Utils/Logger.h"
 
 #include <cstring>
 #include <cstdlib>
@@ -52,7 +52,7 @@ extern "C"
 
     if (result.files == NULL)
     {
-      Logger::Error("Memory allocation failed for FileInfo array");
+      Logger::Error("[FileUtils] Memory allocation failed for FileInfo array");
     }
 
     for (size_t i = 0; i < result.count; ++i)
@@ -80,7 +80,7 @@ extern "C"
 
     if (result.files == NULL)
     {
-      Logger::Error("Memory allocation failed for FileInfo array");
+      Logger::Error("[FileUtils] Memory allocation failed for FileInfo array");
     }
 
     for (size_t i = 0; i < result.count; ++i)

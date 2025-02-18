@@ -1,5 +1,5 @@
-#include "include/FileSystem/DirectoryPermissions.h"
-#include "include/Utils/Logger.h"
+#include "FileSystem/DirectoryPermissions.h"
+#include "Utils/Logger.h"
 
 #include <filesystem>
 #include <iostream>
@@ -18,36 +18,36 @@ namespace DirectoryPermissions
 
       if (fs::exists(fsPath))
       {
-        Logger::Info("Checking access for: " + path);
+        Logger::Info("[DirectoryPermissions] Checking access for: " + path);
         if (fs::is_directory(fsPath))
         {
-          Logger::Info("Path is a directory.");
+          Logger::Info("[DirectoryPermissions] Path is a directory.");
         }
         else
         {
-          Logger::Warn("Path exists but is not a directory: " + path);
+          Logger::Warn("[DirectoryPermissions] Path exists but is not a directory: " + path);
         }
 
         if (access(path.c_str(), R_OK) == 0)
         {
-          Logger::Info("Access granted to directory: " + path);
+          Logger::Info("[DirectoryPermissions] Access granted to directory: " + path);
           return true;
         }
         else
         {
-          Logger::Error("Access denied to directory: " + path);
+          Logger::Error("[DirectoryPermissions] Access denied to directory: " + path);
           return false;
         }
       }
       else
       {
-        Logger::Warn("Directory does not exist: " + path);
+        Logger::Warn("[DirectoryPermissions] Directory does not exist: " + path);
         return false;
       }
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Exception occurred while checking access for " + path + ": " + e.what());
+      Logger::Error("[DirectoryPermissions] Exception occurred while checking access for " + path + ": " + e.what());
       return false;
     }
   }
@@ -56,25 +56,25 @@ namespace DirectoryPermissions
   {
     try
     {
-      Logger::Info("Requesting elevated permissions for: " + path);
+      Logger::Info("[DirectoryPermissions] Requesting elevated permissions for: " + path);
 
       std::string command = "pkexec ls \"" + path + "\"";
       int result = std::system(command.c_str());
 
       if (result == 0)
       {
-        Logger::Info("Elevated permissions granted for: " + path);
+        Logger::Info("[DirectoryPermissions] Elevated permissions granted for: " + path);
         return true;
       }
       else
       {
-        Logger::Error("Failed to request elevated permissions for: " + path);
+        Logger::Error("[DirectoryPermissions] Failed to request elevated permissions for: " + path);
         return false;
       }
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Exception occurred while requesting elevated permissions for " + path + ": " + e.what());
+      Logger::Error("[DirectoryPermissions] Exception occurred while requesting elevated permissions for " + path + ": " + e.what());
       return false;
     }
   }

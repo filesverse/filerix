@@ -1,4 +1,4 @@
-#include "include/Utils/Logger.h"
+#include "Utils/Logger.h"
 
 #include <fstream>
 #include <iostream>
@@ -7,6 +7,8 @@
 #include <filesystem>
 #include <unistd.h>
 #include <cstring>
+#include <vector>
+#include <sstream>
 
 namespace Logger
 {
@@ -19,6 +21,7 @@ namespace Logger
   };
 
   static LogLevel currentLogLevel = LogLevel::NONE;
+  static std::vector<std::string> logPrefixes;
 
   static LogLevel getLogLevelFromString(const char *logLevel)
   {
@@ -31,18 +34,35 @@ namespace Logger
     return LogLevel::NONE;
   }
 
+  static std::vector<std::string> splitString(const std::string &str, char delimiter)
+  {
+    std::vector<std::string> tokens;
+    std::stringstream ss(str);
+    std::string token;
+
+    while (std::getline(ss, token, delimiter))
+    {
+      if (!token.empty())
+        tokens.push_back(token);
+    }
+
+    return tokens;
+  }
+
   static void initLoggerFromEnv()
   {
     const char *logLevelEnv = std::getenv("filerix_log_level");
+    const char *logPrefixEnv = std::getenv("filerix_log");
 
     if (logLevelEnv)
-    {
       currentLogLevel = getLogLevelFromString(logLevelEnv);
-    }
     else
-    {
       currentLogLevel = LogLevel::NONE;
-    }
+
+    if (logPrefixEnv)
+      logPrefixes = splitString(logPrefixEnv, ',');
+    else
+      logPrefixes.clear();
   }
 
   static void logToFile(const std::string &logType, const std::string &message)
@@ -74,6 +94,20 @@ namespace Logger
     }
   }
 
+  static bool shouldLog(const std::string &message)
+  {
+    if (logPrefixes.empty())
+      return true;
+
+    for (const std::string &prefix : logPrefixes)
+    {
+      if (message.find("[" + prefix + "]") == 0)
+        return true;
+    }
+
+    return false;
+  }
+
   void Error(const std::string &message)
   {
     initLoggerFromEnv();
@@ -103,6 +137,9 @@ namespace Logger
   void Info(const std::string &message)
   {
     initLoggerFromEnv();
+
+    if (!shouldLog(message))
+      return;
 
     if (currentLogLevel == LogLevel::DEBUG)
     {

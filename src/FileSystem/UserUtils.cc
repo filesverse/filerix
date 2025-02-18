@@ -1,5 +1,5 @@
-#include "include/FileSystem/UserUtils.h"
-#include "include/Utils/Logger.h"
+#include "FileSystem/UserUtils.h"
+#include "Utils/Logger.h"
 
 #include <string>
 #include <stdexcept>
@@ -21,14 +21,12 @@ namespace UserUtils
       }
       else
       {
-        Logger::Error("Failed to get username: getpwuid returned null");
-        throw std::runtime_error("Failed to get username");
+        Logger::Error("[UserUtils] Failed to get username: getpwuid returned null");
       }
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error retrieving username: " + std::string(e.what()));
-      throw;
+      Logger::Error("[UserUtils] Error retrieving username: " + std::string(e.what()));
     }
   }
 
@@ -38,14 +36,14 @@ namespace UserUtils
     {
       if (chmod(path.c_str(), mode) != 0)
       {
-        Logger::Error("Failed to change permissions for " + path);
+        Logger::Error("[UserUtils] Failed to change permissions for " + path);
         return false;
       }
       return true;
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error changing permissions for " + path + ": " + std::string(e.what()));
+      Logger::Error("[UserUtils] Error changing permissions for " + path + ": " + std::string(e.what()));
       return false;
     }
   }

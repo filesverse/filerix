@@ -1,6 +1,6 @@
-#include "include/FileSystem/UserUtils.h"
-#include "include/FileSystem/DriveUtils.h"
-#include "include/Utils/Logger.h"
+#include "FileSystem/UserUtils.h"
+#include "FileSystem/DriveUtils.h"
+#include "Utils/Logger.h"
 
 #include <string>
 #include <vector>
@@ -24,14 +24,14 @@ namespace DriveUtils
 
   std::string GetMountPoint(const std::string &device)
   {
-    Logger::Info("Attempting to get mount point for device: " + device);
+    Logger::Info("[DriveUtils] Attempting to get mount point for device: " + device);
 
     try
     {
       FILE *file = setmntent("/proc/mounts", "r");
       if (!file)
       {
-        Logger::Error("Unable to read /proc/mounts");
+        Logger::Error("[DriveUtils] Unable to read /proc/mounts");
       }
 
       struct mntent *mnt;
@@ -40,22 +40,22 @@ namespace DriveUtils
         if (mnt->mnt_fsname == device)
         {
           endmntent(file);
-          Logger::Info("Mount point for " + device + " is " + mnt->mnt_dir);
+          Logger::Info("[DriveUtils] Mount point for " + device + " is " + mnt->mnt_dir);
           return mnt->mnt_dir;
         }
       }
       endmntent(file);
-      Logger::Error("Device " + device + " is not mounted or does not exist.");
+      Logger::Error("[DriveUtils] Device " + device + " is not mounted or does not exist.");
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error getting mount point for device " + device + ": " + e.what());
+      Logger::Error("[DriveUtils] failed to get mount point for device " + device + ": " + e.what());
     }
   }
 
   std::vector<DriveInfo> GetDrives()
   {
-    Logger::Info("Getting list of valid drives with mountable partitions...");
+    Logger::Info("[DriveUtils] Getting list of valid drives with mountable partitions...");
 
     std::vector<DriveInfo> drives;
     std::map<std::string, std::pair<std::string, std::string>> mountPoints;
@@ -66,7 +66,7 @@ namespace DriveUtils
       FILE *file = setmntent("/proc/mounts", "r");
       if (!file)
       {
-        Logger::Error("Unable to read /proc/mounts");
+        Logger::Error("[DriveUtils] Unable to read /proc/mounts");
       }
 
       struct mntent *mnt;
@@ -106,7 +106,7 @@ namespace DriveUtils
           {
             if (line.find("DEVTYPE=disk") != std::string::npos && line.find("ID_BUS=usb") != std::string::npos)
             {
-              Logger::Info("Skipping USB device: " + devicePath);
+              Logger::Info("[DriveUtils] Skipping USB device: " + devicePath);
               goto continue_loop;
             }
           }
@@ -129,17 +129,17 @@ namespace DriveUtils
                 drive.mountPoint == "/boot" ||
                 drive.mountPoint == "/home")
             {
-              Logger::Info("Skipping partition: " + drive.device + " (EFI, /boot, or /home)");
+              Logger::Info("[DriveUtils] Skipping partition: " + drive.device + " (EFI, /boot, or /home)");
               continue;
             }
 
-            Logger::Info("Drive " + drive.device + " is mounted at " + drive.mountPoint);
+            Logger::Info("[DriveUtils] Drive " + drive.device + " is mounted at " + drive.mountPoint);
           }
           else
           {
             drive.status = "unmounted";
             drive.mountPoint = "";
-            Logger::Info("Drive " + drive.device + " is unmounted.");
+            Logger::Info("[DriveUtils] Drive " + drive.device + " is unmounted.");
           }
 
           if (drive.device == hostDrive)
@@ -159,7 +159,7 @@ namespace DriveUtils
 
       if (!hostDrive.empty())
       {
-        Logger::Info("Adding host drive: " + hostDrive);
+        Logger::Info("[DriveUtils] Adding host drive: " + hostDrive);
         DriveInfo hostDriveInfo;
         hostDriveInfo.device = hostDrive;
         hostDriveInfo.partition = hostDrive;
@@ -178,11 +178,11 @@ namespace DriveUtils
                 return false;
             return a.device < b.device; });
 
-      Logger::Info("Drives sorted.");
+      Logger::Info("[DriveUtils] Drives sorted.");
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error retrieving drives: " + std::string(e.what()));
+      Logger::Error("[DriveUtils] Error retrieving drives: " + std::string(e.what()));
     }
 
     return drives;
@@ -190,7 +190,7 @@ namespace DriveUtils
 
   DriveUsage GetDriveUsage(const std::string &drive)
   {
-    Logger::Info("Getting drive usage for: " + drive);
+    Logger::Info("[DriveUtils] Getting drive usage for: " + drive);
 
     try
     {
@@ -199,25 +199,25 @@ namespace DriveUtils
       struct statvfs stat;
       if (statvfs(mountPoint.c_str(), &stat) != 0)
       {
-        Logger::Error("Unable to get drive information for " + drive);
+        Logger::Error("[DriveUtils] Unable to get drive information for " + drive);
       }
 
       unsigned long long totalSpace = stat.f_blocks * stat.f_frsize;
       unsigned long long usedSpace = (stat.f_blocks - stat.f_bfree) * stat.f_frsize;
 
-      Logger::Info("Drive usage for " + drive + ": " + std::to_string(usedSpace) + " / " + std::to_string(totalSpace));
+      Logger::Info("[DriveUtils] Drive usage for " + drive + ": " + std::to_string(usedSpace) + " / " + std::to_string(totalSpace));
 
       return {usedSpace, totalSpace};
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error getting drive usage for " + drive + ": " + e.what());
+      Logger::Error("[DriveUtils] failed to get drive usage for " + drive + ": " + e.what());
     }
   }
 
   std::string GetDeviceLabelOrUUID(const std::string &device)
   {
-    Logger::Info("Getting label or UUID for device: " + device);
+    Logger::Info("[DriveUtils] Getting label or UUID for device: " + device);
 
     try
     {
@@ -225,7 +225,7 @@ namespace DriveUtils
       {
         if (fs::canonical(entry.path()) == fs::canonical(device))
         {
-          Logger::Info("Found label for " + device + ": " + entry.path().filename().string());
+          Logger::Info("[DriveUtils] Found label for " + device + ": " + entry.path().filename().string());
           return entry.path().filename().string();
         }
       }
@@ -234,24 +234,24 @@ namespace DriveUtils
       {
         if (fs::canonical(entry.path()) == fs::canonical(device))
         {
-          Logger::Info("Found UUID for " + device + ": " + entry.path().filename().string());
+          Logger::Info("[DriveUtils] Found UUID for " + device + ": " + entry.path().filename().string());
           return entry.path().filename().string();
         }
       }
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error getting label or UUID for device " + device + ": " + e.what());
+      Logger::Error("[DriveUtils] Error getting label or UUID for device " + device + ": " + e.what());
       return {};
     }
 
-    Logger::Warn("No label or UUID found for device: " + device);
+    Logger::Warn("[DriveUtils] No label or UUID found for device: " + device);
     return {};
   }
 
   bool MountDrive(const std::string &device)
   {
-    Logger::Info("Attempting to mount drive: " + device);
+    Logger::Info("[DriveUtils] Attempting to mount drive: " + device);
 
     try
     {
@@ -261,23 +261,23 @@ namespace DriveUtils
 
       if (ret != 0)
       {
-        Logger::Error("Failed to mount " + device);
+        Logger::Error("[DriveUtils] Failed to mount " + device);
         return false;
       }
 
-      Logger::Info("Drive " + device + " mounted successfully.");
+      Logger::Info("[DriveUtils] Drive " + device + " mounted successfully.");
       return true;
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error mounting drive " + device + ": " + e.what());
+      Logger::Error("[DriveUtils] Error mounting drive " + device + ": " + e.what());
       return false;
     }
   }
 
   bool UnmountDrive(const std::string &device)
   {
-    Logger::Info("Attempting to unmount drive: " + device);
+    Logger::Info("[DriveUtils] Attempting to unmount drive: " + device);
 
     try
     {
@@ -287,16 +287,16 @@ namespace DriveUtils
 
       if (ret != 0)
       {
-        Logger::Error("Failed to unmount " + device);
+        Logger::Error("[DriveUtils] Failed to unmount " + device);
         return false;
       }
 
-      Logger::Info("Drive " + device + " unmounted successfully.");
+      Logger::Info("[DriveUtils] Drive " + device + " unmounted successfully.");
       return true;
     }
     catch (const std::exception &e)
     {
-      Logger::Error("Error unmounting drive " + device + ": " + e.what());
+      Logger::Error("[DriveUtils] Error unmounting drive " + device + ": " + e.what());
       return false;
     }
   }

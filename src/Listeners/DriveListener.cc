@@ -1,5 +1,5 @@
-#include "include/Listeners/DriveListener.h"
-#include "include/Utils/Logger.h"
+#include "Listeners/DriveListener.h"
+#include "Utils/Logger.h"
 
 DriveListener::DriveMonitor::DriveMonitor() : running(false) {}
 
@@ -20,13 +20,13 @@ void DriveListener::DriveMonitor::Start(std::function<void(std::string, std::str
                               {
         struct udev *udev = udev_new();
         if (!udev) {
-            Logger::Error("Failed to create udev context.");
+            Logger::Error("[DriveListener] Failed to create udev context.");
             return;
         }
 
         struct udev_monitor *monitor = udev_monitor_new_from_netlink(udev, "udev");
         if (!monitor) {
-            Logger::Error("Failed to create udev monitor.");
+            Logger::Error("[DriveListener] Failed to create udev monitor.");
             udev_unref(udev);
             return;
         }
@@ -36,7 +36,7 @@ void DriveListener::DriveMonitor::Start(std::function<void(std::string, std::str
 
         int fd = udev_monitor_get_fd(monitor);
 
-        Logger::Info("Drive monitor started.");
+        Logger::Info("[DriveListener] Drive monitor started.");
 
         while (running.load()) {
             fd_set fds;
@@ -55,7 +55,7 @@ void DriveListener::DriveMonitor::Start(std::function<void(std::string, std::str
                     const char *devnode = udev_device_get_devnode(dev);
 
                     if (action && devnode) {
-                        Logger::Info("Drive event detected: " + std::string(action) + " - " + std::string(devnode));
+                        Logger::Info("[DriveListener] Drive event detected: " + std::string(action) + " - " + std::string(devnode));
                         eventCallback(action, devnode);
                     }
 
@@ -66,7 +66,7 @@ void DriveListener::DriveMonitor::Start(std::function<void(std::string, std::str
 
         udev_monitor_unref(monitor);
         udev_unref(udev);
-        Logger::Info("Drive monitor stopped."); });
+        Logger::Info("[DriveListener] Drive monitor stopped."); });
 
   monitorThread.detach();
 }
