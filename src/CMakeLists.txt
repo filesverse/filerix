@@ -1,4 +1,4 @@
-include_directories(${NLOHMANN_JSON_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(LIBRARY_SOURCES
   FileSystem/C/DriveUtils.cc
@@ -17,7 +17,7 @@ set(LIBRARY_SOURCES
 
 add_library(filerix SHARED ${LIBRARY_SOURCES})
 
-target_link_libraries(filerix PRIVATE ZLIB::ZLIB nlohmann_json::nlohmann_json)
+target_link_libraries(filerix PRIVATE ZLIB::ZLIB)
 
 install(TARGETS filerix
   LIBRARY DESTINATION lib
