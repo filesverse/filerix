@@ -1,7 +1,9 @@
 #include "FileSystem/FileUtils.h"
 #include "FileSystem/DirectoryPermissions.h"
 #include "Utils/Logger.h"
+#include "data/FileTypes.hpp"
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -11,46 +13,11 @@
 #include <vector>
 #include <cstring>
 #include <zlib.h>
-#include <nlohmann/json.hpp>
 
 namespace fs = std::filesystem;
 
 namespace FileUtils
 {
-  std::unordered_map<std::string, std::string> LoadMimeTypesFromJson(const std::string &jsonPath)
-  {
-    std::unordered_map<std::string, std::string> mimeTypes;
-    try
-    {
-      std::ifstream file(jsonPath);
-      if (!file.is_open())
-      {
-        Logger::Error("[FileUtils] Failed to open MIME types JSON: " + jsonPath);
-        return mimeTypes;
-      }
-
-      nlohmann::json json;
-      file >> json;
-
-      // Parsing the file types into the map
-      for (const auto &category : json.items())
-      {
-        for (const auto &ext : category.value().items())
-        {
-          mimeTypes[ext.key()] = ext.value();
-        }
-      }
-    }
-    catch (const std::exception &e)
-    {
-      Logger::Error("[FileUtils] Error loading MIME types from JSON: " + std::string(e.what()));
-    }
-    return mimeTypes;
-  }
-
-  // Global MIME types map (to be loaded once)
-  static std::unordered_map<std::string, std::string> mimeTypes = LoadMimeTypesFromJson("./src/json/FileTypes.json");
-
   char *CopyString(const std::string &str)
   {
     char *copy = new char[str.size() + 1];
@@ -63,18 +30,23 @@ namespace FileUtils
     try
     {
       Logger::Info("[FileUtils] Getting MIME type for: " + filePath.string());
+
       if (fs::is_directory(filePath))
       {
         return "directory";
       }
 
       std::string ext = filePath.extension().string();
-      auto it = mimeTypes.find(ext);
-      if (it != mimeTypes.end())
+
+      std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+
+      auto it = FileTypes::MIME_TYPES.find(ext);
+      if (it != FileTypes::MIME_TYPES.end())
       {
         return it->second;
       }
-      return "file"; // Default MIME type
+
+      return "application/octet-stream";
     }
     catch (const std::exception &e)
     {
