@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include/filerix
+
+Name: filerix
+Description: File manager library that provides all the essentials.
+Version: @PROJECT_VERSION@
+Requires: nlohmann-json
+Libs: -L${libdir} -lfilerix
+Cflags: -I${includedir}

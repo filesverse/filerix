@@ -1,5 +1,5 @@
 Name:           filerix
-Version:        1.0.1
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        A high-performance file management library
 
@@ -7,7 +7,9 @@ License:        MIT
 URL:            https://github.com/filesverse/filerix
 Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 
-BuildRequires:  gcc, gcc-c++, meson, ninja-build, pkgconfig, systemd-devel, zlib-devel
+BuildRequires:  gcc, gcc-c++, cmake, pkgconfig, vcpkg
+BuildRequires:  systemd-devel, zlib-devel
+
 Requires:       glibc, udev, zlib
 
 %description
@@ -26,11 +28,21 @@ to develop applications using the Filerix library.
 %autosetup -n %{name}-%{version}
 
 %build
-meson setup build --prefix=%{_prefix}
-meson compile -C build
+mkdir -p build
+cd build
+
+if [ ! -d "../vcpkg" ]; then
+  git clone --recurse-submodules https://github.com/microsoft/vcpkg ../vcpkg
+  ./../vcpkg/bootstrap-vcpkg.sh
+fi
+
+./../vcpkg/vcpkg --feature-flags=manifests install
+
+cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake --build . --parallel
 
 %install
-meson install -C build --destdir=%{buildroot}
+cmake --install . --prefix=%{buildroot}
 
 %files
 %license LICENSE
@@ -42,5 +54,8 @@ meson install -C build --destdir=%{buildroot}
 %{_libdir}/pkgconfig/filerix.pc
 
 %changelog
+* Fri Feb 14 2025 KingMaj0r <kingmaj0r@hotmail.com> - 1.0.1-1
+- Updated build process to use CMake and Vcpkg for dependencies
+- Added CMake integration to the RPM build
 * Fri Feb 14 2025 KingMaj0r <kingmaj0r@hotmail.com> - 1.0.0-1
 - Initial release

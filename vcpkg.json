@@ -1,0 +1,9 @@
+{
+  "name": "filerix",
+  "version-string": "0.0.1",
+  "license": "MIT",
+  "dependencies": [
+    "nlohmann-json",
+    "zlib"
+  ]
+}

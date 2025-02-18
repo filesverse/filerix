@@ -12,13 +12,37 @@
     in {
       packages.filerix = pkgs.stdenv.mkDerivation rec {
         pname = "filerix";
-        version = "1.0.1";
+        version = "1.0.2";
 
         src = ./.;
 
-        nativeBuildInputs = [ pkgs.meson pkgs.ninja pkgs.pkg-config ];
+        nativeBuildInputs = [
+          pkgs.cmake
+          pkgs.pkg-config
+          pkgs.zlib
+        ];
 
-        buildInputs = [ pkgs.gcc pkgs.libcxx ];
+        buildInputs = [
+          pkgs.gcc
+          pkgs.libcxx
+        ];
+
+        installPhase = ''
+          echo "Bootstrapping vcpkg..."
+          ./vcpkg/bootstrap-vcpkg.sh
+
+          echo "Installing dependencies with vcpkg..."
+          ./vcpkg/vcpkg --feature-flags=manifests install
+
+          echo "Generating build files with cmake..."
+          cmake -B build -S .
+
+          echo "Building the project..."
+          cmake --build build
+
+          echo "Installing the built project..."
+          sudo make install
+        '';
 
         meta = with pkgs.lib; {
           description = "File manager library that provides all the essentials.";
