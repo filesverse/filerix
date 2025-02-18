@@ -1,7 +1,13 @@
 #!/bin/bash
 
+TMP_DIR=$(mktemp -d) || { echo "Failed to create temp directory"; exit 1; }
+echo "Using temporary directory: $TMP_DIR"
+
+cd "$TMP_DIR" || { echo "Failed to enter temp directory"; exit 1; }
+
 echo "Cloning the repository with submodules..."
-git clone --recurse-submodules https://github.com/filesverse/filerix.git
+git clone --recurse-submodules https://github.com/filesverse/filerix.git || { echo "Failed to clone repository"; exit 1; }
+
 cd filerix || { echo "Failed to enter the project directory"; exit 1; }
 
 echo "Bootstrapping vcpkg..."
@@ -17,6 +23,11 @@ echo "Building the project..."
 cmake --build build || { echo "Build failed"; exit 1; }
 
 echo "Installing the built project..."
-sudo make install || { echo "Installation failed"; exit 1; }
+cd build && sudo make install || { echo "Installation failed"; exit 1; }
+
+cd "$HOME" || { echo "Failed to return to home directory"; exit 1; }
+
+echo "Removing temporary folder: $TMP_DIR"
+rm -rf "$TMP_DIR" || { echo "Removing temp folder failed"; exit 1; }
 
 echo "Installation and build complete!"
