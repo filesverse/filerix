@@ -19,13 +19,11 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install -y libudev-dev zlib1g-dev libcriterion-dev meson ninja-build
+        sudo apt install -y libudev-dev libcriterion-dev
 
     - name: Install filerix
       run: |
-        meson setup build
-        meson compile -C build
-        sudo meson install -C build
+        ./scripts/install.sh
 
     - name: Configure CMake
       working-directory: ${{github.workspace}}/tests
