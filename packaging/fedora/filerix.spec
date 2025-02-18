@@ -8,9 +8,9 @@ URL:            https://github.com/filesverse/filerix
 Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  gcc, gcc-c++, cmake, pkgconfig, vcpkg
-BuildRequires:  systemd-devel, zlib-devel
+BuildRequires:  systemd-devel
 
-Requires:       glibc, udev, zlib
+Requires:       glibc, udev
 
 %description
 Filerix is a lightweight and high-performance file management library 
@@ -31,14 +31,13 @@ to develop applications using the Filerix library.
 mkdir -p build
 cd build
 
-if [ ! -d "../vcpkg" ]; then
-  git clone --recurse-submodules https://github.com/microsoft/vcpkg ../vcpkg
-  ./../vcpkg/bootstrap-vcpkg.sh
-fi
+rm -rf ../vcpkg
+git clone --depth 1 https://github.com/microsoft/vcpkg ../vcpkg
+../vcpkg/bootstrap-vcpkg.sh
 
-./../vcpkg/vcpkg --feature-flags=manifests install
+../vcpkg/vcpkg --feature-flags=manifests install
 
-cmake .. -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake ..
 cmake --build . --parallel
 
 %install
