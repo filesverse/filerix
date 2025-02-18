@@ -7,7 +7,6 @@ project(filerix VERSION 1.0.2 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(nlohmann_json REQUIRED)
 find_package(ZLIB REQUIRED)
 
 add_subdirectory(src)
