@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://github.com/filesverse/filerix
 Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
 
-BuildRequires:  gcc, gcc-c++, cmake, pkgconfig, vcpkg
+BuildRequires:  git, curl tar, unzip
 BuildRequires:  systemd-devel
 
 Requires:       glibc, udev

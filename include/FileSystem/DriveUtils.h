@@ -48,6 +48,7 @@ extern "C"
 #include <string>
 #include <vector>
 #include <utility>
+#include <cstdint>
 
 namespace DriveUtils
 {
@@ -59,6 +60,12 @@ namespace DriveUtils
     std::string mountPoint;
     std::string partition;
     std::string fsType;
+  };
+
+  struct DriveUsage
+  {
+    uint64_t used;
+    uint64_t total;
   };
 
   std::vector<DriveInfo> GetDrives();

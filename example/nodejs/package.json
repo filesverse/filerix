@@ -1,7 +1,0 @@
-{
-  "type": "module",
-  "dependencies": {
-    "@kingmaj0r/filerix": "^1.0.2",
-    "node-addon-api": "^8.3.0"
-  }
-}
