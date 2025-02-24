@@ -1,0 +1,16 @@
+name: Dispatch Portfile Update
+
+on:
+  release:
+    types: [published, prereleased]
+
+jobs:
+  trigger-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository dispatch event
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/filesverse/vcpkg-port/dispatches \
+            -X POST -F event_type="update-vcpkg-port"
