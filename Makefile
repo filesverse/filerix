@@ -27,7 +27,7 @@ check-vcpkg:
 
 uninstall:
 	@echo "Removing installed files..."
-  sudo rm -f $(PREFIX)/lib64/libfilerix.so
+	sudo rm -f $(PREFIX)/lib64/libfilerix.so
 	sudo rm -f $(PREFIX)/lib64/pkgconfig/filerix.pc
 	sudo rm -rf $(PREFIX)/include/filerix
 	sudo rm -rf $(PREFIX)/share/filerix
