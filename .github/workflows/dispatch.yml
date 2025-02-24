@@ -8,11 +8,9 @@ jobs:
   trigger-update:
     runs-on: ubuntu-latest
     steps:
-      - name: Create trigger file
-        run: echo "Triggered by new release" > trigger.txt
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: trigger
-          path: trigger.txt
+      - name: Send repository dispatch event
+        run: |
+          curl -X POST -H "Accept: application/vnd.github.v3+json" \
+               -H "Authorization: token ${{ secrets.REPO_DISPATCH_TOKEN }}" \
+               https://api.github.com/repos/filesverse/vcpkg-port/dispatches \
+               -d '{"event_type": "update-portfile"}'
