@@ -1,4 +1,4 @@
-name: Dispatch Portfile Update
+name: Trigger vcpkg-port Update
 
 on:
   release:
@@ -8,9 +8,11 @@ jobs:
   trigger-update:
     runs-on: ubuntu-latest
     steps:
-      - name: Send repository dispatch event
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api repos/filesverse/vcpkg-port/dispatches \
-            -X POST -F event_type="update-vcpkg-port"
+      - name: Create trigger file
+        run: echo "Triggered by new release" > trigger.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trigger
+          path: trigger.txt
