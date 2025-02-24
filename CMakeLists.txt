@@ -16,4 +16,4 @@ add_subdirectory(src)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/filerix.pc.in
   ${CMAKE_CURRENT_BINARY_DIR}/filerix.pc @ONLY)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/filerix.pc DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/filerix.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
