@@ -5,7 +5,7 @@ PREFIX ?= /usr/local
 all: install
 
 install: build
-	sudo cmake --install build --prefix=$(PREFIX) || { echo "Installation failed"; exit 1; }
+	cmake --install build --prefix=$(PREFIX) || { echo "Installation failed"; exit 1; }
 	echo "Installation and build complete!"
 
 build: check-vcpkg
@@ -27,10 +27,10 @@ check-vcpkg:
 
 uninstall:
 	@echo "Removing installed files..."
-	sudo rm -f $(PREFIX)/lib64/libfilerix.so
-	sudo rm -f $(PREFIX)/lib64/pkgconfig/filerix.pc
-	sudo rm -rf $(PREFIX)/include/filerix
-	sudo rm -rf $(PREFIX)/share/filerix
+	rm -f $(PREFIX)/lib64/libfilerix.so
+	rm -f $(PREFIX)/lib64/pkgconfig/filerix.pc
+	rm -rf $(PREFIX)/include/filerix
+	rm -rf $(PREFIX)/share/filerix
 	@echo "Uninstallation complete!"
 
 clean:
