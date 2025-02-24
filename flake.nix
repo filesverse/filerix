@@ -12,12 +12,13 @@
     in {
       packages.filerix = pkgs.stdenv.mkDerivation rec {
         pname = "filerix";
-        version = "1.0.2";
+        version = "1.0.3";
 
         src = ./.;
 
         nativeBuildInputs = [
           pkgs.cmake
+          pkgs.make
           pkgs.pkg-config
           pkgs.zlib
         ];
@@ -28,19 +29,6 @@
         ];
 
         installPhase = ''
-          echo "Bootstrapping vcpkg..."
-          ./vcpkg/bootstrap-vcpkg.sh
-
-          echo "Installing dependencies with vcpkg..."
-          ./vcpkg/vcpkg --feature-flags=manifests install
-
-          echo "Generating build files with cmake..."
-          cmake -B build -S .
-
-          echo "Building the project..."
-          cmake --build build
-
-          echo "Installing the built project..."
           sudo make install
         '';
 
