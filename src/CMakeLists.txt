@@ -21,17 +21,17 @@ target_link_libraries(filerix PRIVATE ZLIB::ZLIB)
 
 install(TARGETS filerix
   EXPORT filerixTargets
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION include/filerix)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/filerix)
 
 install(EXPORT filerixTargets
   FILE filerixConfig.cmake
   NAMESPACE filerix::
-  DESTINATION share/filerix
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/filerix
 )
 
 include(CMakePackageConfigHelpers)
@@ -42,5 +42,5 @@ write_basic_package_version_file(
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/filerixConfigVersion.cmake"
-  DESTINATION share/filerix
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/filerix
 )
