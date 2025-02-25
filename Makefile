@@ -1,4 +1,3 @@
-REPO_URL = https://github.com/filesverse/filerix.git
 VCPKG_REPO = https://github.com/microsoft/vcpkg.git
 PREFIX ?= /usr/local
 
