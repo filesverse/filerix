@@ -22,8 +22,7 @@ jobs:
         sudo apt install -y libudev-dev libcriterion-dev
 
     - name: Install filerix
-      run: |
-        ./scripts/install.sh
+      run: sudo make install
 
     - name: Configure CMake
       working-directory: ${{github.workspace}}/tests
