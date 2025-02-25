@@ -4,8 +4,9 @@ PREFIX ?= /usr/local
 all: install
 
 install: build
+	@echo "Installing filerix..."
 	cmake --install build --prefix=$(PREFIX) || { echo "Installation failed"; exit 1; }
-	echo "Installation and build complete!"
+	@echo "Installation and build complete!"
 
 build: check-vcpkg
 	@echo "Bootstrapping vcpkg..."

@@ -10,6 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(GNUInstallDirs)
 
 find_package(ZLIB REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(UDEV REQUIRED libudev)
 
 add_subdirectory(src)
 

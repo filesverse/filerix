@@ -27,7 +27,7 @@ extern "C"
 
   typedef struct
   {
-    DriveInfo *items;
+    DriveInfo *drives;
     size_t count;
   } DriveList;
 

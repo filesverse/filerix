@@ -52,6 +52,6 @@ extern "C"
       drives[i].unmountable = cppDrives[i].unmountable;
     }
 
-    return (DriveList){.items = drives, .count = cppDrives.size()};
+    return (DriveList){.drives = drives, .count = cppDrives.size()};
   }
 }
