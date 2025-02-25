@@ -34,8 +34,7 @@ uninstall:
 
 clean:
 	@echo "Cleaning build directory..."
-	rm -rf build
-	rm -rf vcpkg_installed
+	rm -rf build vcpkg_installed
 	@echo "Clean complete!"
 
 .PHONY: all install build uninstall clean
