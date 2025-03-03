@@ -1,0 +1,40 @@
+name: Build and Upload Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build and Upload
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y build-essential
+
+      - name: Build and Install
+        run: |
+          make install PREFIX=linux-release/
+
+      - name: Determine release name
+        id: version
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Package compiled files
+        run: |
+          cd linux-release/
+          ZIP_NAME="filerix-${TAG_NAME}-linux-x86_64.zip"
+          zip -r "../$ZIP_NAME" .
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          cd ..
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
