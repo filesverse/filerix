@@ -8,6 +8,11 @@ set(CPACK_PACKAGE_URL "https://github.com/filesverse/filerix")
 set(CPACK_PACKAGE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
 if(WIN32)
+  if(NOT EXISTS "${ZLIB_LIBRARY}")
+    message(FATAL_ERROR "zlib1.dll not found at ${ZLIB_LIBRARY}. Ensure Zlib is installed correctly via vcpkg.")
+  endif()
+
+  install(FILES ${ZLIB_LIBRARY} DESTINATION lib)
 
   set(CPACK_MUI_ICON "${CMAKE_SOURCE_DIR}/windows/filerix.ico")
   set(CPACK_MUI_UNICON "${CMAKE_SOURCE_DIR}/windows/filerix.ico")
