@@ -84,12 +84,12 @@ jobs:
 
       - name: Verify Windows 32 Executable
         run: |
-          EXE_PATH="./build-win32/Filerix-${CLEAN_TAG_NAME}-win32.exe"
-          if [[ ! -f "$EXE_PATH" ]]; then
-            echo "ERROR: Windows executable not found at $EXE_PATH"
+          EXE32_PATH="./build-win32/Filerix-${CLEAN_TAG_NAME}-win32.exe"
+          if [[ ! -f "$EXE32_PATH" ]]; then
+            echo "ERROR: Windows executable not found at $EXE32_PATH"
             exit 1
           fi
-          echo "EXE_PATH=$EXE_PATH" >> $GITHUB_ENV
+          echo "EXE32_PATH=$EXE32_PATH" >> $GITHUB_ENV
 
       - name: Upload ZIP Archives
         uses: softprops/action-gh-release@v2
