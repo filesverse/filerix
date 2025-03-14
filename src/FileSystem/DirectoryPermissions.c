@@ -16,7 +16,7 @@ bool MountFuseOverlay(const char *target)
 
   Logger_Info("[DirectoryPermissions] Mounting FUSE overlay for: %s", target);
 
-  char cmd[512];
+  char cmd[1024];
   snprintf(cmd, sizeof(cmd),
            "mkdir -p %s && pkexec bindfs --force-user=%d --perms=a+r %s %s",
            mountPoint, geteuid(), target, mountPoint);
@@ -37,7 +37,7 @@ bool UnmountFuse()
   char mountPoint[256];
   snprintf(mountPoint, sizeof(mountPoint), "/tmp/filerix_mount_%d", geteuid());
 
-  char cmd[256];
+  char cmd[512];
   snprintf(cmd, sizeof(cmd), "fusermount -u %s", mountPoint);
 
   int status = system(cmd);

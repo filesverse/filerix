@@ -70,7 +70,12 @@ void *FileListener_MonitorThread(void *arg)
       if (event->len > 0)
       {
         char filePath[PATH_MAX];
-        snprintf(filePath, PATH_MAX, "%s/%s", watchedDirectory, event->name);
+        if (strlen(watchedDirectory) + strlen(event->name) + 1 >= PATH_MAX)
+        {
+          Logger_Error("[FileListener] Path too long: %s/%s", watchedDirectory, event->name);
+          return NULL;
+        }
+        snprintf(filePath, sizeof(filePath), "%s/%s", watchedDirectory, event->name);
 
         char eventType[32] = {0};
 
@@ -97,6 +102,11 @@ void *FileListener_MonitorThread(void *arg)
           if (oldFilePath[0] != '\0')
           {
             char renamedEvent[PATH_MAX * 2];
+            if (strlen(oldFilePath) + strlen(filePath) + 4 >= sizeof(renamedEvent))
+            {
+              Logger_Error("[FileListener] Renamed event too long: %s -> %s", oldFilePath, filePath);
+              return NULL;
+            }
             snprintf(renamedEvent, sizeof(renamedEvent), "%s -> %s", oldFilePath, filePath);
             Logger_Info("[gold]FileListener[/gold] - File renamed: %s", renamedEvent);
             if (eventCallback)
