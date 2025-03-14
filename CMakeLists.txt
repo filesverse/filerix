@@ -18,13 +18,14 @@ else()
   set(TARGET_OS "Linux")
 endif()
 
-find_package(ZLIB REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 if(TARGET_OS STREQUAL "Linux")
   pkg_check_modules(UDEV REQUIRED libudev)
   pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
+
+pkg_check_modules(ZLIB REQUIRED zlib)
 
 add_subdirectory(src)
 

@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include ${ZLIB_INCLUDE_DIRS})
 
 if(TARGET_OS STREQUAL "Windows")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
@@ -40,9 +40,9 @@ add_library(filerix SHARED ${LIBRARY_SOURCES})
 
 if(TARGET_OS STREQUAL "Windows")
   target_compile_definitions(filerix PRIVATE FILERIX_EXPORTS)
-  target_link_libraries(filerix PRIVATE shlwapi ZLIB::ZLIB)
+  target_link_libraries(filerix PRIVATE shlwapi ${ZLIB_LIBRARIES})
 else()
-  target_link_libraries(filerix PRIVATE ZLIB::ZLIB ${UDEV_LIBRARIES} ${DBUS_LIBRARIES})
+  target_link_libraries(filerix PRIVATE ${ZLIB_LIBRARIES} ${UDEV_LIBRARIES} ${DBUS_LIBRARIES})
 endif()
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ 

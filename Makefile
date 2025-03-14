@@ -19,7 +19,7 @@ install-win: build-win
 	cmake --install build-win --prefix="$(PREFIX)" || { echo "Windows installation failed"; exit 1; }
 	@echo "Windows installation complete!"
 
-install-win: build-win32
+install-win32: build-win32
 	@echo "Installing Filerix (Windows)..."
 	cmake --install build-win32 --prefix="$(PREFIX)" || { echo "Windows installation failed"; exit 1; }
 	@echo "Windows installation complete!"
@@ -36,7 +36,7 @@ build: check-vcpkg
 
 build-win: check-vcpkg
 	@echo "Setting up MinGW cross-compilation..."
-	./vcpkg/vcpkg --feature-flags=manifests install --triplet x64-mingw-static || { echo "Failed to install Windows dependencies"; exit 1; }
+	./vcpkg/vcpkg --feature-flags=manifests install --triplet x64-mingw-dynamic || { echo "Failed to install Windows dependencies"; exit 1; }
 	@echo "Generating Windows build files with CMake..."
 	cmake -B build-win -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchain-mingw64.cmake || { echo "Failed to generate Windows CMake build files"; exit 1; }
 	@echo "Building for Windows..."
@@ -44,7 +44,7 @@ build-win: check-vcpkg
 
 build-win32: check-vcpkg
 	@echo "Setting up MinGW cross-compilation..."
-	./vcpkg/vcpkg --feature-flags=manifests install --triplet x86-mingw-static || { echo "Failed to install Windows dependencies"; exit 1; }
+	./vcpkg/vcpkg --feature-flags=manifests install --triplet x86-mingw-dynamic || { echo "Failed to install Windows dependencies"; exit 1; }
 	@echo "Generating Windows build files with CMake..."
 	cmake -B build-win -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchain-mingw32.cmake || { echo "Failed to generate Windows CMake build files"; exit 1; }
 	@echo "Building for Windows..."
