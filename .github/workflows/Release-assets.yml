@@ -16,13 +16,14 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update && sudo apt install -y build-essential libudev-dev autoconf automake libtool libltdl-dev pkg-config libdbus-1-dev
-          sudo apt install -y mingw-w64
+          sudo apt install -y mingw-w64 mingw-w32
 
       - name: Build and Install
         run: |
           export PKG_CONFIG_PATH=$(pwd)/vcpkg_installed/x64-linux-release/lib/pkgconfig:$PKG_CONFIG_PATH
-          make install PREFIX=linux-release/
-          make install-win PREFIX=windows-release/
+          make install PREFIX=linux/
+          make install-win PREFIX=win/
+          make install-win32 PREFIX=win32/
 
       - name: Determine release name
         id: version
@@ -34,7 +35,7 @@ jobs:
 
       - name: Package Linux compiled files
         run: |
-          cd linux-release/
+          cd linux/
           ZIP_NAME="filerix-${CLEAN_TAG_NAME}-linux-x86_64.zip"
           zip -r "../$ZIP_NAME" .
           echo "LINUX_ZIP=$ZIP_NAME" >> $GITHUB_ENV
@@ -42,15 +43,32 @@ jobs:
 
       - name: Package Windows compiled files
         run: |
-          cd windows-release/
+          cd win/
           ZIP_NAME="filerix-${CLEAN_TAG_NAME}-windows-x86_64.zip"
           zip -r "../$ZIP_NAME" .
           echo "WINDOWS_ZIP=$ZIP_NAME" >> $GITHUB_ENV
           cd ..
 
+      - name: Package Windows 32 compiled files
+        run: |
+          cd win32/
+          ZIP_NAME="filerix-${CLEAN_TAG_NAME}-windows-x86.zip"
+          zip -r "../$ZIP_NAME" .
+          echo "WINDOWS32_ZIP=$ZIP_NAME" >> $GITHUB_ENV
+          cd ..
+
       - name: Verify Windows Executable
         run: |
           EXE_PATH="./build-win/filerix-${CLEAN_TAG_NAME}-win64.exe"
+          if [[ ! -f "$EXE_PATH" ]]; then
+            echo "ERROR: Windows executable not found at $EXE_PATH"
+            exit 1
+          fi
+          echo "EXE_PATH=$EXE_PATH" >> $GITHUB_ENV
+
+      - name: Verify Windows 32 Executable
+        run: |
+          EXE_PATH="./build-win32/filerix-${CLEAN_TAG_NAME}-win32.exe"
           if [[ ! -f "$EXE_PATH" ]]; then
             echo "ERROR: Windows executable not found at $EXE_PATH"
             exit 1
@@ -63,6 +81,8 @@ jobs:
           files: |
             ${{ env.LINUX_ZIP }}
             ${{ env.WINDOWS_ZIP }}
+            ${{ env.WINDOWS32_ZIP }}
             ${{ env.EXE_PATH }}
+            ${{ env.EXE32_PATH }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
