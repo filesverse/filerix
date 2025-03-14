@@ -22,7 +22,7 @@ jobs:
         run: |
           wget -O /tmp/EnVar_plugin.zip "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip"
           unzip -o /tmp/EnVar_plugin.zip -d /tmp/EnVar_plugin
-          sudo mv /tmp/EnVar_plugin/* /usr/share/nsis/
+          sudo rsync -a /tmp/EnVar_plugin/ /usr/share/nsis/
           make install PREFIX=linux/
           make install-win PREFIX=win/
           make install-win32 PREFIX=win32/
