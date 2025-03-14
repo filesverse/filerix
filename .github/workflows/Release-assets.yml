@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build and Upload
-    runs-on: fedora-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -15,20 +15,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo dnf update -y
-          sudo dnf install -y \
-            @development-tools \
-            autoconf automake libtool pkg-config \
-            systemd-devel dbus-devel zlib-devel \
-            mingw32-gcc mingw32-gcc-c++ mingw32-winpthreads-static mingw32-zlib-static \
-            mingw64-gcc mingw64-gcc-c++ mingw64-winpthreads-static mingw64-zlib-static \
-            wine
+          sudo apt update && sudo apt install -y build-essential libudev-dev autoconf automake libtool libltdl-dev pkg-config libdbus-1-dev zlib1g-dev
+          sudo apt install -y mingw-w64* gcc-mingw-w64* g++-mingw-w64* libz-mingw-w64* wine*
 
       - name: Build and Install
         run: |
           export PKG_CONFIG_PATH=$(pwd)/vcpkg_installed/x64-linux-release/lib/pkgconfig:$PKG_CONFIG_PATH
           make install PREFIX=linux/
           make install-win PREFIX=win/
+          make install-win32 PREFIX=win32/
 
       - name: Determine release name
         id: version
@@ -54,9 +49,26 @@ jobs:
           echo "WINDOWS_ZIP=$ZIP_NAME" >> $GITHUB_ENV
           cd ..
 
+      - name: Package Windows 32 compiled files
+        run: |
+          cd win32/
+          ZIP_NAME="filerix-${CLEAN_TAG_NAME}-windows-x86.zip"
+          zip -r "../$ZIP_NAME" .
+          echo "WINDOWS32_ZIP=$ZIP_NAME" >> $GITHUB_ENV
+          cd ..
+
       - name: Verify Windows Executable
         run: |
           EXE_PATH="./build-win/filerix-${CLEAN_TAG_NAME}-win64.exe"
+          if [[ ! -f "$EXE_PATH" ]]; then
+            echo "ERROR: Windows executable not found at $EXE_PATH"
+            exit 1
+          fi
+          echo "EXE_PATH=$EXE_PATH" >> $GITHUB_ENV
+
+      - name: Verify Windows 32 Executable
+        run: |
+          EXE_PATH="./build-win32/filerix-${CLEAN_TAG_NAME}-win32.exe"
           if [[ ! -f "$EXE_PATH" ]]; then
             echo "ERROR: Windows executable not found at $EXE_PATH"
             exit 1
@@ -69,6 +81,8 @@ jobs:
           files: |
             ${{ env.LINUX_ZIP }}
             ${{ env.WINDOWS_ZIP }}
+            ${{ env.WINDOWS32_ZIP }}
             ${{ env.EXE_PATH }}
+            ${{ env.EXE32_PATH }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
