@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update && sudo apt install -y build-essential libudev-dev autoconf automake libtool libltdl-dev pkg-config libdbus-1-dev zlib1g-dev
-          sudo apt install -y mingw-w64 gcc-mingw-w64
+          sudo apt install -y mingw-w64 gcc-mingw-w64 mingw-w64-tools mingw-w64-i686-zlib mingw-w64-x86-64-zlib
 
       - name: Build and Install
         run: |
