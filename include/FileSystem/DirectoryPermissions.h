@@ -1,12 +1,12 @@
 #ifndef DIRECTORY_PERMISSIONS_H
 #define DIRECTORY_PERMISSIONS_H
 
-#include <string>
+#include <stdbool.h>
 
-namespace DirectoryPermissions
-{
-  bool HasAccess(const std::string &path);
-  bool RequestElevatedPermissions(const std::string &path);
-}
+bool MountFuseOverlay(const char *target);
+bool UnmountFuse();
+bool HasDirectAccess(const char *path);
+bool RequestAccessViaDBus(const char *path);
+bool HasAccess(const char *path);
 
 #endif

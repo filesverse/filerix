@@ -2,6 +2,7 @@
 #define FILE_UTILS_H
 
 #include "FileInfo.h"
+#include <stddef.h>
 
 #ifdef __cplusplus
 #include <string>
@@ -13,12 +14,12 @@ extern "C"
 {
 #endif
 
-  bool Copy(const char *source, const char *destination);
-  bool Cut(const char *source, const char *destination);
-  bool Rename(const char *oldPath, const char *newPath);
-  bool MoveTo(const char *source, const char *destination);
-  bool Compress(const char *source, const char *destination);
-  bool Decompress(const char *source, const char *destination);
+  bool FileUtils_Copy(const char *source, const char *destination);
+  bool FileUtils_Cut(const char *source, const char *destination);
+  bool FileUtils_Rename(const char *oldPath, const char *newPath);
+  bool FileUtils_MoveTo(const char *source, const char *destination);
+  bool FileUtils_Compress(const char *source, const char *destination);
+  bool FileUtils_Decompress(const char *source, const char *destination);
 
   struct FileList
   {
@@ -26,8 +27,8 @@ extern "C"
     size_t count;
   };
 
-  struct FileList GetFiles(const char *path);
-  struct FileList SearchFiles(const char *path, const char *query);
+  struct FileList FileUtils_GetFiles(const char *path);
+  struct FileList FileUtils_SearchFiles(const char *path, const char *query);
 
 #ifdef __cplusplus
 }

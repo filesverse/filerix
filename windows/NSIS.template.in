@@ -1,0 +1,65 @@
+!include "MUI2.nsh"
+
+!define PRODUCT_NAME "@CPACK_PACKAGE_NAME@"
+!define PRODUCT_URL "@CPACK_PACKAGE_URL@"
+!define PRODUCT_VERSION "@CPACK_PACKAGE_VERSION@"
+!define INSTALL_DIR "$PROGRAMFILES64\${PRODUCT_NAME}"
+!define INST_DIR "@CPACK_TEMPORARY_DIRECTORY@"
+!define MUI_VENDOR "@CPACK_PACKAGE_VENDOR@"
+!define MUI_ABORTWARNING
+
+OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
+InstallDir ${INSTALL_DIR}
+RequestExecutionLevel admin
+
+ShowInstDetails "show"
+ShowUninstDetails "show"
+
+!define MUI_ICON "@CPACK_MUI_ICON@"
+!define MUI_UNICON "@CPACK_MUI_UNICON@"
+
+Name "${PRODUCT_NAME} - ${PRODUCT_VERSION}"
+
+Icon "${MUI_ICON}"
+
+!insertmacro MUI_PAGE_LICENSE "@CPACK_PACKAGE_LICENSE@"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+!insertmacro MUI_LANGUAGE "English"
+
+Section "Install ${PRODUCT_NAME}" SecInstall
+  SetOutPath "${INSTALL_DIR}"
+    @CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS@
+    @CPACK_NSIS_FULL_INSTALL@
+
+  EnVar::AddValue "Path" "${INSTALL_DIR}\lib"
+
+  WriteUninstaller "${INSTALL_DIR}\uninstall.exe"
+
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+    "DisplayName" "${PRODUCT_NAME}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+    "UninstallString" '"${INSTALL_DIR}\uninstall.exe"'
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+    "Publisher" "${MUI_VENDOR}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+    "DisplayVersion" "${PRODUCT_VERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+    "URLInfoAbout" "${PRODUCT_URL}"
+SectionEnd
+
+Section "Uninstall" SecUninstall
+  EnVar::DeleteValue "Path" "${INSTALL_DIR}\lib"
+
+  RMDir /r "${INSTALL_DIR}"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+SectionEnd
+
+LangString DESC_SecInstall 1033 "Install ${PRODUCT_NAME}"
+LangString DESC_SecUninstall 1033 "Uninstall ${PRODUCT_NAME}"

@@ -1,32 +1,60 @@
-include_directories(${CMAKE_SOURCE_DIR}/include ${UDEV_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
-set(LIBRARY_SOURCES
-  FileSystem/C/DriveUtils.cc
-  FileSystem/C/FileUtils.cc
-  FileSystem/C/UserUtils.cc
-  FileSystem/DirectoryPermissions.cc
-  FileSystem/DriveUtils.cc
+if(TARGET_OS STREQUAL "Windows")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
+
+  set(SOURCES
+    FileSystem/Windows/FileUtils.c
+    Listeners/Windows/DriveListener.c
+    Listeners/Windows/FileListener.c
+    System/Windows/DriveUtils.c
+    System/Windows/UserUtils.c
+  )
+else()
+  set(SOURCES
+    FileSystem/DirectoryPermissions.c
+    FileSystem/FileUtils.c
+    Listeners/DriveListener.c
+    Listeners/FileListener.c
+    System/DriveUtils.c
+    System/UserUtils.c
+  )
+
+  include_directories(${UDEV_INCLUDE_DIRS} ${DBUS_INCLUDE_DIRS})
+endif()
+
+set(OTHER_SOURCES
   FileSystem/FileUtils.cc
-  FileSystem/UserUtils.cc
-  Utils/Logger.cc
   Listeners/DriveListener.cc
   Listeners/FileListener.cc
-  Listeners/C/DriveListener.cc
-  Listeners/C/FileListener.cc
+  System/DriveUtils.cc
+  System/UserUtils.cc
+
+  Utils/Logger.c
 )
+
+set(LIBRARY_SOURCES ${SOURCES} ${OTHER_SOURCES})
 
 add_library(filerix SHARED ${LIBRARY_SOURCES})
 
-target_link_libraries(filerix PRIVATE ZLIB::ZLIB ${UDEV_LIBRARIES})
+if(TARGET_OS STREQUAL "Windows")
+  target_compile_definitions(filerix PRIVATE FILERIX_EXPORTS)
+  target_link_libraries(filerix PRIVATE shlwapi ZLIB::ZLIB)
+else()
+  target_link_libraries(filerix PRIVATE ZLIB::ZLIB ${UDEV_LIBRARIES} ${DBUS_LIBRARIES})
+endif()
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ 
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/filerix
+)
 
 install(TARGETS filerix
   EXPORT filerixTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/filerix)
 
 install(EXPORT filerixTargets
   FILE filerixConfig.cmake

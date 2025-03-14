@@ -8,8 +8,8 @@ extern "C"
 
   typedef void (*FileEventCallback)(const char *eventType, const char *filePath);
 
-  void StartFileMonitor(const char *directory, FileEventCallback callback);
-  void StopFileMonitor();
+  void FileListener_Start(const char *directory, FileEventCallback callback);
+  void FileListener_Stop();
 
 #ifdef __cplusplus
 }
@@ -24,21 +24,8 @@ extern "C"
 
 namespace FileListener
 {
-  class FileMonitor
-  {
-  public:
-    explicit FileMonitor(const std::string &directory);
-    ~FileMonitor();
-
-    void Start(std::function<void(const std::string &, const std::string &)> callback);
-    void Stop();
-
-  private:
-    std::string watchedDirectory;
-    std::atomic<bool> running;
-    std::thread monitorThread;
-    std::function<void(const std::string &, const std::string &)> eventCallback;
-  };
+  void Start(std::function<void(const std::string &, const std::string &)> callback);
+  void Stop();
 }
 
 #endif

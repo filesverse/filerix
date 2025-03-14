@@ -19,22 +19,47 @@ jobs:
       - name: Build and Install
         run: |
           make install PREFIX=linux-release/
+          make install PREFIX=windows-release/
 
       - name: Determine release name
         id: version
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          CLEAN_TAG_NAME="${TAG_NAME#v}"  # Remove leading "v"
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          echo "CLEAN_TAG_NAME=$CLEAN_TAG_NAME" >> $GITHUB_ENV
 
-      - name: Package compiled files
+      - name: Package Linux compiled files
         run: |
           cd linux-release/
-          ZIP_NAME="filerix-${TAG_NAME}-linux-x86_64.zip"
+          ZIP_NAME="filerix-${CLEAN_TAG_NAME}-linux-x86_64.zip"
           zip -r "../$ZIP_NAME" .
-          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          echo "LINUX_ZIP=$ZIP_NAME" >> $GITHUB_ENV
           cd ..
 
-      - name: Upload release asset
+      - name: Package Windows compiled files
+        run: |
+          cd windows-release/
+          ZIP_NAME="filerix-${CLEAN_TAG_NAME}-windows-x86_64.zip"
+          zip -r "../$ZIP_NAME" .
+          echo "WINDOWS_ZIP=$ZIP_NAME" >> $GITHUB_ENV
+          cd ..
+
+      - name: Verify Windows Executable
+        run: |
+          EXE_PATH="./build-win/filerix-${CLEAN_TAG_NAME}-win64.exe"
+          if [[ ! -f "$EXE_PATH" ]]; then
+            echo "ERROR: Windows executable not found at $EXE_PATH"
+            exit 1
+          fi
+          echo "EXE_PATH=$EXE_PATH" >> $GITHUB_ENV
+
+      - name: Upload ZIP Archives
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ env.ZIP_NAME }}
+          files: |
+            ${{ env.LINUX_ZIP }}
+            ${{ env.WINDOWS_ZIP }}
+            ${{ env.EXE_PATH }}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}

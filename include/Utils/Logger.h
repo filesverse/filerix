@@ -1,13 +1,8 @@
 #ifndef ERROR_LOGGING_H
 #define ERROR_LOGGING_H
 
-#include <string>
-
-namespace Logger
-{
-  void Error(const std::string &message);
-  void Warn(const std::string &message);
-  void Info(const std::string &message);
-}
+void Logger_Error(const char *message, ...);
+void Logger_Warn(const char *message, ...);
+void Logger_Info(const char *message, ...);
 
 #endif

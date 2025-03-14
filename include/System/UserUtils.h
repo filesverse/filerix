@@ -11,8 +11,8 @@ extern "C"
 {
 #endif
 
-  const char *GetUserName();
-  bool ChangePermissions(const char *path, int mode);
+  const char *UserUtils_GetUserName();
+  bool UserUtils_ChangePermissions(const char *path, int mode);
 
 #ifdef __cplusplus
 }
