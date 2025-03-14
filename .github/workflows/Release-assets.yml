@@ -16,11 +16,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update && sudo apt install -y build-essential libudev-dev autoconf automake libtool libltdl-dev pkg-config libdbus-1-dev zlib1g-dev
-          sudo apt install -y mingw-w64* gcc-mingw-w64* g++-mingw-w64* libz-mingw-w64* wine*
+          sudo apt install -y mingw-w64* gcc-mingw-w64* g++-mingw-w64* libz-mingw-w64* wine* nsis
 
       - name: Build and Install
         run: |
-          export PKG_CONFIG_PATH=$(pwd)/vcpkg_installed/x64-linux-release/lib/pkgconfig:$PKG_CONFIG_PATH
+          wget -O /tmp/EnVar_plugin.zip "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip"
+          unzip -o /tmp/EnVar_plugin.zip -d /tmp/EnVar_plugin
+          sudo mv /tmp/EnVar_plugin/* /usr/share/nsis/
           make install PREFIX=linux/
           make install-win PREFIX=win/
           make install-win32 PREFIX=win32/

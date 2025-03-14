@@ -14,18 +14,24 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/
 
 if(CMAKE_CROSSCOMPILING OR WIN32)
   set(TARGET_OS "Windows")
+  set(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-mingw-dynamic/include")
+  set(ZLIB_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-mingw-dynamic/bin/libzlib1.dll")
 else()
   set(TARGET_OS "Linux")
 endif()
 
 find_package(PkgConfig REQUIRED)
 
+find_package(ZLIB REQUIRED)
+
 if(TARGET_OS STREQUAL "Linux")
   pkg_check_modules(UDEV REQUIRED libudev)
   pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
 
-pkg_check_modules(ZLIB REQUIRED zlib)
+if (ZLIB_FOUND)
+  include_directories(${ZLIB_INCLUDE_DIRS})
+endif()
 
 add_subdirectory(src)
 
