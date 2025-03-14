@@ -15,7 +15,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update && sudo apt install -y build-essential libudev-dev autoconf automake libtool pkg-config
+          sudo apt update && sudo apt install -y build-essential libudev-dev autoconf automake libtool libltdl-dev pkg-config
           sudo apt install -y mingw-w64
 
       - name: Build and Install
