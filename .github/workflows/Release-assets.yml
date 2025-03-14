@@ -75,7 +75,7 @@ jobs:
 
       - name: Verify Windows Executable
         run: |
-          EXE_PATH="./build-win/filerix-${CLEAN_TAG_NAME}-win64.exe"
+          EXE_PATH="./build-win/Filerix-${CLEAN_TAG_NAME}-win64.exe"
           if [[ ! -f "$EXE_PATH" ]]; then
             echo "ERROR: Windows executable not found at $EXE_PATH"
             exit 1
@@ -84,7 +84,7 @@ jobs:
 
       - name: Verify Windows 32 Executable
         run: |
-          EXE_PATH="./build-win32/filerix-${CLEAN_TAG_NAME}-win32.exe"
+          EXE_PATH="./build-win32/Filerix-${CLEAN_TAG_NAME}-win32.exe"
           if [[ ! -f "$EXE_PATH" ]]; then
             echo "ERROR: Windows executable not found at $EXE_PATH"
             exit 1
