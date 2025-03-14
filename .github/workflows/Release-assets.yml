@@ -20,6 +20,7 @@ jobs:
 
       - name: Build and Install
         run: |
+          export PKG_CONFIG_PATH=$(pwd)/vcpkg_installed/x64-linux-release/lib/pkgconfig:$PKG_CONFIG_PATH
           make install PREFIX=linux-release/
           make install PREFIX=windows-release/
 
