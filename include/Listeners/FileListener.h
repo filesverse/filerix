@@ -24,7 +24,7 @@ extern "C"
 
 namespace FileListener
 {
-  void Start(std::function<void(const std::string &, const std::string &)> callback);
+  void Start(const std::string &directory, std::function<void(std::string, std::string)> callback);
   void Stop();
 }
 
