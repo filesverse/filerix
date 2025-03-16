@@ -25,11 +25,10 @@ else()
   set(TARGET_OS "Linux")
 endif()
 
-find_package(PkgConfig REQUIRED)
-
 find_package(ZLIB REQUIRED)
 
 if(TARGET_OS STREQUAL "Linux")
+  find_package(PkgConfig REQUIRED)
   pkg_check_modules(UDEV REQUIRED libudev)
   pkg_check_modules(DBUS REQUIRED dbus-1)
 endif()
