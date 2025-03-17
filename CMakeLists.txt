@@ -12,15 +12,10 @@ include(GNUInstallDirs)
 
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
 
+include(${CMAKE_SOURCE_DIR}/cmake/Zlib.cmake)
+
 if(CMAKE_CROSSCOMPILING OR WIN32)
   set(TARGET_OS "Windows")
-  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-mingw-dynamic/include")
-    set(ZLIB_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x64-mingw-dynamic/bin/libzlib1.dll")
-  else()
-    set(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x86-mingw-dynamic/include")
-    set(ZLIB_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg_installed/x86-mingw-dynamic/bin/libzlib1.dll")
-  endif()
 else()
   set(TARGET_OS "Linux")
 endif()

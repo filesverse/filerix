@@ -15,9 +15,9 @@ if(WIN32)
   install(FILES ${ZLIB_LIBRARY} DESTINATION lib)
 
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(CPACK_INSTALL_PREFIX "C:/Program Files/${CPACK_PACKAGE_NAME}")
+    set(CPACK_INSTALL_PREFIX "C:\\\\Program Files\\\\${CPACK_PACKAGE_NAME}")
   else()
-    set(CPACK_INSTALL_PREFIX "C:/Program Files (x86)/${CPACK_PACKAGE_NAME}")
+    set(CPACK_INSTALL_PREFIX "C:\\\\Program Files (x86)\\\\${CPACK_PACKAGE_NAME}")
   endif()
 
   set(CPACK_MUI_ICON "${CMAKE_SOURCE_DIR}/windows/filerix.ico")
