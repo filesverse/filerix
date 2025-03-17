@@ -46,7 +46,9 @@ if(TARGET_OS STREQUAL "Linux")
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/filerix.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endif()
 
-include(${CMAKE_SOURCE_DIR}/cmake/CpackConfig.cmake)
+if(NOT DEFINED VCPKG_TARGET_TRIPLET)
+  include(${CMAKE_SOURCE_DIR}/cmake/CpackConfig.cmake)
+endif()
 
 if(WIN32)
   add_custom_target(installer
