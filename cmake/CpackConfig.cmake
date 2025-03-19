@@ -4,16 +4,22 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Filerix - File Management Library")
 set(CPACK_PACKAGE_VERSION "1.1.0")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Filerix")
 set(CPACK_PACKAGE_URL "https://github.com/filesverse/filerix")
+set(CPACK_PACKAGE_CONTACT "KingMaj0r <KingMaj0r@hotmail.com>")
 
 set(CPACK_PACKAGE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
+set(CPACK_RPM_PACKAGE_RELEASE "1")
+set(CPACK_RPM_PACKAGE_LICENSE "MIT")
+set(CPACK_RPM_PACKAGE_GROUP "Development/Libraries")
+set(CPACK_RPM_PACKAGE_URL "https://github.com/filesverse/filerix")
+set(CPACK_RPM_PACKAGE_DESCRIPTION "Filerix - File Management Library")
+set(CPACK_RPM_PACKAGE_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
+set(CPACK_RPM_PACKAGE_REQUIRES "zlib, libudev, dbus")
+set(CPACK_RPM_CHANGELOG_FILE "${CMAKE_SOURCE_DIR}/changelog-rpm")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_CONTACT}")
+set(CPACK_DEBIAN_PACKAGE_CHANGELOG "${CMAKE_SOURCE_DIR}/changelog-deb")
+
 if(WIN32)
-  if(NOT EXISTS "${ZLIB_LIBRARY}")
-    message(FATAL_ERROR "zlib1.dll not found at ${ZLIB_LIBRARY}. Ensure Zlib is installed correctly via vcpkg.")
-  endif()
-
-  install(FILES ${ZLIB_LIBRARY} DESTINATION lib)
-
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(CPACK_INSTALL_PREFIX "C:\\\\Program Files\\\\${CPACK_PACKAGE_NAME}")
   else()

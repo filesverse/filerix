@@ -25,11 +25,7 @@ find_package(ZLIB REQUIRED)
 if(TARGET_OS STREQUAL "Linux")
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(UDEV REQUIRED libudev)
-  pkg_check_modules(DBUS REQUIRED dbus-1)
-endif()
-
-if (ZLIB_FOUND)
-  include_directories(${ZLIB_INCLUDE_DIRS})
+  find_package(DBus1 CONFIG REQUIRED)
 endif()
 
 add_subdirectory(src)
@@ -43,12 +39,4 @@ endif()
 
 if(NOT DEFINED VCPKG_TARGET_TRIPLET)
   include(${CMAKE_SOURCE_DIR}/cmake/CpackConfig.cmake)
-endif()
-
-if(WIN32)
-  add_custom_target(installer
-    COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --config Release
-    COMMAND ${CMAKE_COMMAND} -E env VERBOSE=1 ${CMAKE_CPACK_COMMAND} -D CPACK_OUTPUT_FILE_PREFIX=${CMAKE_BINARY_DIR} -G NSIS
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  )
 endif()

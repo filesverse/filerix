@@ -18,26 +18,29 @@ extern "C"
 
   typedef struct DriveInfo
   {
+    bool readOnly;
+    bool removable;
     char device[256];
     char status[256];
     char mountPoint[256];
-    char partition[256];
     char fsType[256];
-    bool unmountable;
+    char label[256];
+    char uuid[256];
+    uint64_t total;
+    uint64_t used;
+    uint64_t free;
   } DriveInfo;
 
   typedef struct DriveList
   {
-    DriveInfo *drives;
+    char **devices;
     size_t count;
   } DriveList;
 
-  DriveUsage DriveUtils_GetDriveUsage(const char *drive);
-  const char *DriveUtils_GetMountPoint(const char *device);
+  DriveList DriveUtils_GetDrives();
+  DriveInfo DriveUtils_GetDriveInfo(const char *device);
   bool DriveUtils_MountDrive(const char *device);
   bool DriveUtils_UnmountDrive(const char *device);
-  const char *DriveUtils_GetDeviceLabelOrUUID(const char *device);
-  DriveList DriveUtils_GetDrives();
 
 #ifdef __cplusplus
 }
@@ -51,19 +54,21 @@ namespace DriveUtils
 {
   struct DriveInfo
   {
+    bool readOnly;
+    bool removable;
     std::string device;
     std::string status;
-    bool unmountable;
     std::string mountPoint;
-    std::string partition;
     std::string fsType;
+    std::string label;
+    std::string uuid;
+    uint64_t total;
+    uint64_t used;
+    uint64_t free;
   };
 
-  using DriveUsage = ::DriveUsage;
-
-  std::vector<DriveInfo> GetDrives();
-  DriveUsage GetDriveUsage(const std::string &drive);
-  std::string GetDeviceLabelOrUUID(const std::string &device);
+  std::vector<std::string> GetDrives();
+  DriveInfo GetDriveInfo(const std::string &device);
   bool MountDrive(const std::string &device);
   bool UnmountDrive(const std::string &device);
 }

@@ -4,56 +4,37 @@
 
 namespace DriveUtils
 {
-  std::string GetMountPoint(const std::string &device)
-  {
-    const char *mountPoint = DriveUtils_GetMountPoint(device.c_str());
-    if (mountPoint)
-    {
-      std::string result(mountPoint);
-      free((void *)mountPoint);
-      return result;
-    }
-    return "";
-  }
-
-  std::vector<DriveUtils::DriveInfo> GetDrives()
+  std::vector<std::string> GetDrives()
   {
     DriveList driveList = DriveUtils_GetDrives();
-    std::vector<DriveUtils::DriveInfo> result;
+    std::vector<std::string> result;
     result.reserve(driveList.count);
 
     for (size_t i = 0; i < driveList.count; ++i)
     {
-      ::DriveInfo cDrive = driveList.drives[i];
-      result.push_back(DriveUtils::DriveInfo{
-          std::string(cDrive.device),
-          std::string(cDrive.status),
-          cDrive.unmountable,
-          std::string(cDrive.mountPoint),
-          std::string(cDrive.partition),
-          std::string(cDrive.fsType)});
+      result.emplace_back(driveList.devices[i]);
+      free(driveList.devices[i]);
     }
 
-    free(driveList.drives);
+    free(driveList.devices);
     return result;
   }
 
-  DriveUsage GetDriveUsage(const std::string &drive)
+  DriveInfo GetDriveInfo(const std::string &device)
   {
-    DriveUsage cUsage = DriveUtils_GetDriveUsage(drive.c_str());
-    return DriveUtils::DriveUsage{cUsage.used, cUsage.total};
-  }
-
-  std::string GetDeviceLabelOrUUID(const std::string &pathOrDevice)
-  {
-    const char *labelOrUUID = DriveUtils_GetDeviceLabelOrUUID(pathOrDevice.c_str());
-    if (labelOrUUID)
-    {
-      std::string result(labelOrUUID);
-      free((void *)labelOrUUID);
-      return result;
-    }
-    return "";
+    ::DriveInfo cDrive = DriveUtils_GetDriveInfo(device.c_str());
+    return DriveInfo{
+        cDrive.readOnly,
+        cDrive.removable,
+        std::string(cDrive.device),
+        std::string(cDrive.status),
+        std::string(cDrive.mountPoint),
+        std::string(cDrive.fsType),
+        std::string(cDrive.label),
+        std::string(cDrive.uuid),
+        cDrive.total,
+        cDrive.used,
+        cDrive.free};
   }
 
   bool MountDrive(const std::string &device)

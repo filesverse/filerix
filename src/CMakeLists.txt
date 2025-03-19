@@ -1,8 +1,9 @@
-include_directories(${CMAKE_SOURCE_DIR}/include ${ZLIB_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 if(TARGET_OS STREQUAL "Windows")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -static -static-libgcc -static-libstdc++ -pthread")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Os -ffunction-sections -fdata-sections")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -ffunction-sections -fdata-sections")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared -static-libgcc -static-libstdc++ -pthread -s -Wl,--gc-sections")
 
   set(SOURCES
     FileSystem/Windows/FileUtils.c
@@ -21,7 +22,7 @@ else()
     System/UserUtils.c
   )
 
-  include_directories(${UDEV_INCLUDE_DIRS} ${DBUS_INCLUDE_DIRS})
+  include_directories(${UDEV_INCLUDE_DIRS})
 endif()
 
 set(OTHER_SOURCES
@@ -40,9 +41,9 @@ add_library(filerix SHARED ${LIBRARY_SOURCES})
 
 if(TARGET_OS STREQUAL "Windows")
   target_compile_definitions(filerix PRIVATE FILERIX_EXPORTS)
-  target_link_libraries(filerix PRIVATE shlwapi ${ZLIB_LIBRARIES})
+  target_link_libraries(filerix PRIVATE shlwapi ZLIB::ZLIB)
 else()
-  target_link_libraries(filerix PRIVATE ${ZLIB_LIBRARIES} ${UDEV_LIBRARIES} ${DBUS_LIBRARIES})
+  target_link_libraries(filerix PRIVATE ZLIB::ZLIB dbus-1 ${UDEV_LIBRARIES})
 endif()
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ 
@@ -53,7 +54,8 @@ install(TARGETS filerix
   EXPORT filerixTargets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(EXPORT filerixTargets

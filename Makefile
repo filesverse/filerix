@@ -1,77 +1,84 @@
 VCPKG_REPO = https://github.com/microsoft/vcpkg.git
 OS := $(shell uname -s)
+PREFIX ?= /usr/local
 
 ifeq ($(OS), MINGW64_NT-10.0)
-    PREFIX ?= C:/Program Files/Filerix
-else
-    PREFIX ?= /usr/local
+  PREFIX := C:/Program Files/Filerix
 endif
 
-all: install
+all: build-all
 
-install: build
+# ---- Installation Targets ----
+install: build-linux
 	@echo "Installing Filerix..."
-	cmake --install build --prefix="$(PREFIX)" || { echo "Installation failed"; exit 1; }
+	cmake --install build/linux --prefix="$(PREFIX)" || { echo "Installation failed"; exit 1; }
 	@echo "Installation complete!"
 
 install-win: build-win
 	@echo "Installing Filerix (Windows)..."
-	cmake --install build-win --prefix="$(PREFIX)" || { echo "Windows installation failed"; exit 1; }
+	cmake --install build/windows-x64 --prefix="$(PREFIX)" || { echo "Windows installation failed"; exit 1; }
 	@echo "Windows installation complete!"
 
 install-win32: build-win32
-	@echo "Installing Filerix (Windows)..."
-	cmake --install build-win32 --prefix="$(PREFIX)" || { echo "Windows installation failed"; exit 1; }
-	@echo "Windows installation complete!"
+	@echo "Installing Filerix (Windows 32-bit)..."
+	cmake --install build/windows-x86 --prefix="$(PREFIX)" || { echo "Windows 32-bit installation failed"; exit 1; }
+	@echo "Windows 32-bit installation complete!"
 
-build: check-vcpkg
-	@echo "Bootstrapping vcpkg..."
-	./vcpkg/bootstrap-vcpkg.sh || { echo "Failed to bootstrap vcpkg"; exit 1; }
-	@echo "Installing Linux dependencies..."
-	./vcpkg/vcpkg --feature-flags=manifests install --triplet x64-linux-release || { echo "Failed to install Linux dependencies"; exit 1; }
-	@echo "Generating Linux build files with CMake..."
-	cmake -B build || { echo "Failed to generate Linux CMake build files"; exit 1; }
+# ---- Build Targets ----
+build-all: build-linux build-win build-win32
+	@echo "All builds completed successfully!"
+
+build-linux: check-vcpkg
 	@echo "Building for Linux..."
-	cmake --build build --parallel || { echo "Linux build failed"; exit 1; }
+	./vcpkg/vcpkg install --triplet x64-linux-release
+	cmake -B build/linux
+	cmake --build build/linux --parallel
 
 build-win: check-vcpkg
-	@echo "Setting up MinGW cross-compilation..."
-	./vcpkg/vcpkg --feature-flags=manifests install --triplet x64-mingw-dynamic || { echo "Failed to install Windows dependencies"; exit 1; }
-	@echo "Generating Windows build files with CMake..."
-	cmake -B build-win -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchain-mingw64.cmake || { echo "Failed to generate Windows CMake build files"; exit 1; }
-	@echo "Building for Windows..."
-	cmake --build build-win --parallel --config Release --target installer || { echo "Windows build failed"; exit 1; }
+	@echo "Building for Windows (x64)..."
+	./vcpkg/vcpkg install --triplet x64-mingw-dynamic
+	cmake -B build/windows-x64 -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchain-mingw64.cmake
+	cmake --build build/windows-x64 --parallel --config Release
 
 build-win32: check-vcpkg
-	@echo "Setting up MinGW cross-compilation..."
-	./vcpkg/vcpkg --feature-flags=manifests install --triplet x86-mingw-dynamic || { echo "Failed to install Windows dependencies"; exit 1; }
-	@echo "Generating Windows build files with CMake..."
-	cmake -B build-win32 -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchain-mingw32.cmake || { echo "Failed to generate Windows CMake build files"; exit 1; }
-	@echo "Building for Windows..."
-	cmake --build build-win32 --parallel --config Release --target installer || { echo "Windows build failed"; exit 1; }
+	@echo "Building for Windows (x86)..."
+	./vcpkg/vcpkg install --triplet x86-mingw-dynamic
+	cmake -B build/windows-x86 -DCMAKE_TOOLCHAIN_FILE=./cmake/toolchain-mingw32.cmake
+	cmake --build build/windows-x86 --parallel --config Release
 
+# ---- Packaging ----
+build-bin: generate-changelog build-all
+	@echo "Generating RPM and DEB packages..."
+	( cd build/linux && cpack -G "DEB;RPM" ) || { echo "Package generation failed"; exit 1; }
+	
+	@echo "Generating Windows NSIS installer..."
+	( cd build/windows-x64 && cpack -G NSIS ) || { echo "NSIS package generation failed"; exit 1; }
+	( cd build/windows-x86 && cpack -G NSIS ) || { echo "NSIS package generation failed"; exit 1; }
+
+	@rm -f changelog-deb changelog-rpm
+	@echo "Package generation complete!"
+
+# ---- Changelog Generation ----
+generate-changelog:
+	@echo "Generating changelog..."
+	@echo "filerix (v1.1.0-$(shell git rev-list --count HEAD)) unstable; urgency=medium" > changelog-deb
+	@git log --pretty=format:"  * %s" --reverse >> changelog-deb
+	@echo "\n -- $(shell git config user.name) <$(shell git config user.email)>  $(shell date -R)" >> changelog-deb
+	@echo "%changelog" > changelog-rpm
+	@git log --pretty=format:"* %ad $(shell git config user.name) - %s" --date=short --reverse >> changelog-rpm
+	@echo "Changelog generated successfully!"
+
+# ---- Utility Targets ----
 check-vcpkg:
 	@if [ ! -d "./vcpkg" ] || [ -z "$$(ls -A ./vcpkg 2>/dev/null)" ]; then \
-		echo "vcpkg is missing or empty. Cloning vcpkg..."; \
+		echo "vcpkg is missing. Cloning..."; \
 		git clone $(VCPKG_REPO) vcpkg || { echo "Failed to clone vcpkg"; exit 1; }; \
+		./vcpkg/bootstrap-vcpkg.sh; \
 	fi
-
-uninstall:
-	@echo "Removing installed files..."
-	rm -f "$(PREFIX)/lib64/libfilerix.so"
-	rm -f "$(PREFIX)/lib64/pkgconfig/filerix.pc"
-	rm -rf "$(PREFIX)/include/filerix"
-	rm -rf "$(PREFIX)/share/filerix"
-	@echo "Uninstallation complete!"
-
-uninstall-win:
-	@echo "Removing Windows installed files..."
-	rm -rf "$(PREFIX)"
-	@echo "Windows uninstallation complete!"
 
 clean:
 	@echo "Cleaning build directories..."
-	rm -rf build build-win vcpkg_installed
+	rm -rf build vcpkg_installed
 	@echo "Clean complete!"
 
-.PHONY: all install install-win build build-win uninstall uninstall/win clean
+.PHONY: all install install-win build build-win build-win32 build-bin clean generate-changelog

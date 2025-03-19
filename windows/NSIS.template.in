@@ -3,13 +3,13 @@
 !define PRODUCT_NAME "@CPACK_PACKAGE_NAME@"
 !define PRODUCT_URL "@CPACK_PACKAGE_URL@"
 !define PRODUCT_VERSION "@CPACK_PACKAGE_VERSION@"
-!define INSTALL_DIR "$PROGRAMFILES64\${PRODUCT_NAME}"
+!define INSTALL_DIR "@CPACK_INSTALL_PREFIX@"
 !define INST_DIR "@CPACK_TEMPORARY_DIRECTORY@"
 !define MUI_VENDOR "@CPACK_PACKAGE_VENDOR@"
 !define MUI_ABORTWARNING
 
 OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
-InstallDir ${INSTALL_DIR}
+InstallDir "${INSTALL_DIR}"
 RequestExecutionLevel admin
 
 ShowInstDetails "show"
@@ -39,6 +39,7 @@ Section "Install ${PRODUCT_NAME}" SecInstall
     @CPACK_NSIS_FULL_INSTALL@
 
   EnVar::AddValue "Path" "${INSTALL_DIR}\lib"
+  EnVar::AddValue "Path" "${INSTALL_DIR}\bin"
 
   WriteUninstaller "${INSTALL_DIR}\uninstall.exe"
 
@@ -56,6 +57,7 @@ SectionEnd
 
 Section "Uninstall" SecUninstall
   EnVar::DeleteValue "Path" "${INSTALL_DIR}\lib"
+  EnVar::DeleteValue "Path" "${INSTALL_DIR}\bin"
 
   RMDir /r "${INSTALL_DIR}"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"

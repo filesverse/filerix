@@ -9,35 +9,102 @@
 
 #pragma comment(lib, "shlwapi.lib")
 
-DriveUsage DriveUtils_GetDriveUsage(const char *drive)
+DriveList DriveUtils_GetDrives()
 {
-  Logger_Info("[DriveUtils] Getting drive usage for: ");
-  Logger_Info(drive);
+  Logger_Info("[DriveUtils] Getting list of drives...");
 
-  ULARGE_INTEGER freeBytesAvailable, totalBytes, totalFreeBytes;
-  if (!GetDiskFreeSpaceExA(drive, &freeBytesAvailable, &totalBytes, &totalFreeBytes))
+  DriveList list;
+  list.count = 0;
+  list.devices = NULL;
+
+  char driveStrings[256];
+  if (GetLogicalDriveStringsA(sizeof(driveStrings), driveStrings) == 0)
   {
-    Logger_Error("[DriveUtils] Unable to get drive usage for ");
-    Logger_Error(drive);
-    DriveUsage usage = {0, 0};
-    return usage;
+    Logger_Error("[DriveUtils] Unable to get drives.");
+    return list;
   }
 
-  DriveUsage usage;
-  usage.used = totalBytes.QuadPart - totalFreeBytes.QuadPart;
-  usage.total = totalBytes.QuadPart;
-  return usage;
+  char *drive = driveStrings;
+  while (*drive)
+  {
+    UINT type = GetDriveTypeA(drive);
+    if (type == DRIVE_FIXED || type == DRIVE_REMOVABLE)
+    {
+      char **temp = (char **)realloc(list.devices, (list.count + 1) * sizeof(char *));
+      if (!temp)
+        continue;
+
+      list.devices = temp;
+      list.devices[list.count] = _strdup(drive);
+      list.count++;
+    }
+    drive += strlen(drive) + 1;
+  }
+
+  return list;
 }
 
-const char *DriveUtils_GetMountPoint(const char *device)
+DriveInfo DriveUtils_GetDriveInfo(const char *device)
 {
-  size_t len = strlen(device) + 2;
-  char *mountPoint = (char *)malloc(len);
-  if (mountPoint)
+  Logger_Info("[DriveUtils] Getting details for device: %s", device);
+
+  DriveInfo drive;
+  memset(&drive, 0, sizeof(DriveInfo));
+  snprintf(drive.device, sizeof(drive.device), "%s", device);
+  snprintf(drive.status, sizeof(drive.status), "mounted");
+
+  UINT type = GetDriveTypeA(device);
+  if (type == DRIVE_REMOVABLE)
+    drive.removable = true;
+  else if (type == DRIVE_FIXED)
+    drive.removable = false;
+  else
   {
-    snprintf(mountPoint, len, "%s\\", device);
+    Logger_Warn("[DriveUtils] Ignoring non-removable or network drive: %s", device);
+    return drive;
   }
-  return mountPoint;
+
+  ULARGE_INTEGER freeBytesAvailable, totalBytes, totalFreeBytes;
+  if (GetDiskFreeSpaceExA(device, &freeBytesAvailable, &totalBytes, &totalFreeBytes))
+  {
+    drive.total = totalBytes.QuadPart;
+    drive.used = totalBytes.QuadPart - totalFreeBytes.QuadPart;
+    drive.free = totalFreeBytes.QuadPart;
+  }
+
+  char volumeLabel[MAX_PATH] = {0};
+  char fileSystemName[MAX_PATH] = {0};
+  DWORD serialNumber = 0;
+
+  if (GetVolumeInformationA(device, volumeLabel, sizeof(volumeLabel), &serialNumber,
+                            NULL, NULL, fileSystemName, sizeof(fileSystemName)))
+  {
+    snprintf(drive.label, sizeof(drive.label), "%s", volumeLabel[0] ? volumeLabel : "Unknown");
+    snprintf(drive.fsType, sizeof(drive.fsType), "%s", fileSystemName);
+  }
+
+  snprintf(drive.uuid, sizeof(drive.uuid), "%08X", serialNumber);
+
+  char roPath[MAX_PATH];
+  snprintf(roPath, sizeof(roPath), "\\\\.\\%s", device);
+  HANDLE hDrive = CreateFileA(roPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+  if (hDrive == INVALID_HANDLE_VALUE)
+  {
+    drive.readOnly = true;
+  }
+  else
+  {
+    drive.readOnly = false;
+    CloseHandle(hDrive);
+  }
+
+  Logger_Info("[DriveUtils] Retrieved details for %s: Label=%s, UUID=%s, FS=%s, Total=%llu, Used=%llu, Free=%llu, ReadOnly=%s, Removable=%s",
+              drive.device, drive.label, drive.uuid, drive.fsType,
+              drive.total, drive.used, drive.free,
+              drive.readOnly ? "Yes" : "No",
+              drive.removable ? "Yes" : "No");
+
+  return drive;
 }
 
 bool DriveUtils_MountDrive(const char *device)
@@ -49,104 +116,32 @@ bool DriveUtils_MountDrive(const char *device)
 
 bool DriveUtils_UnmountDrive(const char *device)
 {
-  (void)device;
-  Logger_Info("[DriveUtils] Unmounting is not required on Windows.");
-  return true;
-}
+  Logger_Info("[DriveUtils] Attempting to safely eject drive: %s", device);
 
-const char *DriveUtils_GetDeviceLabelOrUUID(const char *device)
-{
-  char volumeLabel[MAX_PATH] = {0};
-  char fileSystemName[MAX_PATH] = {0};
-  DWORD serialNumber = 0;
+  char devicePath[MAX_PATH];
+  snprintf(devicePath, sizeof(devicePath), "\\\\.\\%s", device);
 
-  char path[MAX_PATH];
-  snprintf(path, sizeof(path), "%s\\", device);
+  HANDLE hDevice = CreateFileA(devicePath, GENERIC_READ | GENERIC_WRITE,
+                               FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
 
-  if (GetVolumeInformationA(path, volumeLabel, sizeof(volumeLabel),
-                            &serialNumber, NULL, NULL, fileSystemName, sizeof(fileSystemName)))
+  if (hDevice == INVALID_HANDLE_VALUE)
   {
-    return _strdup(volumeLabel);
+    Logger_Error("[DriveUtils] Unable to open device for ejecting.");
+    return false;
   }
 
-  Logger_Warn("[DriveUtils] No label found for ");
-  Logger_Warn(device);
-  return NULL;
-}
+  DWORD bytesReturned;
+  BOOL success = DeviceIoControl(hDevice, IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0, &bytesReturned, NULL);
+  CloseHandle(hDevice);
 
-DriveList DriveUtils_GetDrives()
-{
-  Logger_Info("[DriveUtils] Getting list of valid drives...");
-
-  DriveList driveList;
-  driveList.count = 0;
-  driveList.drives = NULL;
-
-  char driveStrings[256];
-  if (GetLogicalDriveStringsA(sizeof(driveStrings), driveStrings) == 0)
+  if (success)
   {
-    Logger_Error("[DriveUtils] Unable to get drives.");
-    return driveList;
+    Logger_Info("[DriveUtils] Drive %s safely ejected.", device);
+    return true;
   }
-
-  int count = 0;
-  char *drive = driveStrings;
-
-  while (*drive)
+  else
   {
-    count++;
-    drive += strlen(drive) + 1;
+    Logger_Error("[DriveUtils] Failed to eject drive %s.", device);
+    return false;
   }
-
-  driveList.drives = (DriveInfo *)malloc(count * sizeof(DriveInfo));
-  if (!driveList.drives)
-  {
-    Logger_Error("[DriveUtils] Memory allocation failed.");
-    return driveList;
-  }
-
-  drive = driveStrings;
-  for (int i = 0; i < count; i++)
-  {
-    DriveInfo *info = &driveList.drives[i];
-    memset(info, 0, sizeof(DriveInfo));
-
-    strcpy(info->device, drive);
-    strcpy(info->mountPoint, drive);
-
-    UINT driveType = GetDriveTypeA(drive);
-    switch (driveType)
-    {
-    case DRIVE_FIXED:
-      strcpy(info->status, "mounted");
-      strcpy(info->fsType, "NTFS/FAT32");
-      info->unmountable = false;
-      break;
-    case DRIVE_REMOVABLE:
-      strcpy(info->status, "mounted");
-      strcpy(info->fsType, "NTFS/FAT32");
-      info->unmountable = true;
-      break;
-    case DRIVE_CDROM:
-      strcpy(info->status, "mounted");
-      strcpy(info->fsType, "ISO9660");
-      info->unmountable = true;
-      break;
-    case DRIVE_REMOTE:
-      strcpy(info->status, "mounted");
-      strcpy(info->fsType, "Network");
-      info->unmountable = false;
-      break;
-    default:
-      strcpy(info->status, "unknown");
-      strcpy(info->fsType, "unknown");
-      info->unmountable = false;
-      break;
-    }
-
-    drive += strlen(drive) + 1;
-  }
-
-  driveList.count = count;
-  return driveList;
 }
